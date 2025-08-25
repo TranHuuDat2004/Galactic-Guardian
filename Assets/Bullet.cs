@@ -3,22 +3,36 @@
 public class Bullet : MonoBehaviour
 {
     public float speed = 20f;
-    public float lifeTime = 3f; // Vòng đời của viên đạn (tính bằng giây)
     private Rigidbody2D rb;
 
-    // Awake được gọi trước cả Start, tốt cho việc lấy component
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
     }
 
-    // Start is called before the first frame update
     void Start()
     {
-        // Gán vận tốc cho viên đạn bay theo hướng nó được tạo ra
         rb.linearVelocity = transform.up * speed;
+        // Dòng Destroy hẹn giờ không còn cần thiết nữa.
+        // Destroy(gameObject, 2f); 
+    }
 
-        // Hủy đối tượng đạn này sau một khoảng thời gian lifeTime
-        Destroy(gameObject, lifeTime);
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        // Kiểm tra xem đối tượng va chạm có còn tồn tại không
+        if (other == null) return;
+
+        // Nếu va chạm với kẻ địch, tự hủy ngay
+        if (other.CompareTag("Enemy"))
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    // Hàm này sẽ tự động được gọi khi viên đạn bay ra khỏi màn hình
+    void OnBecameInvisible()
+    {
+        // Hủy viên đạn
+        Destroy(gameObject);
     }
 }

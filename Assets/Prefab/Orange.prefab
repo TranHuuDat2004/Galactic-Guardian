@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4651694172562875239}
   - component: {fileID: 239357894478958925}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: Orange
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -81,7 +81,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 4884443935584289356, guid: ae707973d398d604cb4acd5c1bd157bb, type: 3}
+  m_Sprite: {fileID: 3687158462734555838, guid: d162d45ff06577d459136eea0a02af33, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -151,3 +151,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   speed: 3
+  health: 1
