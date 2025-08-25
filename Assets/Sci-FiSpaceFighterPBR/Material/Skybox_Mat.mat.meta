@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: b67970afc33a4d8ca70c9e502a3d98f6
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 288705
+  packageName: Sci-Fi Space Fighter PBR
+  packageVersion: 1.0
+  assetPath: Assets/Sci-FiSpaceFighterPBR/Material/Skybox_Mat.mat
+  uploadId: 673345

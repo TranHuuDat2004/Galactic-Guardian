@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 69ce2f55c3b94e97a5c7899631cc2e20
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 288705
+  packageName: Sci-Fi Space Fighter PBR
+  packageVersion: 1.0
+  assetPath: Assets/Sci-FiSpaceFighterPBR/Material/PBR_Default.mat
+  uploadId: 673345
