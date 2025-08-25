@@ -13,6 +13,28 @@ public class PlayerController : MonoBehaviour
     private bool isDestroyed = false;
     private float fireCooldown = 0f;
 
+    void Awake()
+    {
+        // 1. Nếu firePoint bị mất liên kết trong Inspector, tự tìm lại nó!
+        // Chúng ta tìm component Transform của đối tượng con tên là "FirePoint"
+        if (firePoint == null)
+        {
+            Transform foundPoint = transform.Find("FirePoint");
+            if (foundPoint != null)
+            {
+                firePoint = foundPoint;
+            }
+        }
+
+        // 2. Tương tự, nếu bulletPrefab bị mất, bạn sẽ phải dùng cách khác: 
+        // Tìm nó trong thư mục Resources hoặc AssetBundle, nhưng bây giờ chúng ta 
+        // cứ dựa vào Inspector cho Prefab, và chỉ tập trung vào FirePoint.
+
+        // Nếu bạn muốn chắc chắn FirePoint không bị mất ngay từ đầu, 
+        // bạn có thể đổi 'public Transform firePoint;' thành private 
+        // và dùng thuộc tính [SerializeField] để ép người dùng gán nó. 
+    }
+
     void Start()
     {
         mainCamera = Camera.main;
