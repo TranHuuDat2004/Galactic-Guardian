@@ -87,18 +87,21 @@ public class PlayerController : MonoBehaviour
         switch (weaponLevel)
         {
             case 1: // 1 nòng
-                Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+                    // Lấy 1 viên đạn từ kho và bắn thẳng
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation);
                 break;
 
             case 2: // 2 nòng song song
-                Instantiate(bulletPrefab, firePoint.position + transform.right * 0.3f, firePoint.rotation);
-                Instantiate(bulletPrefab, firePoint.position - transform.right * 0.3f, firePoint.rotation);
+                    // Lấy 2 viên đạn từ kho và đặt ở hai vị trí song song
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position + transform.right * 0.3f, firePoint.rotation);
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position - transform.right * 0.3f, firePoint.rotation);
                 break;
 
             case 3: // 3 nòng hình quạt
-                Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-                Instantiate(bulletPrefab, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 15));
-                Instantiate(bulletPrefab, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -15));
+                    // Lấy 3 viên đạn từ kho, giữ nguyên vị trí nhưng thay đổi góc bắn
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation);
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 15));
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -15));
                 break;
         }
     }

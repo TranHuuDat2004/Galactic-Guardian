@@ -39,7 +39,7 @@ public class EnemySpawner : MonoBehaviour
 
             // 3. Tạo ra kẻ địch tại vị trí đó
             // Quaternion.identity có nghĩa là không xoay (giữ nguyên góc quay của Prefab)
-            Instantiate(enemyToSpawn, spawnPosition, Quaternion.identity);
+            ObjectPooler.Instance.SpawnFromPool("Enemy", spawnPosition, Quaternion.identity);
 
             // 4. Chờ một khoảng thời gian ngẫu nhiên rồi mới lặp lại
             float randomInterval = Random.Range(minSpawnInterval, maxSpawnInterval);

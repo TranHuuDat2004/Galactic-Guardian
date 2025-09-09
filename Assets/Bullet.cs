@@ -10,6 +10,16 @@ public class Bullet : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
+    void OnEnable()
+    {
+        // Hàm này được gọi mỗi khi viên đạn được "mượn" từ kho
+        // Đây là lúc để bắn nó đi!
+        if (rb != null)
+        {
+            rb.linearVelocity = transform.up * speed;
+        }
+    }
+
     void Start()
     {
         rb.linearVelocity = transform.up * speed;
@@ -19,20 +29,20 @@ public class Bullet : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        // Kiểm tra xem đối tượng va chạm có còn tồn tại không
         if (other == null) return;
 
-        // Nếu va chạm với kẻ địch, tự hủy ngay
         if (other.CompareTag("Enemy"))
         {
-            Destroy(gameObject);
+            // Dòng cũ: Destroy(gameObject);
+            // Dòng mới:
+            gameObject.SetActive(false); // "Trả" về kho
         }
     }
 
-    // Hàm này sẽ tự động được gọi khi viên đạn bay ra khỏi màn hình
     void OnBecameInvisible()
     {
-        // Hủy viên đạn
-        Destroy(gameObject);
+        // Dòng cũ: Destroy(gameObject);
+        // Dòng mới:
+        gameObject.SetActive(false); // "Trả" về kho
     }
 }

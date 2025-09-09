@@ -14,6 +14,16 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    public int maxHealth = 1; // Thêm biến này để lưu máu tối đa
+
+    void OnEnable()
+    {
+        // Hàm này được gọi mỗi khi GameObject được SetActive(true)
+        // Đây là nơi hoàn hảo để reset trạng thái của kẻ địch!
+        health = maxHealth;
+        isDestroyed = false;
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (isDestroyed || other == null || other.gameObject == null) return;
@@ -25,14 +35,18 @@ public class Enemy : MonoBehaviour
             if (health <= 0)
             {
                 isDestroyed = true;
-                Destroy(gameObject);
+                // Dòng cũ: Destroy(gameObject);
+                // Dòng mới:
+                gameObject.SetActive(false); // "Trả" về kho
             }
         }
 
         if (other.CompareTag("Player"))
         {
             isDestroyed = true;
-            Destroy(gameObject);
+            // Dòng cũ: Destroy(gameObject);
+            // Dòng mới:
+            gameObject.SetActive(false); // "Trả" về kho
         }
     }
 }
