@@ -26,27 +26,37 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (isDestroyed || other == null || other.gameObject == null) return;
+        // Log 1: Kiểm tra va chạm ban đầu (Dòng này đã hoạt động)
+        Debug.Log("Enemy va chạm với " + other.name + ", có tag là: '" + other.tag + "'");
 
+        if (isDestroyed || other == null) return;
+
+        // Bây giờ, chúng ta kiểm tra điều kiện so sánh Tag
         if (other.CompareTag("Bullet"))
         {
+            // Log 2: Nếu code chạy vào đây, nghĩa là nó đã xác nhận va chạm là Đạn!
+            Debug.Log("XÁC NHẬN va chạm là Bullet! Bắt đầu trừ máu.");
+
             health--;
+
+            // Log 3: Kiểm tra xem máu còn lại bao nhiêu
+            Debug.Log("Máu của Enemy còn lại: " + health);
 
             if (health <= 0)
             {
+                // Log 4: Nếu code vào đây, nghĩa là Enemy đã hết máu và sẽ bị tắt
+                Debug.Log("HẾT MÁU! Tắt Enemy.");
+
                 isDestroyed = true;
-                // Dòng cũ: Destroy(gameObject);
-                // Dòng mới:
-                gameObject.SetActive(false); // "Trả" về kho
+                gameObject.SetActive(false);
             }
         }
 
         if (other.CompareTag("Player"))
         {
             isDestroyed = true;
-            // Dòng cũ: Destroy(gameObject);
-            // Dòng mới:
-            gameObject.SetActive(false); // "Trả" về kho
+            // Phá hủy KẺ ĐỊCH, chứ không phải người chơi
+            gameObject.SetActive(false);
         }
     }
 }

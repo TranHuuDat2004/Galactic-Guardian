@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8709250139581961859}
   m_Layer: 0
   m_Name: Bullet
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -106,7 +106,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bullet
   speed: 20
-  lifeTime: 3
 --- !u!50 &114047309898447578
 Rigidbody2D:
   serializedVersion: 5

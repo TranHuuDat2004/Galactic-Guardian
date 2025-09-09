@@ -13,6 +13,9 @@ public class PlayerController : MonoBehaviour
     private bool isDestroyed = false;
     private float fireCooldown = 0f;
 
+    public int startingLives = 3;
+    // Khai báo biến lives này ở đầu script, thay vì dùng private int _lives = 1;
+    public int lives;
     void Awake()
     {
         // 1. Nếu firePoint bị mất liên kết trong Inspector, tự tìm lại nó!
@@ -39,27 +42,53 @@ public class PlayerController : MonoBehaviour
     {
         mainCamera = Camera.main;
         InitBounds();
+        // KHÔNG CẦN gọi ResetState ở đây nữa, vì nó sẽ được gọi khi Enable
+    }
+
+    // Thêm hàm này để reset lại tất cả các trạng thái của Player
+    void ResetState()
+    {
+        isDestroyed = false; // Cho phép di chuyển và bắn
+        lives = startingLives; // Reset số mạng
+        fireCooldown = 0f; // Reset thời gian hồi chiêu
+
+        // Reset các hiệu ứng hình ảnh nếu có (như shield, fire visualization)
+        // Ví dụ: 
+        // _shieldVisualize.SetActive(false);
+        // _Fire1_Visualize.SetActive(false);
+        // _Fire2_Visualize.SetActive(false);
+        // ... (làm tương tự cho các hiệu ứng khác)
+
+        // Reset lại vị trí và góc quay ban đầu (hoặc vị trí spawn)
+        // Ví dụ: transform.position = Vector3.zero;
+        //        transform.rotation = Quaternion.identity;
+    }
+
+    // Hàm này được gọi mỗi khi GameObject Player được SetActive(true)
+    void OnEnable()
+    {
+        ResetState(); // Khởi tạo lại mọi thứ khi Player được "mượn" từ Pool
     }
 
     void Update()
+{
+    // Dòng này là quan trọng nhất: nếu isDestroyed là true, thì không làm gì cả
+    if (isDestroyed) return;
+
+    MoveAndRotate();
+
+    if (Input.GetMouseButton(0))
     {
-        if (isDestroyed) return;
-
-        MoveAndRotate();
-
-        // Bắn liên tục khi giữ chuột trái
-        if (Input.GetMouseButton(0))
+        if (fireCooldown <= 0f)
         {
-            if (fireCooldown <= 0f)
-            {
-                Shoot();
-                fireCooldown = fireRate;
-            }
+            Shoot();
+            fireCooldown = fireRate;
         }
-
-        if (fireCooldown > 0f)
-            fireCooldown -= Time.deltaTime;
     }
+
+    if (fireCooldown > 0f)
+        fireCooldown -= Time.deltaTime;
+}
 
     void MoveAndRotate()
     {
@@ -122,14 +151,34 @@ public class PlayerController : MonoBehaviour
         maxBounds.y -= spriteSize.y / 2;
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (isDestroyed || other == null || other.gameObject == null) return;
+    // Hàm OnTriggerEnter2D cũ của bạn, CHỈ xử lý trừ máu và kiểm tra Game Over
+private void OnTriggerEnter2D(Collider2D other)
+{
+    // THAY THẾ TOÀN BỘ hàm OnTriggerEnter2D cũ bằng hàm này
+    if (isDestroyed || other == null || other.gameObject == null) return;
 
-        if (other.CompareTag("Enemy"))
+    if (other.CompareTag("Enemy"))
+    {
+        lives--;
+        Debug.Log("Player còn lại: " + lives + " mạng!");
+
+        if (lives <= 0)
         {
-            isDestroyed = true;
-            Destroy(gameObject);
+            isDestroyed = true; // Đặt cờ isDestroyed là true để dừng Update()
+            Debug.Log("GAME OVER! Player đã bị phá hủy.");
+            // Thay vì Destroy, chúng ta sẽ TẮT nó đi để trả về pool
+            gameObject.SetActive(false); 
+        }
+        // Đừng quên Destroy/SetActive(false) kẻ địch đã va vào mình!
+        // Cần thêm logic này để kẻ địch cũng biến mất sau va chạm
+        if (other.TryGetComponent<Enemy>(out Enemy enemy))
+        {
+            // Logic để enemy biến mất (nếu dùng pool thì SetActive(false), nếu không thì Destroy)
+            // Vì enemy spawn bằng pool, nên dùng SetActive(false)
+            other.gameObject.SetActive(false);
         }
     }
+}
+
+
 }
