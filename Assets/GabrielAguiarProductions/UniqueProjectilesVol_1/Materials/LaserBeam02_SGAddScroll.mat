@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 5
+  version: 10
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -22,11 +22,13 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: LaserBeam02_SGAddScroll
   m_Shader: {fileID: 4800000, guid: 8dd944eaa6c5f9d40a31d383a07fd824, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _BUILTIN_SURFACE_TYPE_TRANSPARENT
-  m_InvalidKeywords:
   - _SURFACE_TYPE_TRANSPARENT
-  m_LightmapFlags: 1
+  m_InvalidKeywords:
+  - _EMISSION
+  m_LightmapFlags: 3
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -34,6 +36,8 @@ Material:
     RenderType: Transparent
   disabledShaderPasses:
   - DepthOnly
+  - MOTIONVECTORS
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -134,13 +138,14 @@ Material:
     - Vector1_C1728026: 1.38
     - Vector1_D1034171: 0.24
     - _AlphaClip: 0
+    - _AlphaToMask: 0
     - _BUILTIN_AlphaClip: 0
     - _BUILTIN_Blend: 2
     - _BUILTIN_CullMode: 0
-    - _BUILTIN_DstBlend: 1
-    - _BUILTIN_QueueControl: 0
+    - _BUILTIN_DstBlend: 0
+    - _BUILTIN_QueueControl: -1
     - _BUILTIN_QueueOffset: 0
-    - _BUILTIN_SrcBlend: 5
+    - _BUILTIN_SrcBlend: 1
     - _BUILTIN_Surface: 1
     - _BUILTIN_ZTest: 4
     - _BUILTIN_ZWrite: 0
@@ -208,6 +213,7 @@ Material:
     - _MainTexTiling: {r: 1, g: 1, b: 0, a: 0}
     - _TintColor: {r: 0.625, g: 0.625, b: 0.625, a: 1}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
 --- !u!114 &713328075568980823
 MonoBehaviour:
   m_ObjectHideFlags: 11
