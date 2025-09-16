@@ -157,7 +157,7 @@ private void OnTriggerEnter2D(Collider2D other)
     // THAY THẾ TOÀN BỘ hàm OnTriggerEnter2D cũ bằng hàm này
     if (isDestroyed || other == null || other.gameObject == null) return;
 
-    if (other.CompareTag("Enemy"))
+    if (other.CompareTag("Blue") || other.CompareTag("Black") || other.CompareTag("Orange") || other.CompareTag("Green"))
     {
         lives--;
         Debug.Log("Player còn lại: " + lives + " mạng!");
