@@ -390,7 +390,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0296db97a8eb971418a2554d2a53e70d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  bulletPrefab: {fileID: 3715787003513466192, guid: 928942646dd7b754382acc2c7fa66a84, type: 3}
+  bulletPrefab: {fileID: 1170744857039610, guid: 6b48e87ff28b6f046be5de5985f87ed2, type: 3}
   firePoint: {fileID: 4476874946771786391}
   fireRate: 0.2
   weaponLevel: 3

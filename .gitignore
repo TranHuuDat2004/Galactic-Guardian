@@ -64,3 +64,12 @@ sysinfo.txt
 
 # Crashlytics generated folder
 /[Cc]rashlytics/
+
+# Packed Addressables
+/[Aa]ssets/StreamingAssets/aa/
+
+# End of https://www.toptal.com/developers/gitignore/api/unity
+# You can customize this file further by adding more rules below
+
+
+Assets/Boki

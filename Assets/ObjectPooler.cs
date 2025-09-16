@@ -24,10 +24,7 @@ public class ObjectPooler : MonoBehaviour
     {
         // Thiết lập Singleton
         Instance = this;
-    }
 
-    void Start()
-    {
         poolDictionary = new Dictionary<string, Queue<GameObject>>();
 
         // Duyệt qua tất cả các "Pool" đã được cấu hình trong Inspector
@@ -47,6 +44,11 @@ public class ObjectPooler : MonoBehaviour
             // Thêm hàng đợi vừa tạo vào Dictionary với Tag tương ứng
             poolDictionary.Add(pool.tag, objectPool);
         }
+    }
+
+    void Start()
+    {
+        
     }
 
     // Hàm để "mượn" một đối tượng từ kho

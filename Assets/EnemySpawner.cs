@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    // Mảng chứa tất cả các loại Prefab kẻ địch mà chúng ta muốn tạo ra
-    [SerializeField] private GameObject[] enemyPrefabs;
+    // THAY ĐỔI: Thay vì mảng GameObject, chúng ta dùng mảng string chứa các Tag
+    // Bạn sẽ điền các Tag này trong Inspector (ví dụ: "EnemyBlack", "EnemyBlue"...)
+    [SerializeField] private string[] enemyTags; 
 
-    // Thời gian chờ tối thiểu và tối đa giữa mỗi lần tạo kẻ địch
     [SerializeField] private float minSpawnInterval = 0.5f;
     [SerializeField] private float maxSpawnInterval = 1.5f;
 
@@ -18,30 +18,33 @@ public class EnemySpawner : MonoBehaviour
     {
         mainCamera = Camera.main;
         InitBounds();
-
-        // Bắt đầu vòng lặp tạo kẻ địch
         StartCoroutine(SpawnEnemies());
     }
 
-    // Coroutine để tạo kẻ địch liên tục
     private IEnumerator SpawnEnemies()
     {
-        // Vòng lặp này sẽ chạy mãi mãi khi game còn diễn ra
         while (true)
         {
-            // 1. Chọn ngẫu nhiên một loại kẻ địch từ trong mảng
-            int randomIndex = Random.Range(0, enemyPrefabs.Length);
-            GameObject enemyToSpawn = enemyPrefabs[randomIndex];
+            // THAY ĐỔI 1: Kiểm tra xem mảng tag có rỗng không để tránh lỗi
+            if (enemyTags.Length == 0)
+            {
+                Debug.LogWarning("Enemy Tags array in Spawner is empty!");
+                // Chờ 1 giây rồi thử lại, tránh vòng lặp vô hạn gây treo máy
+                yield return new WaitForSeconds(1f); 
+                continue; // Bỏ qua lần lặp này và bắt đầu lại vòng lặp
+            }
+            
+            // 1. Chọn ngẫu nhiên một Tag từ trong mảng
+            string randomTag = enemyTags[Random.Range(0, enemyTags.Length)];
 
-            // 2. Chọn một vị trí X ngẫu nhiên ở mép trên màn hình
+            // 2. Chọn một vị trí X ngẫu nhiên
             float randomX = Random.Range(minBounds.x, maxBounds.x);
             Vector3 spawnPosition = new Vector3(randomX, maxBounds.y, 0);
 
-            // 3. Tạo ra kẻ địch tại vị trí đó
-            // Quaternion.identity có nghĩa là không xoay (giữ nguyên góc quay của Prefab)
-            ObjectPooler.Instance.SpawnFromPool("Enemy", spawnPosition, Quaternion.identity);
+            // 3. THAY ĐỔI 2: Sử dụng Tag ngẫu nhiên vừa chọn để gọi Object Pooler
+            ObjectPooler.Instance.SpawnFromPool(randomTag, spawnPosition, Quaternion.identity);
 
-            // 4. Chờ một khoảng thời gian ngẫu nhiên rồi mới lặp lại
+            // 4. Chờ một khoảng thời gian ngẫu nhiên
             float randomInterval = Random.Range(minSpawnInterval, maxSpawnInterval);
             yield return new WaitForSeconds(randomInterval);
         }
