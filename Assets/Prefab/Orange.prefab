@@ -153,7 +153,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   speed: 3
   health: 1
-  maxHealth: 1
+  powerUpPrefab: {fileID: 6551157495255583541, guid: aa7b84cc7f50e3840b6a6ffb88e5a49d, type: 3}
+  dropChance: 80
 --- !u!50 &5646770844955745967
 Rigidbody2D:
   serializedVersion: 5

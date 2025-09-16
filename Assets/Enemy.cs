@@ -2,61 +2,111 @@
 
 public class Enemy : MonoBehaviour
 {
+    [Header("Chỉ Số Cơ Bản")]
     public float speed = 3.0f;
     public int health = 1;
-    private bool isDestroyed = false;
+
+    [Header("Thiết Lập Rớt Đồ (Loot)")]
+    public GameObject powerUpPrefab; // Kéo Prefab Power-up vào đây trong Inspector
+    [Range(0, 100)] public float dropChance = 15f; // Tỉ lệ % rớt đồ (ví dụ: 15%)
+
+    private bool isDead = false;
+    private int initialHealth; // Biến để lưu trữ máu ban đầu
+
+    void Awake()
+    {
+        // Lưu lại lượng máu ban đầu khi game mới bắt đầu
+        initialHealth = health;
+    }
+
+    void OnEnable()
+    {
+        // Hàm này được gọi mỗi khi đối tượng được kích hoạt (lấy ra từ pool)
+        // Reset lại tất cả các trạng thái về ban đầu
+        health = initialHealth;
+        isDead = false;
+        
+        // Bật lại collider để có thể va chạm, phòng trường hợp nó đã bị tắt
+        Collider2D col = GetComponent<Collider2D>();
+        if (col != null)
+        {
+            col.enabled = true;
+        }
+    }
 
     void Update()
     {
-        if (!isDestroyed)
+        // Chỉ di chuyển khi còn sống
+        if (!isDead)
         {
             transform.Translate(Vector2.down * speed * Time.deltaTime);
         }
     }
-
-    public int maxHealth = 1; // Thêm biến này để lưu máu tối đa
-
-    void OnEnable()
-    {
-        // Hàm này được gọi mỗi khi GameObject được SetActive(true)
-        // Đây là nơi hoàn hảo để reset trạng thái của kẻ địch!
-        health = maxHealth;
-        isDestroyed = false;
-    }
-
+    
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Log 1: Kiểm tra va chạm ban đầu (Dòng này đã hoạt động)
-        Debug.Log("Enemy va chạm với " + other.name + ", có tag là: '" + other.tag + "'");
+        // Nếu đã chết hoặc vật va chạm không tồn tại, bỏ qua
+        if (isDead || other == null) return;
 
-        if (isDestroyed || other == null) return;
-
-        // Bây giờ, chúng ta kiểm tra điều kiện so sánh Tag
+        // Xử lý va chạm với đạn
         if (other.CompareTag("Bullet"))
         {
-            // Log 2: Nếu code chạy vào đây, nghĩa là nó đã xác nhận va chạm là Đạn!
-            Debug.Log("XÁC NHẬN va chạm là Bullet! Bắt đầu trừ máu.");
-
             health--;
-
-            // Log 3: Kiểm tra xem máu còn lại bao nhiêu
-            Debug.Log("Máu của Enemy còn lại: " + health);
-
             if (health <= 0)
             {
-                // Log 4: Nếu code vào đây, nghĩa là Enemy đã hết máu và sẽ bị tắt
-                Debug.Log("HẾT MÁU! Tắt Enemy.");
-
-                isDestroyed = true;
-                gameObject.SetActive(false);
+                Die();
             }
         }
-
+        
+        // Xử lý va chạm với người chơi
         if (other.CompareTag("Player"))
         {
-            isDestroyed = true;
-            // Phá hủy KẺ ĐỊCH, chứ không phải người chơi
-            gameObject.SetActive(false);
+            Die();
         }
+    }
+
+    // Hàm xử lý tất cả logic khi kẻ địch "chết"
+    private void Die()
+    {
+        isDead = true;
+
+        // Thử rớt vật phẩm
+        TryDropLoot();
+
+        // (Tùy chọn) Tạo hiệu ứng nổ tại đây nếu bạn có
+        // ObjectPooler.Instance.SpawnFromPool("Explosion", transform.position, Quaternion.identity);
+
+        // Tắt collider đi ngay lập tức để không gây ra thêm va chạm nào nữa
+        Collider2D col = GetComponent<Collider2D>();
+        if (col != null)
+        {
+            col.enabled = false;
+        }
+        
+        // "Trả" kẻ địch về kho chứa (pool)
+        gameObject.SetActive(false);
+    }
+
+    // Hàm kiểm tra tỉ lệ và tạo ra vật phẩm
+    private void TryDropLoot()
+    {
+        // Nếu không có prefab vật phẩm được gán, bỏ qua
+        if (powerUpPrefab == null) return;
+        
+        // Tung một con số ngẫu nhiên từ 0 đến 100
+        float randomChance = Random.Range(0f, 100f);
+        
+        // Nếu con số ngẫu nhiên nhỏ hơn hoặc bằng tỉ lệ rớt đồ
+        if (randomChance <= dropChance)
+        {
+            // Tạo ra vật phẩm tại vị trí của kẻ địch
+            Instantiate(powerUpPrefab, transform.position, Quaternion.identity);
+        }
+    }
+
+    // Tự động "trả" về kho nếu bay ra khỏi màn hình
+    void OnBecameInvisible()
+    {
+        gameObject.SetActive(false);
     }
 }

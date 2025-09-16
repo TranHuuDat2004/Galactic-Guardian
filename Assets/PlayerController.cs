@@ -13,6 +13,9 @@ public class PlayerController : MonoBehaviour
     private bool isDestroyed = false;
     private float fireCooldown = 0f;
 
+    // === THÊM BIẾN NÀY ĐỂ GIỚI HẠN CẤP VŨ KHÍ ===
+    private int maxWeaponLevel = 3;
+
     public int startingLives = 3;
     // Khai báo biến lives này ở đầu script, thay vì dùng private int _lives = 1;
     public int lives;
@@ -71,24 +74,24 @@ public class PlayerController : MonoBehaviour
     }
 
     void Update()
-{
-    // Dòng này là quan trọng nhất: nếu isDestroyed là true, thì không làm gì cả
-    if (isDestroyed) return;
-
-    MoveAndRotate();
-
-    if (Input.GetMouseButton(0))
     {
-        if (fireCooldown <= 0f)
-        {
-            Shoot();
-            fireCooldown = fireRate;
-        }
-    }
+        // Dòng này là quan trọng nhất: nếu isDestroyed là true, thì không làm gì cả
+        if (isDestroyed) return;
 
-    if (fireCooldown > 0f)
-        fireCooldown -= Time.deltaTime;
-}
+        MoveAndRotate();
+
+        if (Input.GetMouseButton(0))
+        {
+            if (fireCooldown <= 0f)
+            {
+                Shoot();
+                fireCooldown = fireRate;
+            }
+        }
+
+        if (fireCooldown > 0f)
+            fireCooldown -= Time.deltaTime;
+    }
 
     void MoveAndRotate()
     {
@@ -152,33 +155,54 @@ public class PlayerController : MonoBehaviour
     }
 
     // Hàm OnTriggerEnter2D cũ của bạn, CHỈ xử lý trừ máu và kiểm tra Game Over
-private void OnTriggerEnter2D(Collider2D other)
-{
-    // THAY THẾ TOÀN BỘ hàm OnTriggerEnter2D cũ bằng hàm này
-    if (isDestroyed || other == null || other.gameObject == null) return;
-
-    if (other.CompareTag("Blue") || other.CompareTag("Black") || other.CompareTag("Orange") || other.CompareTag("Green"))
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        lives--;
-        Debug.Log("Player còn lại: " + lives + " mạng!");
+        // THAY THẾ TOÀN BỘ hàm OnTriggerEnter2D cũ bằng hàm này
+        if (isDestroyed || other == null || other.gameObject == null) return;
 
-        if (lives <= 0)
+        if (other.CompareTag("Blue") || other.CompareTag("Black") || other.CompareTag("Orange") || other.CompareTag("Green"))
         {
-            isDestroyed = true; // Đặt cờ isDestroyed là true để dừng Update()
-            Debug.Log("GAME OVER! Player đã bị phá hủy.");
-            // Thay vì Destroy, chúng ta sẽ TẮT nó đi để trả về pool
-            gameObject.SetActive(false); 
+            lives--;
+            Debug.Log("Player còn lại: " + lives + " mạng!");
+
+            if (lives <= 0)
+            {
+                isDestroyed = true; // Đặt cờ isDestroyed là true để dừng Update()
+                Debug.Log("GAME OVER! Player đã bị phá hủy.");
+                // Thay vì Destroy, chúng ta sẽ TẮT nó đi để trả về pool
+                gameObject.SetActive(false);
+            }
+            // Đừng quên Destroy/SetActive(false) kẻ địch đã va vào mình!
+            // Cần thêm logic này để kẻ địch cũng biến mất sau va chạm
+            if (other.TryGetComponent<Enemy>(out Enemy enemy))
+            {
+                // Logic để enemy biến mất (nếu dùng pool thì SetActive(false), nếu không thì Destroy)
+                // Vì enemy spawn bằng pool, nên dùng SetActive(false)
+                other.gameObject.SetActive(false);
+            }
         }
-        // Đừng quên Destroy/SetActive(false) kẻ địch đã va vào mình!
-        // Cần thêm logic này để kẻ địch cũng biến mất sau va chạm
-        if (other.TryGetComponent<Enemy>(out Enemy enemy))
+
+        // --- THÊM LOGIC MỚI: NHẶT POWER-UP ---
+        if (other.CompareTag("PowerUp"))
         {
-            // Logic để enemy biến mất (nếu dùng pool thì SetActive(false), nếu không thì Destroy)
-            // Vì enemy spawn bằng pool, nên dùng SetActive(false)
-            other.gameObject.SetActive(false);
+            // Hủy vật phẩm ngay khi nhặt
+            Destroy(other.gameObject);
+
+            // Nâng cấp vũ khí
+            UpgradeWeapon();
         }
     }
-}
 
+    // --- THÊM HÀM MỚI: NÂNG CẤP VŨ KHÍ ---
+    private void UpgradeWeapon()
+    {
+        // Nếu chưa đạt cấp tối đa thì mới cộng
+        if (weaponLevel < maxWeaponLevel)
+        {
+            weaponLevel++;
+        }
 
+        // (Tùy chọn) Chơi một âm thanh nâng cấp
+        // audioSource.PlayOneShot(upgradeSound);
+    }
 }

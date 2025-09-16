@@ -213,6 +213,6 @@ MonoBehaviour:
   bulletPrefab: {fileID: 1170744857039610, guid: 6b48e87ff28b6f046be5de5985f87ed2, type: 3}
   firePoint: {fileID: 4476874946771786391}
   fireRate: 0.2
-  weaponLevel: 3
+  weaponLevel: 2
   startingLives: 3
   lives: 0

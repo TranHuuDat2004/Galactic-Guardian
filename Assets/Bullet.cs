@@ -31,7 +31,7 @@ public class Bullet : MonoBehaviour
     {
         if (other == null) return;
 
-        if (other.CompareTag("Enemy"))
+        if (other.CompareTag("Blue") || other.CompareTag("Black") || other.CompareTag("Orange") || other.CompareTag("Green"))
         {
             // Dòng cũ: Destroy(gameObject);
             // Dòng mới:
