@@ -3,108 +3,110 @@
 public class Enemy : MonoBehaviour
 {
     [Header("Chỉ Số Cơ Bản")]
-    public float speed = 3.0f;
     public int health = 1;
 
     [Header("Thiết Lập Rớt Đồ (Loot)")]
-    public GameObject powerUpPrefab; // Kéo Prefab Power-up vào đây trong Inspector
-    [Range(0, 100)] public float dropChance = 15f; // Tỉ lệ % rớt đồ (ví dụ: 15%)
+    public GameObject powerUpPrefab;
+    [Range(0, 100)] public float dropChance = 15f;
 
+    // Các biến private để điều khiển trạng thái và di chuyển
+    private float speed;
+    private Vector2 moveDirection;
     private bool isDead = false;
-    private int initialHealth; // Biến để lưu trữ máu ban đầu
+    private int initialHealth;
 
     void Awake()
     {
-        // Lưu lại lượng máu ban đầu khi game mới bắt đầu
         initialHealth = health;
     }
 
     void OnEnable()
     {
-        // Hàm này được gọi mỗi khi đối tượng được kích hoạt (lấy ra từ pool)
-        // Reset lại tất cả các trạng thái về ban đầu
         health = initialHealth;
         isDead = false;
-        
-        // Bật lại collider để có thể va chạm, phòng trường hợp nó đã bị tắt
-        Collider2D col = GetComponent<Collider2D>();
-        if (col != null)
+        GetComponent<Collider2D>().enabled = true;
+    }
+
+    // =================================================================
+    // === THÊM LẠI TOÀN BỘ HÀM NÀY VÀO SCRIPT ENEMY.CS CỦA BẠN ===
+    // =================================================================
+    public void SetMovement(float newSpeed, MovementPattern pattern)
+    {
+        this.speed = newSpeed;
+
+        // Mặc định xoay đối tượng về hướng ban đầu
+        transform.rotation = Quaternion.identity;
+
+        switch (pattern)
         {
-            col.enabled = true;
+            case MovementPattern.StraightDown:
+                moveDirection = Vector2.down;
+                break;
+            case MovementPattern.FromLeftCorner:
+                // Hướng từ trên-trái xuống dưới-phải
+                moveDirection = new Vector2(1, -1).normalized;
+                break;
+            case MovementPattern.FromRightCorner:
+                // Hướng từ trên-phải xuống dưới-trái
+                moveDirection = new Vector2(-1, -1).normalized;
+                break;
+            case MovementPattern.MeteorFall:
+                // Rơi nghiêng 45 độ từ phải sang trái
+                moveDirection = new Vector2(-1, -1).normalized;
+                transform.rotation = Quaternion.Euler(0, 0, 45f); // Xoay thiên thạch cho đúng hướng rơi
+                break;
         }
     }
 
     void Update()
     {
-        // Chỉ di chuyển khi còn sống
         if (!isDead)
         {
-            transform.Translate(Vector2.down * speed * Time.deltaTime);
+            // Sử dụng Space.World để đảm bảo di chuyển đúng hướng toàn cục
+            // bất kể đối tượng có bị xoay hay không (quan trọng cho thiên thạch)
+            transform.Translate(moveDirection * speed * Time.deltaTime, Space.World);
         }
     }
-    
+
+
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Nếu đã chết hoặc vật va chạm không tồn tại, bỏ qua
         if (isDead || other == null) return;
-
-        // Xử lý va chạm với đạn
-        if (other.CompareTag("Bullet"))
-        {
-            health--;
-            if (health <= 0)
-            {
-                Die();
-            }
-        }
-        
-        // Xử lý va chạm với người chơi
-        if (other.CompareTag("Player"))
-        {
-            Die();
-        }
+        if (other.CompareTag("Bullet")) Die(); // Đơn giản hóa: đạn thường giết địch ngay
+        if (other.CompareTag("Player")) Die();
     }
 
-    // Hàm xử lý tất cả logic khi kẻ địch "chết"
+
     private void Die()
     {
         isDead = true;
 
-        // Thử rớt vật phẩm
-        TryDropLoot();
-
-        // (Tùy chọn) Tạo hiệu ứng nổ tại đây nếu bạn có
-        // ObjectPooler.Instance.SpawnFromPool("Explosion", transform.position, Quaternion.identity);
-
-        // Tắt collider đi ngay lập tức để không gây ra thêm va chạm nào nữa
-        Collider2D col = GetComponent<Collider2D>();
-        if (col != null)
+        // THÊM BƯỚC KIỂM TRA NÀY
+        // Trước khi báo cáo, hãy kiểm tra xem WaveManager.Instance có tồn tại không
+        if (WaveManager.Instance != null)
         {
-            col.enabled = false;
+            WaveManager.Instance.EnemyDestroyed(this.gameObject);
         }
-        
-        // "Trả" kẻ địch về kho chứa (pool)
+        else
+        {
+            // (Tùy chọn) Ghi log để cảnh báo nếu không tìm thấy WaveManager
+            Debug.LogWarning("WaveManager.Instance not found. Cannot report enemy destruction.");
+        }
+
+        TryDropLoot();
         gameObject.SetActive(false);
     }
 
-    // Hàm kiểm tra tỉ lệ và tạo ra vật phẩm
+
     private void TryDropLoot()
     {
-        // Nếu không có prefab vật phẩm được gán, bỏ qua
         if (powerUpPrefab == null) return;
-        
-        // Tung một con số ngẫu nhiên từ 0 đến 100
-        float randomChance = Random.Range(0f, 100f);
-        
-        // Nếu con số ngẫu nhiên nhỏ hơn hoặc bằng tỉ lệ rớt đồ
-        if (randomChance <= dropChance)
+        if (Random.Range(0f, 100f) <= dropChance)
         {
-            // Tạo ra vật phẩm tại vị trí của kẻ địch
             Instantiate(powerUpPrefab, transform.position, Quaternion.identity);
         }
     }
 
-    // Tự động "trả" về kho nếu bay ra khỏi màn hình
     void OnBecameInvisible()
     {
         gameObject.SetActive(false);
