@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WaveData
   formationSteps:
   - formationData: {fileID: 11400000, guid: cc616cc41194a3449aa784f5ede05bbe, type: 2}
-    delayBefore: 5
+    delayBefore: 1

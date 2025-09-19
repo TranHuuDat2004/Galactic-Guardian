@@ -15,6 +15,6 @@ MonoBehaviour:
   enemyPrefab: {fileID: 8604667864235231083, guid: 9c26ff96cb683de439621b89981de16c, type: 3}
   numberOfEnemies: 12
   moveSpeed: 3
-  movementPattern: 0
-  startPosition: {x: 0, y: 5}
-  spacing: {x: 2, y: 4}
+  movementPattern: 3
+  startPosition: {x: -1, y: 1}
+  spacing: {x: 1, y: 1}

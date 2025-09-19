@@ -16,5 +16,5 @@ MonoBehaviour:
   numberOfEnemies: 10
   moveSpeed: 2
   movementPattern: 0
-  startPosition: {x: -6, y: 4}
-  spacing: {x: 2, y: -2}
+  startPosition: {x: -1, y: 1}
+  spacing: {x: 0.5, y: 0.5}
