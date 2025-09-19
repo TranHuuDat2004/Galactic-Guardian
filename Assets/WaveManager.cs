@@ -69,23 +69,39 @@ public class WaveManager : MonoBehaviour
         StartNextWave();
     }
 
-    private void SpawnFormation(EnemyFormationData formation)
+    private void SpawnFormation(EnemyFormationData data) // Đổi tên biến cho rõ ràng
     {
-        Vector2 currentPos = formation.startPosition;
-        for (int i = 0; i < formation.numberOfEnemies; i++)
+        if (data == null)
         {
-            // Lấy tag từ tên prefab để gọi Object Pooler
-            string enemyTag = formation.enemyPrefab.name;
-            GameObject enemy = ObjectPooler.Instance.SpawnFromPool(enemyTag, currentPos, Quaternion.identity);
+            Debug.LogError("Formation Data is missing!");
+            return;
+        }
 
-            if (enemy != null)
+        Vector2 currentPosition = data.startPosition;
+        for (int i = 0; i < data.numberOfEnemies; i++)
+        {
+            // Lấy Tag từ tên của Prefab
+            string enemyTag = data.enemyPrefab.name;
+            GameObject enemyGO = ObjectPooler.Instance.SpawnFromPool(enemyTag, currentPosition, Quaternion.identity);
+
+            if (enemyGO != null)
             {
-                activeEnemies.Add(enemy); // Thêm vào danh sách theo dõi
+                activeEnemies.Add(enemyGO); // Thêm vào danh sách theo dõi
+
+                // === THÊM LẠI PHẦN QUAN TRỌNG NÀY ===
+                Enemy enemyScript = enemyGO.GetComponent<Enemy>();
+                if (enemyScript != null)
+                {
+                    // Ra lệnh cho kẻ địch di chuyển theo kịch bản
+                    enemyScript.SetMovement(data.moveSpeed, data.movementPattern);
+                }
+                // ===================================
             }
 
-            currentPos += formation.spacing;
+            currentPosition += data.spacing;
         }
     }
+
 
     private void SpawnMeteorFormation(EnemyFormationData formation)
     {
