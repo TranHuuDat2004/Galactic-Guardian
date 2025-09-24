@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 4651694172562875239}
   - component: {fileID: 239357894478958925}
   m_Layer: 0
-  m_Name: Enemy 4
-  m_TagString: Enemy
+  m_Name: Meteors
+  m_TagString: Black
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -81,7 +81,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 4884443935584289356, guid: ae707973d398d604cb4acd5c1bd157bb, type: 3}
+  m_Sprite: {fileID: -4501234463003357724, guid: 74dafc857eaabc84fbe9b32d2cd45223, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -130,7 +130,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.93, y: 0.84}
+    oldSize: {x: 0.89, y: 0.82}
     newSize: {x: 0.93, y: 0.84}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -152,3 +152,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   speed: 1
   health: 1
+  powerUpPrefab: {fileID: 0}
+  dropChance: 15

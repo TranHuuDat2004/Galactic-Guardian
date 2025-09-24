@@ -12,9 +12,6 @@ TagManager:
   - Orange
   - Undefined
   - PowerUp
-  - Mereor
-  - Meteor
-  - Boss
   layers:
   - Default
   - TransparentFX
