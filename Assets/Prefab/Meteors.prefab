@@ -150,7 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db8faeafce6c2d945a317476039611e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  speed: 1
+  speed: 1.8
   health: 1
   powerUpPrefab: {fileID: 0}
   dropChance: 15

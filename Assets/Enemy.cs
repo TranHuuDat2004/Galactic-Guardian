@@ -25,7 +25,7 @@ public class Enemy : MonoBehaviour
         // Reset lại tất cả các trạng thái về ban đầu
         health = initialHealth;
         isDead = false;
-        
+
         // Bật lại collider để có thể va chạm, phòng trường hợp nó đã bị tắt
         Collider2D col = GetComponent<Collider2D>();
         if (col != null)
@@ -42,7 +42,7 @@ public class Enemy : MonoBehaviour
             transform.Translate(Vector2.down * speed * Time.deltaTime);
         }
     }
-    
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         // Nếu đã chết hoặc vật va chạm không tồn tại, bỏ qua
@@ -57,7 +57,7 @@ public class Enemy : MonoBehaviour
                 Die();
             }
         }
-        
+
         // Xử lý va chạm với người chơi
         if (other.CompareTag("Player"))
         {
@@ -82,7 +82,15 @@ public class Enemy : MonoBehaviour
         {
             col.enabled = false;
         }
-        
+
+        // --- THÊM DÒNG NÀY VÀO ĐÂY ---
+        // Báo cho WaveManager biết rằng một kẻ địch đã bị tiêu diệt
+        if (WaveManager.Instance != null)
+        {
+            WaveManager.Instance.OnEnemyDestroyed();
+        }
+        // ----------------------------
+
         // "Trả" kẻ địch về kho chứa (pool)
         gameObject.SetActive(false);
     }
@@ -92,10 +100,10 @@ public class Enemy : MonoBehaviour
     {
         // Nếu không có prefab vật phẩm được gán, bỏ qua
         if (powerUpPrefab == null) return;
-        
+
         // Tung một con số ngẫu nhiên từ 0 đến 100
         float randomChance = Random.Range(0f, 100f);
-        
+
         // Nếu con số ngẫu nhiên nhỏ hơn hoặc bằng tỉ lệ rớt đồ
         if (randomChance <= dropChance)
         {
@@ -104,9 +112,18 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    // Tự động "trả" về kho nếu bay ra khỏi màn hình
+    // Tương tự, nếu bạn muốn kẻ địch bay ra khỏi màn hình cũng tính là hết wave
     void OnBecameInvisible()
     {
+        // --- BẠN CŨNG CÓ THỂ THÊM VÀO ĐÂY (TÙY CHỌN) ---
+        if (gameObject.activeInHierarchy && !isDead) // Chỉ gọi nếu nó còn sống và đang active
+        {
+            if (WaveManager.Instance != null)
+            {
+                WaveManager.Instance.OnEnemyDestroyed();
+            }
+        }
+        // ----------------------------------------------------
         gameObject.SetActive(false);
     }
 }
