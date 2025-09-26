@@ -1,7 +1,7 @@
-﻿// WaveManager.cs
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class WaveManager : MonoBehaviour
@@ -10,96 +10,121 @@ public class WaveManager : MonoBehaviour
     public class Wave
     {
         public string waveName;
-        public GameObject formationPrefab; // Kéo Prefab đội hình vào đây
-        public string enemyTagToSpawn;     // Loại kẻ địch cho wave này (ví dụ: "Blue")
-        public float delayBeforeStart = 2.0f; // Thời gian chờ trước khi wave bắt đầu
+        public GameObject formationPrefab;
+        public string enemyTagToSpawn;
+
+        [Header("Tùy Chọn Cảnh Báo & Vị Trí")]
+        public GameObject warningImagePrefab;
+        public Vector3 warningPosition;      // Vị trí của cảnh báo (tọa độ UI)
+        public Vector3 enemyStartPosition;   // Vị trí XUẤT PHÁT của đội hình (tọa độ World)
+        public float warningDelay = 2.0f;
     }
 
     [Header("Cài Đặt Màn Chơi")]
     [SerializeField] private Wave[] waves;
+
+    [Header("Thiết Lập UI")]
+    [SerializeField] private Canvas mainCanvas; 
     [SerializeField] private TextMeshProUGUI waveText;
+    [SerializeField] private CanvasGroup waveTextCanvasGroup;
+    [SerializeField] private float textDisplayTime = 1.5f;
+    [SerializeField] private float textFadeTime = 0.5f;
+    
+    [Header("Âm Thanh")]
+    [SerializeField] private AudioClip levelCompleteSound;
+    [SerializeField] private AudioSource backgroundMusicSource;
+    private AudioSource audioSource; 
 
     private int currentWaveIndex = -1;
     private int enemiesAlive = 0;
-    private GameObject currentFormationInstance; // Biến để lưu đội hình hiện tại
-
-    // --- Singleton Pattern để dễ dàng truy cập từ các script khác ---
+    private GameObject currentFormationInstance;
     public static WaveManager Instance;
 
     void Awake()
     {
         Instance = this;
+        audioSource = GetComponent<AudioSource>();
+        if (mainCanvas == null) mainCanvas = FindObjectOfType<Canvas>();
     }
-    // -----------------------------------------------------------------
 
     void Start()
     {
-        // Khi game bắt đầu, gọi wave đầu tiên NGAY LẬP TỨC
-        // KHÔNG dùng vòng lặp hay timer ở đây
+        if (waveTextCanvasGroup != null) waveTextCanvasGroup.alpha = 0;
         StartNextWave();
     }
 
     public void StartNextWave()
     {
         currentWaveIndex++;
-
-        // Kiểm tra xem còn wave nào trong danh sách không
-        if (currentWaveIndex < waves.Length)
-        {
-            StartCoroutine(SpawnWaveCoroutine(waves[currentWaveIndex]));
-        }
-        else
-        {
-            // Đã hoàn thành tất cả các wave!
-            if (waveText != null) waveText.text = "LEVEL COMPLETE!";
-            Debug.Log("Bạn đã thắng!");
-            // Kích hoạt logic qua màn, tính sao, v.v.
-        }
+        if (currentWaveIndex < waves.Length) StartCoroutine(SpawnWaveCoroutine(waves[currentWaveIndex]));
+        else StartCoroutine(ShowWaveTextCoroutine("LEVEL COMPLETE!"));
     }
 
+    // Coroutine đã được đơn giản hóa
     private IEnumerator SpawnWaveCoroutine(Wave wave)
     {
-        if (waveText != null) waveText.text = wave.waveName;
-        
-        // Chờ một khoảng thời gian trước khi spawn
-        yield return new WaitForSeconds(wave.delayBeforeStart);
+        yield return StartCoroutine(ShowWaveTextCoroutine(wave.waveName));
 
-        // Hủy đội hình cũ đi nếu nó còn tồn tại
-        if (currentFormationInstance != null)
+        // Hiện cảnh báo nếu có
+        GameObject warningInstance = null;
+        if (wave.warningImagePrefab != null && mainCanvas != null)
         {
-            Destroy(currentFormationInstance);
+            warningInstance = Instantiate(wave.warningImagePrefab, mainCanvas.transform);
+            warningInstance.transform.localPosition = wave.warningPosition;
+            warningInstance.SetActive(true);
         }
 
-        // Tạo đội hình mới
-        currentFormationInstance = Instantiate(wave.formationPrefab, transform.position, Quaternion.identity);
+        // Chờ theo thời gian cảnh báo
+        yield return new WaitForSeconds(wave.warningDelay);
+        
+        // Xóa cảnh báo đi
+        if (warningInstance != null) Destroy(warningInstance);
 
-        // Reset biến đếm và bắt đầu đếm lại
+        // Tạo đội hình địch ở vị trí BẮT ĐẦU.
+        // FormationController sẽ tự động di chuyển nó từ đây.
+        if (currentFormationInstance != null) Destroy(currentFormationInstance);
+        currentFormationInstance = Instantiate(wave.formationPrefab, wave.enemyStartPosition, Quaternion.identity);
+
         enemiesAlive = 0;
         foreach (Transform spawnPoint in currentFormationInstance.transform)
         {
-            // Quan trọng: Chỉ spawn vào các vị trí con (Spawn Points)
-            if (spawnPoint.CompareTag("Untagged")) // Giả sử các spawn point không có tag đặc biệt
-            {
-                 ObjectPooler.Instance.SpawnFromPool(wave.enemyTagToSpawn, spawnPoint.position, spawnPoint.rotation);
-                 enemiesAlive++;
-            }
+            ObjectPooler.Instance.SpawnFromPool(wave.enemyTagToSpawn, spawnPoint.position, spawnPoint.rotation);
+            enemiesAlive++;
         }
-        
-        Debug.Log("Bắt đầu " + wave.waveName + " với " + enemiesAlive + " kẻ địch.");
+    }
+    
+    // Hàm ShowWaveTextCoroutine và OnEnemyDestroyed không thay đổi
+    private IEnumerator ShowWaveTextCoroutine(string textToShow)
+    {
+        if (waveText == null || waveTextCanvasGroup == null) yield break;
+        if (textToShow == "LEVEL COMPLETE!")
+        {
+            if (backgroundMusicSource != null) backgroundMusicSource.Stop();
+            if (levelCompleteSound != null && audioSource != null) audioSource.PlayOneShot(levelCompleteSound);
+        }
+        waveText.text = textToShow;
+        float elapsedTime = 0f;
+        while (elapsedTime < textFadeTime)
+        {
+            waveTextCanvasGroup.alpha = Mathf.Lerp(0, 1, elapsedTime / textFadeTime);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        waveTextCanvasGroup.alpha = 1;
+        yield return new WaitForSeconds(textDisplayTime);
+        elapsedTime = 0f;
+        while (elapsedTime < textFadeTime)
+        {
+            waveTextCanvasGroup.alpha = Mathf.Lerp(1, 0, elapsedTime / textFadeTime);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        waveTextCanvasGroup.alpha = 0;
     }
 
-    // HÀM QUAN TRỌNG NHẤT: Kẻ địch sẽ gọi hàm này khi chúng bị phá hủy
     public void OnEnemyDestroyed()
     {
         enemiesAlive--;
-        Debug.Log("Một kẻ địch đã bị tiêu diệt, còn lại: " + enemiesAlive);
-
-        // Nếu không còn kẻ địch nào sống sót
-        if (enemiesAlive <= 0)
-        {
-            Debug.Log("Đã tiêu diệt hết địch! Chuẩn bị wave tiếp theo...");
-            // Bắt đầu wave tiếp theo
-            StartNextWave();
-        }
+        if (enemiesAlive <= 0) StartNextWave();
     }
 }
