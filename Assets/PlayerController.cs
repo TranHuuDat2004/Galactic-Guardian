@@ -1,45 +1,42 @@
-﻿// Dán toàn bộ nội dung này vào file PlayerController.cs
-
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public GameObject bulletPrefab;
+    [System.Serializable]
+    public class BulletMapping
+    {
+        public WeaponType weaponType;
+        public string bulletTag;
+    }
+
+    [Header("Thiết Lập Vũ Khí")]
+    public List<BulletMapping> bulletMappings;
     public Transform firePoint;
     public float fireRate = 0.2f;
-    public int weaponLevel = 1;
+    [Range(1, 10)] public int weaponLevel = 1;
     private int maxWeaponLevel = 10;
+    private WeaponType currentWeaponType = WeaponType.Default;
 
-    // --- THÊM MỚI Ở ĐÂY ---
-    [Header("Âm thanh")]
-    public AudioClip shootSound; // << Biến để kéo file âm thanh bắn vào
-    private AudioSource audioSource; // << Biến để điều khiển component "Loa"
-    // ----------------------
-
-    private Camera mainCamera;
-    private Vector2 minBounds;
-    private Vector2 maxBounds;
-    private bool isDestroyed = false;
-    private float fireCooldown = 0f;
-
+    [Header("Thiết Lập Sinh Tồn")]
     public int startingLives = 3;
     public int lives;
 
+    [Header("Âm thanh")]
+    public AudioClip shootSound;
+    private AudioSource audioSource;
+    
+    // ... các biến nội bộ khác ...
+    private Camera mainCamera;
+    private Vector2 minBounds, maxBounds;
+    private bool isDestroyed = false;
+    private float fireCooldown = 0f;
+
     void Awake()
     {
-        if (firePoint == null)
-        {
-            Transform foundPoint = transform.Find("FirePoint");
-            if (foundPoint != null)
-            {
-                firePoint = foundPoint;
-            }
-        }
-
-        // --- THÊM MỚI Ở ĐÂY ---
-        // Lấy component Audio Source để có thể điều khiển nó
+        if (firePoint == null) firePoint = transform.Find("FirePoint");
         audioSource = GetComponent<AudioSource>();
-        // ----------------------
     }
 
     void Start()
@@ -47,41 +44,163 @@ public class PlayerController : MonoBehaviour
         mainCamera = Camera.main;
         InitBounds();
     }
-
+    
     void OnEnable()
     {
         ResetState();
     }
-
+    
     void ResetState()
     {
         isDestroyed = false;
         lives = startingLives;
         fireCooldown = 0f;
+        currentWeaponType = WeaponType.Default;
+        weaponLevel = 1;
     }
 
     void Update()
     {
         if (isDestroyed) return;
-
         MoveAndRotate();
-
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && fireCooldown <= 0f)
         {
-            if (fireCooldown <= 0f)
+            Shoot();
+            fireCooldown = fireRate;
+        }
+        if (fireCooldown > 0f)
+        {
+            fireCooldown -= Time.deltaTime;
+        }
+    }
+    
+    // --- HÀM UPGRADEORCHANGEWEAPON() ĐÃ ĐƯỢC THAY ĐỔI HOÀN TOÀN ---
+    private void UpgradeOrChangeWeapon(WeaponType newWeaponType)
+    {
+        // TRƯỜNG HỢP 1: Nhặt được hộp quà "Chỉ Nâng Cấp" (tia sét)
+        if (newWeaponType == WeaponType.UpgradeOnly)
+        {
+            // Chỉ cần tăng cấp độ vũ khí hiện tại
+            if (weaponLevel < maxWeaponLevel)
             {
-                Shoot();
-                fireCooldown = fireRate;
+                weaponLevel++;
+                Debug.Log("Nâng cấp vũ khí! Cấp độ hiện tại: " + weaponLevel);
             }
         }
-
-        if (fireCooldown > 0f)
-            fireCooldown -= Time.deltaTime;
+        // TRƯỜNG HỢP 2: Nhặt được hộp quà cùng loại với vũ khí đang dùng
+        else if (newWeaponType == currentWeaponType)
+        {
+            // Cũng tăng cấp độ vũ khí
+            if (weaponLevel < maxWeaponLevel)
+            {
+                weaponLevel++;
+                Debug.Log("Nâng cấp vũ khí! Cấp độ hiện tại: " + weaponLevel);
+            }
+        }
+        // TRƯỜNG HỢP 3: Nhặt được hộp quà khác loại
+        else
+        {
+            // Đổi sang loại vũ khí mới VÀ GIỮ NGUYÊN CẤP ĐỘ
+            currentWeaponType = newWeaponType;
+            Debug.Log("Đổi vũ khí thành: " + currentWeaponType + " ở cấp độ " + weaponLevel);
+        }
     }
+    
+    // Tất cả các hàm khác không cần thay đổi
+    // Shoot(), GetBulletTagForCurrentWeapon(), OnTriggerEnter2D(), TakeDamage(), ...
+    #region Unchanged Methods 
+    void Shoot()
+    {
+        if (firePoint == null) return;
 
+        string bulletTagToSpawn = GetBulletTagForCurrentWeapon();
+        if (string.IsNullOrEmpty(bulletTagToSpawn)) return;
+
+        if (shootSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(shootSound);
+        }
+
+        switch (weaponLevel)
+        {
+            case 1:
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation);
+                break;
+            case 2:
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position + transform.right * 0.3f, firePoint.rotation);
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position - transform.right * 0.3f, firePoint.rotation);
+                break;
+            case 3:
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation);
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 15));
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -15));
+                break;
+            case 4:
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation);
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 15));
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -15));
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 30));
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -30));
+                break;
+            case 5:
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position + transform.right * 0.2f, firePoint.rotation);
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position - transform.right * 0.2f, firePoint.rotation);
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 25));
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -25));
+                break;
+            case 6:
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position + transform.right * 0.2f, firePoint.rotation);
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position - transform.right * 0.2f, firePoint.rotation);
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 20));
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -20));
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 40));
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -40));
+                break;
+            case 7:
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation);
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 15));
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -15));
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 30));
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -30));
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 90));
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -90));
+                break;
+            case 8:
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position + transform.right * 0.2f, firePoint.rotation);
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position - transform.right * 0.2f, firePoint.rotation);
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 20));
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -20));
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 40));
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -40));
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 90));
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -90));
+                break;
+            case 9:
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation);
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 10));
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -10));
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 20));
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -20));
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 30));
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -30));
+                break;
+            case 10:
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation);
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 20));
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -20));
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 45));
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -45));
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 90));
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -90));
+                ObjectPooler.Instance.SpawnFromPool(bulletTagToSpawn, firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 180));
+                break;
+            default:
+                goto case 10;
+        }
+    }
+    
     void MoveAndRotate()
     {
-        // ... (Hàm này không thay đổi)
         Vector3 mouseWorldPosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
         Vector3 targetPosition = mouseWorldPosition;
         targetPosition.x = Mathf.Clamp(targetPosition.x, minBounds.x, maxBounds.x);
@@ -96,144 +215,36 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void Shoot()
+    private string GetBulletTagForCurrentWeapon()
     {
-        if (bulletPrefab == null || firePoint == null) return;
-
-        // Phát âm thanh bắn
-        if (shootSound != null && audioSource != null)
+        foreach (var mapping in bulletMappings)
         {
-            audioSource.PlayOneShot(shootSound);
-        }
-
-        switch (weaponLevel)
-        {
-            case 1: // 1 nòng
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation);
-                break;
-
-            case 2: // 2 nòng song song
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position + transform.right * 0.3f, firePoint.rotation);
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position - transform.right * 0.3f, firePoint.rotation);
-                break;
-
-            case 3: // 3 nòng hình quạt
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation);
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 15));
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -15));
-                break;
-
-            // --- CÁC CẤP ĐỘ MỚI BẮT ĐẦU TỪ ĐÂY ---
-
-            case 4: // Cấp 4: Ngôi Sao 5 Cánh (5 nòng hình quạt)
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation);
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 15));
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -15));
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 30));
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -30));
-                break;
-
-            case 5: // Cấp 5: Mũi Tên Hủy Diệt (2 thẳng, 2 chéo)
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position + transform.right * 0.2f, firePoint.rotation);
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position - transform.right * 0.2f, firePoint.rotation);
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 25));
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -25));
-                break;
-
-            case 6: // Cấp 6: Loạt Đạn Tên Lửa (2 thẳng, 4 chéo)
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position + transform.right * 0.2f, firePoint.rotation);
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position - transform.right * 0.2f, firePoint.rotation);
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 20));
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -20));
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 40));
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -40));
-                break;
-
-            case 7: // Cấp 7: Pháo Đài Bay (5 nòng trước + 2 bên)
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation);
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 15));
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -15));
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 30));
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -30));
-                // Súng hai bên
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 90));
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -90));
-                break;
-
-            case 8: // Cấp 8: Bão Đạn (Kết hợp cấp 6 và súng hai bên)
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position + transform.right * 0.2f, firePoint.rotation);
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position - transform.right * 0.2f, firePoint.rotation);
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 20));
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -20));
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 40));
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -40));
-                // Súng hai bên
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 90));
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -90));
-                break;
-
-            case 9: // Cấp 9: Vòng Cung Hủy Diệt (7 nòng quạt rộng)
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation);
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 10));
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -10));
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 20));
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -20));
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 30));
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -30));
-                break;
-
-            case 10: // Cấp 10: Bất Khả Xâm Phạm (Bắn mọi hướng)
-                     // Phía trước
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation);
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 20));
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -20));
-                // Chéo
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 45));
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -45));
-                // Hai bên
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 90));
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -90));
-                // Phía sau
-                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 180));
-                break;
-
-            // Thêm một trường hợp default để nếu weaponLevel lớn hơn 10, nó sẽ bắn như cấp 10
-            default:
-                goto case 10;
-        }
-    }
-
-    void InitBounds()
-    {
-        // ... (Hàm này không thay đổi)
-        SpriteRenderer sr = GetComponent<SpriteRenderer>();
-        if (sr == null) return;
-        Vector2 spriteSize = sr.bounds.size;
-        minBounds = mainCamera.ViewportToWorldPoint(new Vector2(0, 0));
-        maxBounds = mainCamera.ViewportToWorldPoint(new Vector2(1, 1));
-        minBounds.x += spriteSize.x / 2;
-        maxBounds.x -= spriteSize.x / 2;
-        minBounds.y += spriteSize.y / 2;
-        maxBounds.y -= spriteSize.y / 2;
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (isDestroyed || other == null || other.gameObject == null) return;
-
-        if (other.CompareTag("Blue") || other.CompareTag("Black") || other.CompareTag("Orange") || other.CompareTag("Green"))
-        {
-            TakeDamage(1); // Gọi hàm TakeDamage để xử lý va chạm
-            if (other.TryGetComponent<Enemy>(out Enemy enemy))
+            if (mapping.weaponType == currentWeaponType)
             {
-                other.gameObject.SetActive(false);
+                return mapping.bulletTag;
             }
         }
+        Debug.LogError("Không tìm thấy tag đạn cho loại vũ khí: " + currentWeaponType);
+        return null;
+    }
+    
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (isDestroyed || other == null) return;
 
-        if (other.CompareTag("PowerUp"))
+        string tag = other.tag;
+        if (tag == "Blue" || tag == "Black" || tag == "Orange" || tag == "Green" || tag == "Meteor")
         {
+            TakeDamage(1);
+            other.gameObject.SetActive(false);
+        }
+        else if (tag == "PowerUp")
+        {
+            if (other.TryGetComponent<PowerUp>(out PowerUp powerUp))
+            {
+                UpgradeOrChangeWeapon(powerUp.weaponTypeToGive);
+            }
             Destroy(other.gameObject);
-            UpgradeWeapon();
         }
     }
 
@@ -248,11 +259,17 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void UpgradeWeapon()
+    void InitBounds()
     {
-        if (weaponLevel < maxWeaponLevel)
-        {
-            weaponLevel++;
-        }
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        if (sr == null) return;
+        Vector2 spriteSize = sr.bounds.size;
+        minBounds = mainCamera.ViewportToWorldPoint(new Vector2(0, 0));
+        maxBounds = mainCamera.ViewportToWorldPoint(new Vector2(1, 1));
+        minBounds.x += spriteSize.x / 2;
+        maxBounds.x -= spriteSize.x / 2;
+        minBounds.y += spriteSize.y / 2;
+        maxBounds.y -= spriteSize.y / 2;
     }
+    #endregion
 }

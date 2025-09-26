@@ -303,13 +303,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0296db97a8eb971418a2554d2a53e70d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  bulletPrefab: {fileID: 1170744857039610, guid: 6b48e87ff28b6f046be5de5985f87ed2, type: 3}
+  bulletMappings:
+  - weaponType: 0
+    bulletTag: Bullet
+  - weaponType: 1
+    bulletTag: ArrowBlue
+  - weaponType: 2
+    bulletTag: FireballOrange
+  - weaponType: 3
+    bulletTag: BulletGreen
   firePoint: {fileID: 4476874946771786391}
   fireRate: 0.2
   weaponLevel: 1
-  shootSound: {fileID: 8300000, guid: eb0c6f42274d3cc419f4d75725a84e4b, type: 3}
   startingLives: 3
   lives: 0
+  shootSound: {fileID: 8300000, guid: eb0c6f42274d3cc419f4d75725a84e4b, type: 3}
 --- !u!82 &1508549570684291339
 AudioSource:
   m_ObjectHideFlags: 0
