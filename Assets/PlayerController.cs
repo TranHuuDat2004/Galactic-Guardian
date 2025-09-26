@@ -1,11 +1,20 @@
-﻿using UnityEngine;
+﻿// Dán toàn bộ nội dung này vào file PlayerController.cs
+
+using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
     public GameObject bulletPrefab;
     public Transform firePoint;
-    public float fireRate = 0.2f;   // thời gian delay giữa mỗi viên đạn
-    public int weaponLevel = 1;     // cấp vũ khí (1 = 1 nòng, 2 = 2 nòng, 3 = 3 nòng quạt)
+    public float fireRate = 0.2f;
+    public int weaponLevel = 1;
+    private int maxWeaponLevel = 10;
+
+    // --- THÊM MỚI Ở ĐÂY ---
+    [Header("Âm thanh")]
+    public AudioClip shootSound; // << Biến để kéo file âm thanh bắn vào
+    private AudioSource audioSource; // << Biến để điều khiển component "Loa"
+    // ----------------------
 
     private Camera mainCamera;
     private Vector2 minBounds;
@@ -13,16 +22,11 @@ public class PlayerController : MonoBehaviour
     private bool isDestroyed = false;
     private float fireCooldown = 0f;
 
-    // === THÊM BIẾN NÀY ĐỂ GIỚI HẠN CẤP VŨ KHÍ ===
-    private int maxWeaponLevel = 3;
-
     public int startingLives = 3;
-    // Khai báo biến lives này ở đầu script, thay vì dùng private int _lives = 1;
     public int lives;
+
     void Awake()
     {
-        // 1. Nếu firePoint bị mất liên kết trong Inspector, tự tìm lại nó!
-        // Chúng ta tìm component Transform của đối tượng con tên là "FirePoint"
         if (firePoint == null)
         {
             Transform foundPoint = transform.Find("FirePoint");
@@ -32,50 +36,32 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        // 2. Tương tự, nếu bulletPrefab bị mất, bạn sẽ phải dùng cách khác: 
-        // Tìm nó trong thư mục Resources hoặc AssetBundle, nhưng bây giờ chúng ta 
-        // cứ dựa vào Inspector cho Prefab, và chỉ tập trung vào FirePoint.
-
-        // Nếu bạn muốn chắc chắn FirePoint không bị mất ngay từ đầu, 
-        // bạn có thể đổi 'public Transform firePoint;' thành private 
-        // và dùng thuộc tính [SerializeField] để ép người dùng gán nó. 
+        // --- THÊM MỚI Ở ĐÂY ---
+        // Lấy component Audio Source để có thể điều khiển nó
+        audioSource = GetComponent<AudioSource>();
+        // ----------------------
     }
 
     void Start()
     {
         mainCamera = Camera.main;
         InitBounds();
-        // KHÔNG CẦN gọi ResetState ở đây nữa, vì nó sẽ được gọi khi Enable
     }
 
-    // Thêm hàm này để reset lại tất cả các trạng thái của Player
-    void ResetState()
-    {
-        isDestroyed = false; // Cho phép di chuyển và bắn
-        lives = startingLives; // Reset số mạng
-        fireCooldown = 0f; // Reset thời gian hồi chiêu
-
-        // Reset các hiệu ứng hình ảnh nếu có (như shield, fire visualization)
-        // Ví dụ: 
-        // _shieldVisualize.SetActive(false);
-        // _Fire1_Visualize.SetActive(false);
-        // _Fire2_Visualize.SetActive(false);
-        // ... (làm tương tự cho các hiệu ứng khác)
-
-        // Reset lại vị trí và góc quay ban đầu (hoặc vị trí spawn)
-        // Ví dụ: transform.position = Vector3.zero;
-        //        transform.rotation = Quaternion.identity;
-    }
-
-    // Hàm này được gọi mỗi khi GameObject Player được SetActive(true)
     void OnEnable()
     {
-        ResetState(); // Khởi tạo lại mọi thứ khi Player được "mượn" từ Pool
+        ResetState();
+    }
+
+    void ResetState()
+    {
+        isDestroyed = false;
+        lives = startingLives;
+        fireCooldown = 0f;
     }
 
     void Update()
     {
-        // Dòng này là quan trọng nhất: nếu isDestroyed là true, thì không làm gì cả
         if (isDestroyed) return;
 
         MoveAndRotate();
@@ -95,15 +81,13 @@ public class PlayerController : MonoBehaviour
 
     void MoveAndRotate()
     {
+        // ... (Hàm này không thay đổi)
         Vector3 mouseWorldPosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-
         Vector3 targetPosition = mouseWorldPosition;
         targetPosition.x = Mathf.Clamp(targetPosition.x, minBounds.x, maxBounds.x);
         targetPosition.y = Mathf.Clamp(targetPosition.y, minBounds.y, maxBounds.y);
         targetPosition.z = 0;
-
         transform.position = targetPosition;
-
         Vector3 direction = targetPosition - transform.position;
         if (direction.sqrMagnitude > 0.01f)
         {
@@ -116,93 +100,159 @@ public class PlayerController : MonoBehaviour
     {
         if (bulletPrefab == null || firePoint == null) return;
 
+        // Phát âm thanh bắn
+        if (shootSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(shootSound);
+        }
+
         switch (weaponLevel)
         {
             case 1: // 1 nòng
-                    // Lấy 1 viên đạn từ kho và bắn thẳng
                 ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation);
                 break;
 
             case 2: // 2 nòng song song
-                    // Lấy 2 viên đạn từ kho và đặt ở hai vị trí song song
                 ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position + transform.right * 0.3f, firePoint.rotation);
                 ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position - transform.right * 0.3f, firePoint.rotation);
                 break;
 
             case 3: // 3 nòng hình quạt
-                    // Lấy 3 viên đạn từ kho, giữ nguyên vị trí nhưng thay đổi góc bắn
                 ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation);
                 ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 15));
                 ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -15));
                 break;
+
+            // --- CÁC CẤP ĐỘ MỚI BẮT ĐẦU TỪ ĐÂY ---
+
+            case 4: // Cấp 4: Ngôi Sao 5 Cánh (5 nòng hình quạt)
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation);
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 15));
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -15));
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 30));
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -30));
+                break;
+
+            case 5: // Cấp 5: Mũi Tên Hủy Diệt (2 thẳng, 2 chéo)
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position + transform.right * 0.2f, firePoint.rotation);
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position - transform.right * 0.2f, firePoint.rotation);
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 25));
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -25));
+                break;
+
+            case 6: // Cấp 6: Loạt Đạn Tên Lửa (2 thẳng, 4 chéo)
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position + transform.right * 0.2f, firePoint.rotation);
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position - transform.right * 0.2f, firePoint.rotation);
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 20));
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -20));
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 40));
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -40));
+                break;
+
+            case 7: // Cấp 7: Pháo Đài Bay (5 nòng trước + 2 bên)
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation);
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 15));
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -15));
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 30));
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -30));
+                // Súng hai bên
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 90));
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -90));
+                break;
+
+            case 8: // Cấp 8: Bão Đạn (Kết hợp cấp 6 và súng hai bên)
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position + transform.right * 0.2f, firePoint.rotation);
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position - transform.right * 0.2f, firePoint.rotation);
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 20));
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -20));
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 40));
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -40));
+                // Súng hai bên
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 90));
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -90));
+                break;
+
+            case 9: // Cấp 9: Vòng Cung Hủy Diệt (7 nòng quạt rộng)
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation);
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 10));
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -10));
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 20));
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -20));
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 30));
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -30));
+                break;
+
+            case 10: // Cấp 10: Bất Khả Xâm Phạm (Bắn mọi hướng)
+                     // Phía trước
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation);
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 20));
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -20));
+                // Chéo
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 45));
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -45));
+                // Hai bên
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 90));
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, -90));
+                // Phía sau
+                ObjectPooler.Instance.SpawnFromPool("Bullet", firePoint.position, firePoint.rotation * Quaternion.Euler(0, 0, 180));
+                break;
+
+            // Thêm một trường hợp default để nếu weaponLevel lớn hơn 10, nó sẽ bắn như cấp 10
+            default:
+                goto case 10;
         }
     }
 
     void InitBounds()
     {
+        // ... (Hàm này không thay đổi)
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
         if (sr == null) return;
-
         Vector2 spriteSize = sr.bounds.size;
-
         minBounds = mainCamera.ViewportToWorldPoint(new Vector2(0, 0));
         maxBounds = mainCamera.ViewportToWorldPoint(new Vector2(1, 1));
-
         minBounds.x += spriteSize.x / 2;
         maxBounds.x -= spriteSize.x / 2;
         minBounds.y += spriteSize.y / 2;
         maxBounds.y -= spriteSize.y / 2;
     }
 
-    // Hàm OnTriggerEnter2D cũ của bạn, CHỈ xử lý trừ máu và kiểm tra Game Over
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // THAY THẾ TOÀN BỘ hàm OnTriggerEnter2D cũ bằng hàm này
         if (isDestroyed || other == null || other.gameObject == null) return;
 
         if (other.CompareTag("Blue") || other.CompareTag("Black") || other.CompareTag("Orange") || other.CompareTag("Green"))
         {
-            lives--;
-            Debug.Log("Player còn lại: " + lives + " mạng!");
-
-            if (lives <= 0)
-            {
-                isDestroyed = true; // Đặt cờ isDestroyed là true để dừng Update()
-                Debug.Log("GAME OVER! Player đã bị phá hủy.");
-                // Thay vì Destroy, chúng ta sẽ TẮT nó đi để trả về pool
-                gameObject.SetActive(false);
-            }
-            // Đừng quên Destroy/SetActive(false) kẻ địch đã va vào mình!
-            // Cần thêm logic này để kẻ địch cũng biến mất sau va chạm
+            TakeDamage(1); // Gọi hàm TakeDamage để xử lý va chạm
             if (other.TryGetComponent<Enemy>(out Enemy enemy))
             {
-                // Logic để enemy biến mất (nếu dùng pool thì SetActive(false), nếu không thì Destroy)
-                // Vì enemy spawn bằng pool, nên dùng SetActive(false)
                 other.gameObject.SetActive(false);
             }
         }
 
-        // --- THÊM LOGIC MỚI: NHẶT POWER-UP ---
         if (other.CompareTag("PowerUp"))
         {
-            // Hủy vật phẩm ngay khi nhặt
             Destroy(other.gameObject);
-
-            // Nâng cấp vũ khí
             UpgradeWeapon();
         }
     }
 
-    // --- THÊM HÀM MỚI: NÂNG CẤP VŨ KHÍ ---
+    public void TakeDamage(int damageAmount)
+    {
+        if (isDestroyed) return;
+        lives -= damageAmount;
+        if (lives <= 0)
+        {
+            isDestroyed = true;
+            gameObject.SetActive(false);
+        }
+    }
+
     private void UpgradeWeapon()
     {
-        // Nếu chưa đạt cấp tối đa thì mới cộng
         if (weaponLevel < maxWeaponLevel)
         {
             weaponLevel++;
         }
-
-        // (Tùy chọn) Chơi một âm thanh nâng cấp
-        // audioSource.PlayOneShot(upgradeSound);
     }
 }

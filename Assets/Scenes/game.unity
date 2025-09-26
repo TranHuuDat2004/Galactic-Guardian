@@ -211,10 +211,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1498412418416526083, guid: 43c5fb4b2bc591c4895736631266695f, type: 3}
-      propertyPath: weaponLevel
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7402313836422617715, guid: 43c5fb4b2bc591c4895736631266695f, type: 3}
       propertyPath: m_Name
       value: Player
@@ -225,7 +221,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8392465033918891721, guid: 43c5fb4b2bc591c4895736631266695f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -5.79
+      value: -5.61
       objectReference: {fileID: 0}
     - target: {fileID: 8392465033918891721, guid: 43c5fb4b2bc591c4895736631266695f, type: 3}
       propertyPath: m_LocalPosition.z
