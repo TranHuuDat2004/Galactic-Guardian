@@ -4,16 +4,13 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    // Lớp nội bộ để ánh xạ vũ khí
     [System.Serializable]
     public class BulletMapping
     {
         public WeaponType weaponType;
         public string bulletTag;
     }
-
-    [Header("Hiệu Ứng")]
-    public string explosionTag = "PlayerExplosion"; // Tag hiệu ứng nổ của Player
-
 
     [Header("Thiết Lập Vũ Khí")]
     public List<BulletMapping> bulletMappings;
@@ -26,93 +23,194 @@ public class PlayerController : MonoBehaviour
     [Header("Thiết Lập Sinh Tồn")]
     public int startingLives = 3;
     public int lives;
+    public bool isInvincible = false; // Trạng thái bất tử
+    public float invincibilityDuration = 2.0f; // Thời gian bất tử sau khi hồi sinh
+
+    [Header("Hiệu Ứng")]
+    public string explosionTag = "PlayerExplosion";
 
     [Header("Âm thanh")]
     public AudioClip shootSound;
     private AudioSource audioSource;
-
-    // ... các biến nội bộ khác ...
+    
+    // Biến nội bộ
     private Camera mainCamera;
     private Vector2 minBounds, maxBounds;
-    private bool isDestroyed = false;
+    private bool isDestroyed = false; // Dùng để kiểm soát trạng thái "chết hẳn"
     private float fireCooldown = 0f;
+    private SpriteRenderer spriteRenderer;
 
     void Awake()
     {
         if (firePoint == null) firePoint = transform.Find("FirePoint");
         audioSource = GetComponent<AudioSource>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void Start()
     {
         mainCamera = Camera.main;
         InitBounds();
+        // ResetState() sẽ được gọi trong OnEnable
     }
-
+    
     void OnEnable()
     {
-        ResetState();
+        // ResetState chỉ reset các chỉ số logic, không phải trạng thái bất tử
+        ResetForNewLife();
     }
 
-    void ResetState()
+    // Reset các chỉ số cơ bản khi bắt đầu một mạng sống mới
+    void ResetForNewLife()
     {
         isDestroyed = false;
+        // Không reset weaponLevel và currentWeaponType ở đây để giữ nguyên nâng cấp
+    }
+
+    // Hàm này được gọi bởi GameManager khi game bắt đầu
+    public void InitializePlayer()
+    {
         lives = startingLives;
-        fireCooldown = 0f;
-        currentWeaponType = WeaponType.Default;
         weaponLevel = 1;
+        currentWeaponType = WeaponType.Default;
     }
 
     void Update()
     {
         if (isDestroyed) return;
+
         MoveAndRotate();
+
         if (Input.GetMouseButton(0) && fireCooldown <= 0f)
         {
             Shoot();
             fireCooldown = fireRate;
         }
+
         if (fireCooldown > 0f)
         {
             fireCooldown -= Time.deltaTime;
         }
     }
 
-    // --- HÀM UPGRADEORCHANGEWEAPON() ĐÃ ĐƯỢC THAY ĐỔI HOÀN TOÀN ---
-    private void UpgradeOrChangeWeapon(WeaponType newWeaponType)
+    // Hàm này được gọi bởi GameManager để hồi sinh người chơi
+    public void Respawn()
     {
-        // TRƯỜNG HỢP 1: Nhặt được hộp quà "Chỉ Nâng Cấp" (tia sét)
-        if (newWeaponType == WeaponType.UpgradeOnly)
-        {
-            // Chỉ cần tăng cấp độ vũ khí hiện tại
-            if (weaponLevel < maxWeaponLevel)
-            {
-                weaponLevel++;
-                Debug.Log("Nâng cấp vũ khí! Cấp độ hiện tại: " + weaponLevel);
-            }
-        }
-        // TRƯỜNG HỢP 2: Nhặt được hộp quà cùng loại với vũ khí đang dùng
-        else if (newWeaponType == currentWeaponType)
-        {
-            // Cũng tăng cấp độ vũ khí
-            if (weaponLevel < maxWeaponLevel)
-            {
-                weaponLevel++;
-                Debug.Log("Nâng cấp vũ khí! Cấp độ hiện tại: " + weaponLevel);
-            }
-        }
-        // TRƯỜNG HỢP 3: Nhặt được hộp quà khác loại
-        else
-        {
-            // Đổi sang loại vũ khí mới VÀ GIỮ NGUYÊN CẤP ĐỘ
-            currentWeaponType = newWeaponType;
-            Debug.Log("Đổi vũ khí thành: " + currentWeaponType + " ở cấp độ " + weaponLevel);
-        }
+        // Kích hoạt lại GameObject
+        gameObject.SetActive(true);
+        // Reset các chỉ số cho mạng sống mới
+        ResetForNewLife();
+        // Bắt đầu coroutine bất tử và nhấp nháy
+        StartCoroutine(InvincibilityCoroutine());
     }
 
-    // Tất cả các hàm khác không cần thay đổi
-    // Shoot(), GetBulletTagForCurrentWeapon(), OnTriggerEnter2D(), TakeDamage(), ...
-    #region Unchanged Methods 
+    // Coroutine xử lý trạng thái bất tử và hiệu ứng nhấp nháy
+    private IEnumerator InvincibilityCoroutine()
+    {
+        Debug.Log("Player đang trong trạng thái bất tử!");
+        isInvincible = true;
+
+        float endTime = Time.time + invincibilityDuration;
+        while (Time.time < endTime)
+        {
+            // Bật/tắt sprite renderer để tạo hiệu ứng nhấp nháy
+            spriteRenderer.enabled = !spriteRenderer.enabled;
+            yield return new WaitForSeconds(0.1f); // Tần suất nhấp nháy
+        }
+
+        // Đảm bảo sprite luôn hiện lại cuối cùng và tắt trạng thái bất tử
+        spriteRenderer.enabled = true;
+        isInvincible = false;
+        Debug.Log("Player hết bất tử!");
+    }
+
+    // Hàm nhận sát thương đã được viết lại hoàn toàn
+    public void TakeDamage(int damageAmount)
+    {
+        // Nếu đang bất tử, hoặc đã "chết hẳn" (đang chờ game over), thì không nhận sát thương
+        if (isInvincible || isDestroyed) return;
+
+        lives -= damageAmount;
+        
+        // Tạo hiệu ứng nổ
+        if (!string.IsNullOrEmpty(explosionTag))
+        {
+            ObjectPooler.Instance.SpawnFromPool(explosionTag, transform.position, Quaternion.identity);
+        }
+
+        // Tạm ẩn người chơi đi
+        gameObject.SetActive(false);
+
+        // Báo cho GameManager biết người chơi vừa mất một mạng
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.HandlePlayerDeath();
+        }
+
+        // Nếu hết mạng, đánh dấu là đã "chết hẳn"
+        if (lives <= 0)
+        {
+            isDestroyed = true;
+        }
+    }
+    
+    // Các hàm còn lại không cần thay đổi
+    // ...
+    #region Unchanged Methods
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (isDestroyed || other == null) return;
+        string tag = other.tag;
+
+        if (tag == "Blue" || tag == "Black" || tag == "Orange" || tag == "Green" || tag == "Meteor")
+        {
+            TakeDamage(1);
+            other.gameObject.SetActive(false);
+        }
+        else if (tag == "PowerUp")
+        {
+            if (other.TryGetComponent<PowerUp>(out PowerUp powerUp))
+            {
+                UpgradeOrChangeWeapon(powerUp.weaponTypeToGive);
+            }
+            Destroy(other.gameObject);
+        }
+        // Thêm va chạm với đạn của địch
+        else if (tag == "EnemyBullet")
+        {
+            TakeDamage(1);
+            // Viên đạn địch sẽ tự hủy khi va chạm
+        }
+    }
+    
+    private void UpgradeOrChangeWeapon(WeaponType newWeaponType)
+    {
+        if (newWeaponType == WeaponType.UpgradeOnly || newWeaponType == currentWeaponType)
+        {
+            if (weaponLevel < maxWeaponLevel)
+            {
+                weaponLevel++;
+            }
+        }
+        else
+        {
+            currentWeaponType = newWeaponType;
+            // weaponLevel = 1; // Giữ nguyên cấp độ khi đổi vũ khí
+        }
+    }
+    
+    private string GetBulletTagForCurrentWeapon()
+    {
+        foreach (var mapping in bulletMappings)
+        {
+            if (mapping.weaponType == currentWeaponType)
+            {
+                return mapping.bulletTag;
+            }
+        }
+        return null;
+    }
+
     void Shoot()
     {
         if (firePoint == null) return;
@@ -201,7 +299,7 @@ public class PlayerController : MonoBehaviour
             default:
                 goto case 10;
         }
-    }
+        }
 
     void MoveAndRotate()
     {
@@ -219,62 +317,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private string GetBulletTagForCurrentWeapon()
-    {
-        foreach (var mapping in bulletMappings)
-        {
-            if (mapping.weaponType == currentWeaponType)
-            {
-                return mapping.bulletTag;
-            }
-        }
-        Debug.LogError("Không tìm thấy tag đạn cho loại vũ khí: " + currentWeaponType);
-        return null;
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (isDestroyed || other == null) return;
-
-        string tag = other.tag;
-        if (tag == "Blue" || tag == "Black" || tag == "Orange" || tag == "Green" || tag == "Meteor")
-        {
-            TakeDamage(1);
-            other.gameObject.SetActive(false);
-        }
-        else if (tag == "PowerUp")
-        {
-            if (other.TryGetComponent<PowerUp>(out PowerUp powerUp))
-            {
-                UpgradeOrChangeWeapon(powerUp.weaponTypeToGive);
-            }
-            Destroy(other.gameObject);
-        }
-    }
-
-    public void TakeDamage(int damageAmount)
-    {
-        if (isDestroyed) return;
-        lives -= damageAmount;
-        if (lives <= 0)
-        {
-            isDestroyed = true;
-
-            // Gọi hiệu ứng nổ của Player
-            if (!string.IsNullOrEmpty(explosionTag))
-            {
-                ObjectPooler.Instance.SpawnFromPool(explosionTag, transform.position, Quaternion.identity);
-            }
-
-            gameObject.SetActive(false);
-        }
-    }
-
     void InitBounds()
     {
-        SpriteRenderer sr = GetComponent<SpriteRenderer>();
-        if (sr == null) return;
-        Vector2 spriteSize = sr.bounds.size;
+        if (spriteRenderer == null) return;
+        Vector2 spriteSize = spriteRenderer.bounds.size;
         minBounds = mainCamera.ViewportToWorldPoint(new Vector2(0, 0));
         maxBounds = mainCamera.ViewportToWorldPoint(new Vector2(1, 1));
         minBounds.x += spriteSize.x / 2;
