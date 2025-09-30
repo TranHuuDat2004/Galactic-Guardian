@@ -11,10 +11,27 @@ public class UIManager : MonoBehaviour
     public Image healthBarFill;
     public TextMeshProUGUI bossNameText;
 
+
+    // --- THÊM MỚI Ở ĐÂY ---
+    [Header("UI Mạng Sống Player")]
+    public TextMeshProUGUI livesText; // Kéo Text hiển thị số mạng vào đây
+    // ----------------------
+
     private void Awake()
     {
         Instance = this;
     }
+    
+    // --- HÀM MỚI ĐỂ CẬP NHẬT SỐ MẠNG ---
+    public void UpdateLives(int currentLives)
+    {
+        if (livesText != null)
+        {
+            livesText.text = "x " + currentLives;
+        }
+    }
+    // ------------------------------------
+
 
     // Hàm để hiện thanh máu
     public void ShowBossHealthBar(string bossName)

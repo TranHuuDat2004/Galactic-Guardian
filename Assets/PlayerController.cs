@@ -125,34 +125,37 @@ public class PlayerController : MonoBehaviour
     }
 
     // Hàm nhận sát thương đã được viết lại hoàn toàn
-    public void TakeDamage(int damageAmount)
+    // Trong PlayerController.cs
+public void TakeDamage(int damageAmount)
+{
+    if (isInvincible || isDestroyed) return;
+
+    lives -= damageAmount;
+
+    // --- THÊM DÒNG NÀY ---
+    // Báo cho UIManager cập nhật lại hiển thị số mạng
+    if (UIManager.Instance != null)
     {
-        // Nếu đang bất tử, hoặc đã "chết hẳn" (đang chờ game over), thì không nhận sát thương
-        if (isInvincible || isDestroyed) return;
-
-        lives -= damageAmount;
-
-        // Tạo hiệu ứng nổ
-        if (!string.IsNullOrEmpty(explosionTag))
-        {
-            ObjectPooler.Instance.SpawnFromPool(explosionTag, transform.position, Quaternion.identity);
-        }
-
-        // Tạm ẩn người chơi đi
-        gameObject.SetActive(false);
-
-        // Báo cho GameManager biết người chơi vừa mất một mạng
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.HandlePlayerDeath();
-        }
-
-        // Nếu hết mạng, đánh dấu là đã "chết hẳn"
-        if (lives <= 0)
-        {
-            isDestroyed = true;
-        }
+        UIManager.Instance.UpdateLives(lives);
     }
+    // ----------------------
+
+    Debug.Log("Player bị trúng đạn! Còn lại: " + lives + " mạng!");
+    
+    if (!string.IsNullOrEmpty(explosionTag))
+    {
+        ObjectPooler.Instance.SpawnFromPool(explosionTag, transform.position, Quaternion.identity);
+    }
+
+    gameObject.SetActive(false);
+    
+    GameManager.Instance.HandlePlayerDeath();
+
+    if (lives <= 0)
+    {
+        isDestroyed = true;
+    }
+}
 
     // Các hàm còn lại không cần thay đổi
     // ...

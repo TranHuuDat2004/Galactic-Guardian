@@ -42,21 +42,27 @@ public class GameManager : MonoBehaviour
         }
         SpawnPlayer();
     }
-    
+
+    // Trong GameManager.cs
     void SpawnPlayer()
     {
         GameObject playerInstance = Instantiate(playerPrefab, playerSpawnPoint.position, playerSpawnPoint.rotation);
         currentPlayer = playerInstance.GetComponent<PlayerController>();
 
-        // Khởi tạo số mạng cho Player khi game bắt đầu
         if (currentPlayer != null)
         {
-            // Thay vì currentPlayer.lives = currentPlayer.startingLives;
-            // chúng ta sẽ gọi một hàm khởi tạo để code gọn gàng hơn
             currentPlayer.InitializePlayer();
+
+            // --- THÊM DÒNG NÀY ---
+            // Cập nhật UI mạng sống lần đầu tiên khi game bắt đầu
+            if (UIManager.Instance != null)
+            {
+                UIManager.Instance.UpdateLives(currentPlayer.lives);
+            }
+            // ----------------------
         }
     }
-    
+
     public void HandlePlayerDeath()
     {
         if (currentPlayer == null) return;
@@ -81,12 +87,12 @@ public class GameManager : MonoBehaviour
             // Di chuyển Player về vị trí hồi sinh trước khi kích hoạt lại
             currentPlayer.transform.position = playerSpawnPoint.position;
             currentPlayer.transform.rotation = playerSpawnPoint.rotation;
-            
+
             // Gọi hàm Respawn để kích hoạt và bắt đầu trạng thái bất tử
             currentPlayer.Respawn();
         }
     }
-    
+
     void GameOver()
     {
         Debug.Log("GAME OVER!");
@@ -102,23 +108,23 @@ public class GameManager : MonoBehaviour
         {
             gameOverUI.SetActive(true);
         }
-        
+
         // 3. Phát âm thanh Game Over
         if (gameOverSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(gameOverSound);
         }
-        
+
         // 4. Bắt đầu đếm ngược để quay về Menu
         StartCoroutine(LoadMenuAfterDelay());
     }
-    
+
     private IEnumerator LoadMenuAfterDelay()
     {
         yield return new WaitForSeconds(delayBeforeLoadScene);
 
         // Reset lại Time.timeScale về bình thường trước khi chuyển cảnh
-        Time.timeScale = 1f; 
+        Time.timeScale = 1f;
 
         // Tải lại Scene Menu
         SceneManager.LoadScene(menuSceneName);
