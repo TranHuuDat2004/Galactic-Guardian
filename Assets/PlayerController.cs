@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
     [Header("Âm thanh")]
     public AudioClip shootSound;
     private AudioSource audioSource;
-    
+
     // Biến nội bộ
     private Camera mainCamera;
     private Vector2 minBounds, maxBounds;
@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
         InitBounds();
         // ResetState() sẽ được gọi trong OnEnable
     }
-    
+
     void OnEnable()
     {
         // ResetState chỉ reset các chỉ số logic, không phải trạng thái bất tử
@@ -131,7 +131,7 @@ public class PlayerController : MonoBehaviour
         if (isInvincible || isDestroyed) return;
 
         lives -= damageAmount;
-        
+
         // Tạo hiệu ứng nổ
         if (!string.IsNullOrEmpty(explosionTag))
         {
@@ -153,20 +153,37 @@ public class PlayerController : MonoBehaviour
             isDestroyed = true;
         }
     }
-    
+
     // Các hàm còn lại không cần thay đổi
     // ...
     #region Unchanged Methods
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (isDestroyed || other == null) return;
+
         string tag = other.tag;
 
-        if (tag == "Blue" || tag == "Black" || tag == "Orange" || tag == "Green" || tag == "Meteor")
+        // --- KIỂM TRA VA CHẠM VỚI TẤT CẢ CÁC LOẠI KẺ ĐỊCH ---
+        if (tag == "Blue" || tag == "Black" || tag == "Orange" || tag == "Green" || tag == "Meteor" || tag == "Boss")
         {
-            TakeDamage(1);
+            // Thử lấy component Enemy từ đối tượng va chạm
+            if (other.TryGetComponent<Enemy>(out Enemy enemy))
+            {
+                // Nhận một lượng sát thương bằng với collisionDamage của kẻ địch đó
+                // Nếu là Boss, sẽ là 10. Nếu là địch thường, sẽ là 1.
+                TakeDamage(enemy.collisionDamage);
+            }
+            else
+            {
+                // Nếu không lấy được component Enemy (dự phòng, ví dụ cho Meteor nếu nó dùng script khác), chỉ trừ 1 máu
+                TakeDamage(1);
+            }
+
+            // Tắt đối tượng kẻ địch đi
             other.gameObject.SetActive(false);
         }
+        // --------------------------------------------------
+
         else if (tag == "PowerUp")
         {
             if (other.TryGetComponent<PowerUp>(out PowerUp powerUp))
@@ -175,14 +192,13 @@ public class PlayerController : MonoBehaviour
             }
             Destroy(other.gameObject);
         }
-        // Thêm va chạm với đạn của địch
         else if (tag == "EnemyBullet")
         {
+            // Va chạm với đạn địch luôn trừ 1 máu
             TakeDamage(1);
-            // Viên đạn địch sẽ tự hủy khi va chạm
         }
     }
-    
+
     private void UpgradeOrChangeWeapon(WeaponType newWeaponType)
     {
         if (newWeaponType == WeaponType.UpgradeOnly || newWeaponType == currentWeaponType)
@@ -198,7 +214,7 @@ public class PlayerController : MonoBehaviour
             // weaponLevel = 1; // Giữ nguyên cấp độ khi đổi vũ khí
         }
     }
-    
+
     private string GetBulletTagForCurrentWeapon()
     {
         foreach (var mapping in bulletMappings)
@@ -299,7 +315,7 @@ public class PlayerController : MonoBehaviour
             default:
                 goto case 10;
         }
-        }
+    }
 
     void MoveAndRotate()
     {

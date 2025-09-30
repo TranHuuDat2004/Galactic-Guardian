@@ -20,6 +20,9 @@ public class Enemy : MonoBehaviour
     [Header("Chỉ Số Cơ Bản")]
     public int health = 1;
     public float speed = 3.0f;
+
+     // --- THÊM BIẾN MỚI Ở ĐÂY ---
+    public int collisionDamage = 1; // Sát thương khi va chạm vào Player
     public float rotationSpeed = 50.0f;
     public string bossDisplayName = "CHIẾN HẠM ZYGON";
 
@@ -34,7 +37,7 @@ public class Enemy : MonoBehaviour
     public float fireRate = 2.0f;
     public Transform firePoint;
     private float fireCooldown = 0f;
-    
+
     [Header("Thiết Lập Tấn Công Của Boss")]
     public bool isBoss = false;
     public List<AttackPhase> attackPhases;
@@ -49,7 +52,7 @@ public class Enemy : MonoBehaviour
     [Header("Thiết Lập Rớt Đồ")]
     public GameObject[] powerUpPrefabs;
     [Range(0, 100)] public float dropChance = 15f;
-    
+
     private bool isDead = false;
     private int initialHealth;
     private Vector2 moveDirection;
@@ -75,7 +78,7 @@ public class Enemy : MonoBehaviour
         if (col != null) col.enabled = true;
 
         fireCooldown = Random.Range(0.5f, fireRate);
-        
+
         if (movementType == MovementType.Diagonal)
         {
             float randomX = Random.Range(0, 2) == 0 ? -1f : 1f;
@@ -83,10 +86,10 @@ public class Enemy : MonoBehaviour
         }
         else if (movementType == MovementType.Roaming)
         {
-            StopAllCoroutines(); 
+            StopAllCoroutines();
             StartCoroutine(RoamingCoroutine());
         }
-        
+
         if (isBoss)
         {
             if (attackPhases.Count > 0)
@@ -109,7 +112,7 @@ public class Enemy : MonoBehaviour
     void OnDisable()
     {
         StopAllCoroutines();
-        
+
         if (isBoss && UIManager.Instance != null)
         {
             UIManager.Instance.HideBossHealthBar();
@@ -139,12 +142,12 @@ public class Enemy : MonoBehaviour
             fireCooldown -= Time.deltaTime;
             if (fireCooldown <= 0)
             {
-                Shoot(BossAttackType.SingleShot); 
+                Shoot(BossAttackType.SingleShot);
                 fireCooldown = fireRate;
             }
         }
     }
-    
+
     private IEnumerator RoamingCoroutine()
     {
         while (!isDead)
@@ -186,7 +189,7 @@ public class Enemy : MonoBehaviour
             }
         }
     }
-    
+
     void Shoot(BossAttackType attackType)
     {
         if (firePoint == null || string.IsNullOrEmpty(bulletTag)) return;
@@ -201,15 +204,32 @@ public class Enemy : MonoBehaviour
             case BossAttackType.CircularBurst: int numberOfBullets = 12; for (int i = 0; i < numberOfBullets; i++) { float angle = i * (360f / numberOfBullets); ObjectPooler.Instance.SpawnFromPool(bulletTag, firePoint.position, Quaternion.Euler(0, 0, angle)); } break;
         }
     }
-    
+
+     // --- CẬP NHẬT HÀM OnTriggerEnter2D ---
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (isDead || other == null) return;
+
+        // Nếu va chạm với đạn của Player
         if (other.CompareTag("Bullet"))
         {
-            if (other.TryGetComponent<Bullet>(out Bullet bullet)) { TakeDamage(bullet.damage); }
+            if (other.TryGetComponent<Bullet>(out Bullet bullet))
+            {
+                TakeDamage(bullet.damage);
+            }
         }
-        else if (other.CompareTag("Player")) { Die(); }
+        // Nếu va chạm với Player
+        else if (other.CompareTag("Player"))
+        {
+            // Thử lấy component PlayerController
+            if(other.TryGetComponent<PlayerController>(out PlayerController player))
+            {
+                // Ra lệnh cho Player nhận sát thương bằng giá trị collisionDamage
+                player.TakeDamage(collisionDamage);
+            }
+            // Sau khi gây sát thương, Boss/Enemy tự hủy
+            Die();
+        }
     }
 
     public void TakeDamage(int damageAmount)
@@ -219,16 +239,16 @@ public class Enemy : MonoBehaviour
         if (isBoss && UIManager.Instance != null) { UIManager.Instance.UpdateBossHealth(health, initialHealth); }
         if (health <= 0) { Die(); }
     }
-    
+
     private void Die()
     {
         if (isDead) return;
         isDead = true;
-        
+
         TryDropLoot();
         if (!string.IsNullOrEmpty(explosionTag)) { ObjectPooler.Instance.SpawnFromPool(explosionTag, transform.position, Quaternion.identity); }
         if (WaveManager.Instance != null) { WaveManager.Instance.OnEnemyDestroyed(); }
-        
+
         gameObject.SetActive(false);
     }
 
@@ -243,7 +263,7 @@ public class Enemy : MonoBehaviour
             if (randomPowerUpPrefab != null) Instantiate(randomPowerUpPrefab, transform.position, Quaternion.identity);
         }
     }
-    
+
     public void OnBecameInvisible()
     {
         if (gameObject.activeInHierarchy && !isDead)

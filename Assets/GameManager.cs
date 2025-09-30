@@ -1,7 +1,9 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI; // Cần cho UI
-using TMPro;      // Cần cho TextMeshPro
+using UnityEngine.UI;
+using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,83 +12,115 @@ public class GameManager : MonoBehaviour
     [Header("Thiết Lập Player")]
     public GameObject playerPrefab;
     public Transform playerSpawnPoint;
-    public float respawnDelay = 1.0f; // Thời gian chờ trước khi hồi sinh
+    public float respawnDelay = 1.0f;
     private PlayerController currentPlayer;
 
     [Header("Thiết Lập UI")]
-    public GameObject gameOverUI; // Kéo GameObject chứa màn hình Game Over vào đây
-    
+    public GameObject gameOverUI;
+
     [Header("Âm Thanh")]
+    public AudioSource backgroundMusicSource; // << BIẾN BỊ THIẾU ĐÃ ĐƯỢC THÊM LẠI
     public AudioClip gameOverSound;
-    private AudioSource audioSource;
+    private AudioSource audioSource; // Dùng để phát âm thanh của riêng GameManager
+
+    [Header("Chuyển Cảnh")]
+    public string menuSceneName = "MainMenu";
+    public float delayBeforeLoadScene = 8.0f;
 
     void Awake()
     {
         Instance = this;
+        // Lấy AudioSource trên chính GameObject này
         audioSource = GetComponent<AudioSource>();
     }
 
     void Start()
     {
-        // Ẩn màn hình Game Over khi bắt đầu
-        if (gameOverUI != null) gameOverUI.SetActive(false);
-        
-        // Bắt đầu game bằng cách tạo Player
+        if (gameOverUI != null)
+        {
+            gameOverUI.SetActive(false);
+        }
         SpawnPlayer();
     }
-
+    
     void SpawnPlayer()
     {
         GameObject playerInstance = Instantiate(playerPrefab, playerSpawnPoint.position, playerSpawnPoint.rotation);
         currentPlayer = playerInstance.GetComponent<PlayerController>();
-    }
 
-    // Hàm này sẽ được gọi từ PlayerController khi nó hết mạng
+        // Khởi tạo số mạng cho Player khi game bắt đầu
+        if (currentPlayer != null)
+        {
+            // Thay vì currentPlayer.lives = currentPlayer.startingLives;
+            // chúng ta sẽ gọi một hàm khởi tạo để code gọn gàng hơn
+            currentPlayer.InitializePlayer();
+        }
+    }
+    
     public void HandlePlayerDeath()
     {
-        // Kiểm tra xem Player còn mạng không
+        if (currentPlayer == null) return;
+
+        // Kiểm tra xem Player còn mạng không (sau khi đã bị trừ)
         if (currentPlayer.lives > 0)
         {
-            // Nếu còn, bắt đầu Coroutine hồi sinh
             StartCoroutine(RespawnPlayerCoroutine());
         }
         else
         {
-            // Nếu hết mạng, kích hoạt Game Over
             GameOver();
         }
     }
 
     private IEnumerator RespawnPlayerCoroutine()
     {
-        // Chờ một khoảng thời gian
         yield return new WaitForSeconds(respawnDelay);
 
-        // Kích hoạt lại Player
         if (currentPlayer != null)
         {
-            currentPlayer.gameObject.transform.position = playerSpawnPoint.position;
-            currentPlayer.gameObject.transform.rotation = playerSpawnPoint.rotation;
-            currentPlayer.Respawn(); // Gọi hàm đặc biệt để reset trạng thái
+            // Di chuyển Player về vị trí hồi sinh trước khi kích hoạt lại
+            currentPlayer.transform.position = playerSpawnPoint.position;
+            currentPlayer.transform.rotation = playerSpawnPoint.rotation;
+            
+            // Gọi hàm Respawn để kích hoạt và bắt đầu trạng thái bất tử
+            currentPlayer.Respawn();
         }
     }
-
+    
     void GameOver()
     {
         Debug.Log("GAME OVER!");
 
-        // Hiện UI Game Over
-        if (gameOverUI != null) gameOverUI.SetActive(true);
-        
-        // Phát âm thanh Game Over
-        if (gameOverSound != null && audioSource != null)
+        // 1. Dừng nhạc nền
+        if (backgroundMusicSource != null)
         {
-            // Dừng nhạc nền trước
-            // (Bạn có thể thêm tham chiếu đến AudioSource nhạc nền ở đây nếu muốn)
-            audioSource.PlayOneShot(gameOverSound);
+            backgroundMusicSource.Stop();
         }
 
-        // (Tùy chọn) Dừng thời gian
-        Time.timeScale = 0f;
+        // 2. Hiện UI Game Over
+        if (gameOverUI != null)
+        {
+            gameOverUI.SetActive(true);
+        }
+        
+        // 3. Phát âm thanh Game Over
+        if (gameOverSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(gameOverSound);
+        }
+        
+        // 4. Bắt đầu đếm ngược để quay về Menu
+        StartCoroutine(LoadMenuAfterDelay());
+    }
+    
+    private IEnumerator LoadMenuAfterDelay()
+    {
+        yield return new WaitForSeconds(delayBeforeLoadScene);
+
+        // Reset lại Time.timeScale về bình thường trước khi chuyển cảnh
+        Time.timeScale = 1f; 
+
+        // Tải lại Scene Menu
+        SceneManager.LoadScene(menuSceneName);
     }
 }
