@@ -15,6 +15,7 @@ TagManager:
   - FxTemporaire
   - Projectile
   - EnemyBullet
+  - Boss
   layers:
   - Default
   - TransparentFX

@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7022252791296686959
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1753989687043263155}
+  m_Layer: 0
+  m_Name: Firepoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1753989687043263155
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7022252791296686959}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.043, y: -0.476, z: 0}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 438155650841082958}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8604667864235231083
 GameObject:
   m_ObjectHideFlags: 0
@@ -12,9 +43,10 @@ GameObject:
   - component: {fileID: 880750931960417853}
   - component: {fileID: 4651694172562875239}
   - component: {fileID: 239357894478958925}
+  - component: {fileID: 5646770844955745967}
   m_Layer: 0
-  m_Name: Draft
-  m_TagString: Blue
+  m_Name: Boss2
+  m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29,9 +61,10 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -7.192403, y: 16.582273, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1753989687043263155}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &880750931960417853
@@ -81,7 +114,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 3432717553192849819, guid: 9e84c83ba7a219c41aa413ff96e0009f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3c6d6674bfcb5ac498628dff731a28f5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -130,7 +163,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.91, y: 0.91}
+    oldSize: {x: 1.024, y: 1.024}
     newSize: {x: 0.93, y: 0.84}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -150,9 +183,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db8faeafce6c2d945a317476039611e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  movementType: 0
-  speed: 1
-  health: 1
+  movementType: 3
+  speed: 3
+  health: 50
   rotationSpeed: 50
   roamingAreaMin: {x: -12, y: -6}
   roamingAreaMax: {x: 12, y: 6}
@@ -160,8 +193,58 @@ MonoBehaviour:
   canShoot: 1
   bulletTag: EnemyBullet
   fireRate: 2
-  firePoint: {fileID: 0}
+  firePoint: {fileID: 1753989687043263155}
+  isBoss: 1
+  attackPhases:
+  - phaseName: "B\u1EAFn Qu\u1EA1t 3 Tia"
+    attackType: 2
+    duration: 5
+    fireRate: 0.8
+  - phaseName: "B\u1EAFn Ngang"
+    attackType: 3
+    duration: 4
+    fireRate: 1
+  - phaseName: "B\xE3o \u0110\u1EA1n V\xF2ng Cung"
+    attackType: 5
+    duration: 4
+    fireRate: 1.2
+  - phaseName: "T\u1ECFa N\u0103ng L\u01B0\u1EE3ng 360"
+    attackType: 1
+    duration: 4
+    fireRate: 0.7
   explosionTag: EnemyExplosion
-  engineEffectPrefab: {fileID: 0}
-  powerUpPrefabs: []
+  engineEffectPrefab: {fileID: 100000, guid: 93bdcaae53f95461785a8eeb8c01bc61, type: 3}
+  powerUpPrefabs:
+  - {fileID: 587035885492962172, guid: dd34ca2b08c498d45ad2653ca71edd28, type: 3}
+  - {fileID: 587035885492962172, guid: 7ac30f462f6c1184fb3c722700d52721, type: 3}
+  - {fileID: 587035885492962172, guid: 1e67fa9bc3e9564488d0362ed8a32b71, type: 3}
+  - {fileID: 587035885492962172, guid: 1eeeeece94a385c4bbb4cf03bb040f73, type: 3}
+  - {fileID: 6551157495255583541, guid: aa7b84cc7f50e3840b6a6ffb88e5a49d, type: 3}
   dropChance: 15
+--- !u!50 &5646770844955745967
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8604667864235231083}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

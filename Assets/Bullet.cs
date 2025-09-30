@@ -3,6 +3,10 @@
 public class Bullet : MonoBehaviour
 {
     public float speed = 20f;
+    // --- THÊM BIẾN NÀY ---
+    public int damage = 1; // Lượng sát thương mà viên đạn này gây ra
+    // ----------------------
+    
     private Rigidbody2D rb;
 
     void Awake()
@@ -12,37 +16,27 @@ public class Bullet : MonoBehaviour
 
     void OnEnable()
     {
-        // Hàm này được gọi mỗi khi viên đạn được "mượn" từ kho
-        // Đây là lúc để bắn nó đi!
         if (rb != null)
         {
             rb.linearVelocity = transform.up * speed;
         }
     }
 
-    void Start()
-    {
-        rb.linearVelocity = transform.up * speed;
-        // Dòng Destroy hẹn giờ không còn cần thiết nữa.
-        // Destroy(gameObject, 2f); 
-    }
-
+    // Hàm OnTriggerEnter2D không cần thay đổi, vì logic gây sát thương
+    // sẽ được xử lý bên phía Enemy.
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other == null) return;
 
-        if (other.CompareTag("Blue") || other.CompareTag("Black") || other.CompareTag("Orange") || other.CompareTag("Green"))
+        string tag = other.tag;
+        if (tag == "Blue" || tag == "Black" || tag == "Orange" || tag == "Green" || tag == "Boss"  || tag == "Meteor")
         {
-            // Dòng cũ: Destroy(gameObject);
-            // Dòng mới:
-            gameObject.SetActive(false); // "Trả" về kho
+            gameObject.SetActive(false);
         }
     }
 
     void OnBecameInvisible()
     {
-        // Dòng cũ: Destroy(gameObject);
-        // Dòng mới:
-        gameObject.SetActive(false); // "Trả" về kho
+        gameObject.SetActive(false);
     }
 }
