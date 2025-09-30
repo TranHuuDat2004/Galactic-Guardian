@@ -12,6 +12,9 @@ TagManager:
   - Orange
   - Undefined
   - PowerUp
+  - FxTemporaire
+  - Projectile
+  - EnemyBullet
   layers:
   - Default
   - TransparentFX

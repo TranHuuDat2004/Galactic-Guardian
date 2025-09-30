@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 438155650841082958}
   - component: {fileID: 880750931960417853}
   - component: {fileID: 4651694172562875239}
-  - component: {fileID: 239357894478958925}
+  - component: {fileID: -3462061943812034047}
   m_Layer: 0
   m_Name: Meteors
   m_TagString: Black
@@ -27,13 +27,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8604667864235231083}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.38268343, z: 0, w: 0.92387956}
+  m_LocalRotation: {x: 0.35355338, y: 0.35355338, z: -0.1464466, w: 0.8535535}
   m_LocalPosition: {x: -7.192403, y: 16.582273, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 45, z: 0}
+  m_LocalEulerAnglesHint: {x: 45, y: 45, z: 0}
 --- !u!212 &880750931960417853
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -138,7 +138,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.93, y: 0.84}
   m_EdgeRadius: 0
---- !u!114 &239357894478958925
+--- !u!114 &-3462061943812034047
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -147,17 +147,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 8604667864235231083}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db8faeafce6c2d945a317476039611e1, type: 3}
+  m_Script: {fileID: 11500000, guid: 6da816a7c1b536549b7122d2f6efbe11, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  speed: 2
-  health: 2
-  canMoveIndependently: 1
-  explosionTag: EnemyExplosion
+  m_EditorClassIdentifier: Assembly-CSharp::MeteorController
+  speed: 5
+  health: 1
+  rotationSpeed: 50
+  explosionTag: MeteorExplosion
   powerUpPrefabs:
-  - {fileID: 587035885492962172, guid: dd34ca2b08c498d45ad2653ca71edd28, type: 3}
-  - {fileID: 587035885492962172, guid: 7ac30f462f6c1184fb3c722700d52721, type: 3}
-  - {fileID: 587035885492962172, guid: 1e67fa9bc3e9564488d0362ed8a32b71, type: 3}
-  - {fileID: 587035885492962172, guid: 1eeeeece94a385c4bbb4cf03bb040f73, type: 3}
   - {fileID: 6551157495255583541, guid: aa7b84cc7f50e3840b6a6ffb88e5a49d, type: 3}
-  dropChance: 10
+  dropChance: 2
