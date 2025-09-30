@@ -184,8 +184,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   movementType: 3
-  speed: 3
   health: 50
+  speed: 3
   rotationSpeed: 50
   roamingAreaMin: {x: -12, y: -6}
   roamingAreaMax: {x: 12, y: 6}
@@ -212,6 +212,9 @@ MonoBehaviour:
     attackType: 1
     duration: 4
     fireRate: 0.7
+  healthBarUI: {fileID: 3560735220706192425, guid: d7c6ab4934e1a974c82b0fdebd654457, type: 3}
+  healthBarFill: {fileID: 1327578053465620365, guid: 00462de4f1864c84385540aa5aad0267, type: 3}
+  bossNameText: {fileID: 327005143472573278, guid: 5ac44b36f5187e64799516c6c97365d8, type: 3}
   explosionTag: EnemyExplosion
   engineEffectPrefab: {fileID: 100000, guid: 93bdcaae53f95461785a8eeb8c01bc61, type: 3}
   powerUpPrefabs:
