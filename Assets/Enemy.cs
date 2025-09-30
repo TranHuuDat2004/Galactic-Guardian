@@ -7,13 +7,19 @@ public class Enemy : MonoBehaviour
     public int health = 1;
     public bool canMoveIndependently = true; // Cho phép tắt/bật di chuyển tự động
 
+    // --- THÊM MỚI Ở ĐÂY ---
+    [Header("Hiệu Ứng")]
+    public string explosionTag = "EnemyExplosion"; // Tag của hiệu ứng nổ trong ObjectPooler
+    // ----------------------
+
+
     [Header("Thiết Lập Rớt Đồ (Loot)")]
     public GameObject[] powerUpPrefabs; // Mảng chứa các loại quà có thể rơi ra
     [Range(0, 100)] public float dropChance = 15f;
 
     private bool isDead = false;
     private int initialHealth;
-    
+
     void Awake()
     {
         initialHealth = health;
@@ -23,7 +29,7 @@ public class Enemy : MonoBehaviour
     {
         health = initialHealth;
         isDead = false;
-        
+
         Collider2D col = GetComponent<Collider2D>();
         if (col != null)
         {
@@ -39,7 +45,7 @@ public class Enemy : MonoBehaviour
             transform.Translate(Vector2.down * speed * Time.deltaTime);
         }
     }
-    
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (isDead || other == null) return;
@@ -57,14 +63,20 @@ public class Enemy : MonoBehaviour
             Die();
         }
     }
-    
+
+    // --- CẬP NHẬT HÀM Die() ---
     private void Die()
     {
         isDead = true;
 
         TryDropLoot();
-        
-        // Báo cho WaveManager biết một kẻ địch đã bị tiêu diệt
+
+        // Gọi hiệu ứng nổ bằng tag đã chỉ định
+        if (!string.IsNullOrEmpty(explosionTag))
+        {
+            ObjectPooler.Instance.SpawnFromPool(explosionTag, transform.position, Quaternion.identity);
+        }
+
         if (WaveManager.Instance != null)
         {
             WaveManager.Instance.OnEnemyDestroyed();
@@ -75,29 +87,29 @@ public class Enemy : MonoBehaviour
         {
             col.enabled = false;
         }
-        
+
         gameObject.SetActive(false);
     }
-    
+
     private void TryDropLoot()
     {
         if (powerUpPrefabs == null || powerUpPrefabs.Length == 0) return;
-        
+
         float randomChance = Random.Range(0f, 100f);
-        
+
         if (randomChance <= dropChance)
         {
             // Chọn ngẫu nhiên một loại quà từ trong danh sách để rơi ra
             int randomIndex = Random.Range(0, powerUpPrefabs.Length);
             GameObject randomPowerUpPrefab = powerUpPrefabs[randomIndex];
-            
+
             if (randomPowerUpPrefab != null)
             {
                 Instantiate(randomPowerUpPrefab, transform.position, Quaternion.identity);
             }
         }
     }
-    
+
     // Tự động "trả" về kho nếu bay ra khỏi màn hình
     void OnBecameInvisible()
     {

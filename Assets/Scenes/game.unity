@@ -1333,7 +1333,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 190923078105867837, guid: cc92ed6076bf5f548bd3ce83f2659668, type: 3}
       propertyPath: pools.Array.size
-      value: 11
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 190923078105867837, guid: cc92ed6076bf5f548bd3ce83f2659668, type: 3}
       propertyPath: pools.Array.data[0].tag
@@ -1384,6 +1384,18 @@ PrefabInstance:
       value: ArrowBlue
       objectReference: {fileID: 0}
     - target: {fileID: 190923078105867837, guid: cc92ed6076bf5f548bd3ce83f2659668, type: 3}
+      propertyPath: pools.Array.data[11].tag
+      value: EnemyExplosion
+      objectReference: {fileID: 0}
+    - target: {fileID: 190923078105867837, guid: cc92ed6076bf5f548bd3ce83f2659668, type: 3}
+      propertyPath: pools.Array.data[12].tag
+      value: PlayerExplosion
+      objectReference: {fileID: 0}
+    - target: {fileID: 190923078105867837, guid: cc92ed6076bf5f548bd3ce83f2659668, type: 3}
+      propertyPath: pools.Array.data[13].tag
+      value: PlayerExplosion
+      objectReference: {fileID: 0}
+    - target: {fileID: 190923078105867837, guid: cc92ed6076bf5f548bd3ce83f2659668, type: 3}
       propertyPath: pools.Array.data[5].size
       value: 1
       objectReference: {fileID: 0}
@@ -1402,6 +1414,18 @@ PrefabInstance:
     - target: {fileID: 190923078105867837, guid: cc92ed6076bf5f548bd3ce83f2659668, type: 3}
       propertyPath: pools.Array.data[10].size
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 190923078105867837, guid: cc92ed6076bf5f548bd3ce83f2659668, type: 3}
+      propertyPath: pools.Array.data[11].size
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 190923078105867837, guid: cc92ed6076bf5f548bd3ce83f2659668, type: 3}
+      propertyPath: pools.Array.data[12].size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 190923078105867837, guid: cc92ed6076bf5f548bd3ce83f2659668, type: 3}
+      propertyPath: pools.Array.data[13].size
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 190923078105867837, guid: cc92ed6076bf5f548bd3ce83f2659668, type: 3}
       propertyPath: pools.Array.data[0].prefab
@@ -1447,6 +1471,18 @@ PrefabInstance:
       propertyPath: pools.Array.data[10].prefab
       value: 
       objectReference: {fileID: 1170744857039610, guid: 6b48e87ff28b6f046be5de5985f87ed2, type: 3}
+    - target: {fileID: 190923078105867837, guid: cc92ed6076bf5f548bd3ce83f2659668, type: 3}
+      propertyPath: pools.Array.data[11].prefab
+      value: 
+      objectReference: {fileID: 100004, guid: 2857e183f4cd3df4e9096e5b578bd32f, type: 3}
+    - target: {fileID: 190923078105867837, guid: cc92ed6076bf5f548bd3ce83f2659668, type: 3}
+      propertyPath: pools.Array.data[12].prefab
+      value: 
+      objectReference: {fileID: 100008, guid: a93496017806b7740910df5fd946f306, type: 3}
+    - target: {fileID: 190923078105867837, guid: cc92ed6076bf5f548bd3ce83f2659668, type: 3}
+      propertyPath: pools.Array.data[13].prefab
+      value: 
+      objectReference: {fileID: 100008, guid: a93496017806b7740910df5fd946f306, type: 3}
     - target: {fileID: 4117634812058438898, guid: cc92ed6076bf5f548bd3ce83f2659668, type: 3}
       propertyPath: m_Name
       value: ObjectPooler

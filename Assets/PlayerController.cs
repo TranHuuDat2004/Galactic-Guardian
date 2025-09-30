@@ -11,6 +11,10 @@ public class PlayerController : MonoBehaviour
         public string bulletTag;
     }
 
+    [Header("Hiệu Ứng")]
+    public string explosionTag = "PlayerExplosion"; // Tag hiệu ứng nổ của Player
+
+
     [Header("Thiết Lập Vũ Khí")]
     public List<BulletMapping> bulletMappings;
     public Transform firePoint;
@@ -26,7 +30,7 @@ public class PlayerController : MonoBehaviour
     [Header("Âm thanh")]
     public AudioClip shootSound;
     private AudioSource audioSource;
-    
+
     // ... các biến nội bộ khác ...
     private Camera mainCamera;
     private Vector2 minBounds, maxBounds;
@@ -44,12 +48,12 @@ public class PlayerController : MonoBehaviour
         mainCamera = Camera.main;
         InitBounds();
     }
-    
+
     void OnEnable()
     {
         ResetState();
     }
-    
+
     void ResetState()
     {
         isDestroyed = false;
@@ -73,7 +77,7 @@ public class PlayerController : MonoBehaviour
             fireCooldown -= Time.deltaTime;
         }
     }
-    
+
     // --- HÀM UPGRADEORCHANGEWEAPON() ĐÃ ĐƯỢC THAY ĐỔI HOÀN TOÀN ---
     private void UpgradeOrChangeWeapon(WeaponType newWeaponType)
     {
@@ -105,7 +109,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Đổi vũ khí thành: " + currentWeaponType + " ở cấp độ " + weaponLevel);
         }
     }
-    
+
     // Tất cả các hàm khác không cần thay đổi
     // Shoot(), GetBulletTagForCurrentWeapon(), OnTriggerEnter2D(), TakeDamage(), ...
     #region Unchanged Methods 
@@ -198,7 +202,7 @@ public class PlayerController : MonoBehaviour
                 goto case 10;
         }
     }
-    
+
     void MoveAndRotate()
     {
         Vector3 mouseWorldPosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
@@ -227,7 +231,7 @@ public class PlayerController : MonoBehaviour
         Debug.LogError("Không tìm thấy tag đạn cho loại vũ khí: " + currentWeaponType);
         return null;
     }
-    
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (isDestroyed || other == null) return;
@@ -255,6 +259,13 @@ public class PlayerController : MonoBehaviour
         if (lives <= 0)
         {
             isDestroyed = true;
+
+            // Gọi hiệu ứng nổ của Player
+            if (!string.IsNullOrEmpty(explosionTag))
+            {
+                ObjectPooler.Instance.SpawnFromPool(explosionTag, transform.position, Quaternion.identity);
+            }
+
             gameObject.SetActive(false);
         }
     }
