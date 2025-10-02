@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 06dd7f1032024af9b0bf421f19b0ecba
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 288705
+  packageName: Sci-Fi Space Fighter PBR
+  packageVersion: 1.0
+  assetPath: Assets/Sci-FiSpaceFighterPBR/Material/Stage.mat
+  uploadId: 673345
