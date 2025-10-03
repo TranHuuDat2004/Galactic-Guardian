@@ -7,6 +7,12 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+
+    // --- THÊM DÒNG NÀY VÀO ĐÂY ---
+    public static LevelData levelToLoad; // Biến tĩnh để truyền dữ liệu
+    // ---------------------------------
+
+
     public static GameManager Instance; // Singleton
 
     [Header("Thiết Lập Player")]
@@ -34,13 +40,20 @@ public class GameManager : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
-    void Start()
+     void Start()
     {
-        if (gameOverUI != null)
+        // ...
+        SpawnPlayer(); // Giữ lại hàm này
+        
+        // GameManager sẽ ra lệnh cho WaveManager
+        if (levelToLoad != null && WaveManager.Instance != null)
         {
-            gameOverUI.SetActive(false);
+            WaveManager.Instance.StartLevel(levelToLoad);
         }
-        SpawnPlayer();
+        else
+        {
+            Debug.LogError("LỖI: Không có LevelData để tải!");
+        }
     }
 
     // Trong GameManager.cs

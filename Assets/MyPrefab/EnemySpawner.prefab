@@ -45,16 +45,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cf6cc782758bfb488db4f09623e4d3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
-  waves:
+  allWaves:
   - waveName: "M\xE0n 1: \u0110\u1ED9i h\xECnh c\u01A1 b\u1EA3n"
     formationPrefab: {fileID: 0}
     enemyTagToSpawn: Black
+    warningImagePrefab: {fileID: 0}
+    warningPosition: {x: 0, y: 0, z: 0}
+    enemyStartPosition: {x: 0, y: 6, z: 0}
+    warningDelay: 2
   - waveName: "M\xE0n 2: Thi\xEAn th\u1EA1ch r\u01A1i"
     formationPrefab: {fileID: 0}
     enemyTagToSpawn: Meteor
+    warningImagePrefab: {fileID: 0}
+    warningPosition: {x: 0, y: 0, z: 0}
+    enemyStartPosition: {x: 0, y: 12, z: 0}
+    warningDelay: 2
   - waveName: "M\xE0n 3: \u0110\u1ED9i h\xECnh tr\xE1i tim"
     formationPrefab: {fileID: 0}
     enemyTagToSpawn: Blue
+    warningImagePrefab: {fileID: 0}
+    warningPosition: {x: 0, y: 0, z: 0}
+    enemyStartPosition: {x: 0, y: 8, z: 0}
+    warningDelay: 0.8
+  - waveName: "M\xE0n Boss"
+    formationPrefab: {fileID: 0}
+    enemyTagToSpawn: Boss2
+    warningImagePrefab: {fileID: 0}
+    warningPosition: {x: 0, y: 0, z: 0}
+    enemyStartPosition: {x: 0, y: 8, z: 0}
+    warningDelay: 0
+  wavesPerLevel: 5
+  worldMapSceneName: WorldMap
+  finalVictorySceneName: VictoryScene
+  initialScrollSpeed: 0.01
+  victoryScrollSpeed: 0.3
+  mainCanvas: {fileID: 0}
   waveText: {fileID: 0}
   waveTextCanvasGroup: {fileID: 0}
   textDisplayTime: 1.5

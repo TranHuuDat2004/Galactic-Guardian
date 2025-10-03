@@ -45,27 +45,51 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPooler
   pools:
-  - tag: Bullet
-    prefab: {fileID: 1305997383178436, guid: 44c881ac192579e43a415f51e9fc5eeb, type: 3}
-    size: 50
   - tag: Black
     prefab: {fileID: 8604667864235231083, guid: 714392553d590cf44b7e3d6120fc9cc9, type: 3}
-    size: 20
+    size: 50
   - tag: Blue
     prefab: {fileID: 8604667864235231083, guid: 2816561174ceed243a90b4cbc69e5e5b, type: 3}
-    size: 20
+    size: 50
   - tag: Green
     prefab: {fileID: 8604667864235231083, guid: 9aa384afb37bf2e4ba8ad3ba17c8b6ee, type: 3}
-    size: 20
+    size: 50
   - tag: Orange
     prefab: {fileID: 8604667864235231083, guid: 65a3a0b44ca47724788c7da240844b82, type: 3}
-    size: 20
+    size: 50
   - tag: Meteor
-    prefab: {fileID: 8604667864235231083, guid: 9c26ff96cb683de439621b89981de16c, type: 3}
-    size: 20
+    prefab: {fileID: 8604667864235231083, guid: 56e8ebd706fb81d41a0bf07e1dc968f0, type: 3}
+    size: 50
   - tag: Player
     prefab: {fileID: 7402313836422617715, guid: 43c5fb4b2bc591c4895736631266695f, type: 3}
     size: 1
   - tag: Boss
-    prefab: {fileID: 0}
+    prefab: {fileID: 8604667864235231083, guid: 9c26ff96cb683de439621b89981de16c, type: 3}
     size: 1
+  - tag: Bullet
+    prefab: {fileID: 3715787003513466192, guid: 928942646dd7b754382acc2c7fa66a84, type: 3}
+    size: 50
+  - tag: BulletGreen
+    prefab: {fileID: 1260705795423738, guid: cd829bfda67d0e34f91dc05e3db9a42c, type: 3}
+    size: 50
+  - tag: FireballOrange
+    prefab: {fileID: 1391574063814312, guid: 7da2132da8b2c334fab2b8116ad2d51b, type: 3}
+    size: 50
+  - tag: ArrowBlue
+    prefab: {fileID: 1170744857039610, guid: 6b48e87ff28b6f046be5de5985f87ed2, type: 3}
+    size: 50
+  - tag: EnemyExplosion
+    prefab: {fileID: 100004, guid: 2857e183f4cd3df4e9096e5b578bd32f, type: 3}
+    size: 50
+  - tag: PlayerExplosion
+    prefab: {fileID: 100008, guid: a93496017806b7740910df5fd946f306, type: 3}
+    size: 5
+  - tag: EnemyBullet
+    prefab: {fileID: 728102698893383216, guid: 8c811c8127ea68a47b12298734cfd7f0, type: 3}
+    size: 50
+  - tag: MeteorExplosion
+    prefab: {fileID: 100004, guid: 8190da552bc3bfa478ad9bc1846660dc, type: 3}
+    size: 50
+  - tag: Boss2
+    prefab: {fileID: 8604667864235231083, guid: 33a321df25894a4419612518790d004c, type: 3}
+    size: 2
