@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// Lớp AttackPhase không thay đổi, vẫn đặt bên ngoài lớp Enemy
+// Lớp AttackPhase không đổi
 [System.Serializable]
 public class AttackPhase
 {
@@ -20,9 +20,7 @@ public class Enemy : MonoBehaviour
     [Header("Chỉ Số Cơ Bản")]
     public int health = 1;
     public float speed = 3.0f;
-
-     // --- THÊM BIẾN MỚI Ở ĐÂY ---
-    public int collisionDamage = 1; // Sát thương khi va chạm vào Player
+    public int collisionDamage = 1;
     public float rotationSpeed = 50.0f;
     public string bossDisplayName = "CHIẾN HẠM ZYGON";
 
@@ -52,7 +50,8 @@ public class Enemy : MonoBehaviour
     [Header("Thiết Lập Rớt Đồ")]
     public GameObject[] powerUpPrefabs;
     [Range(0, 100)] public float dropChance = 15f;
-
+    
+    // Biến nội bộ
     private bool isDead = false;
     private int initialHealth;
     private Vector2 moveDirection;
@@ -69,6 +68,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    // --- HÀM ONENABLE() ĐÃ ĐƯỢC CẬP NHẬT HOÀN CHỈNH ---
     void OnEnable()
     {
         health = initialHealth;
@@ -79,15 +79,32 @@ public class Enemy : MonoBehaviour
 
         fireCooldown = Random.Range(0.5f, fireRate);
 
-        if (movementType == MovementType.Diagonal)
+        // Thiết lập hướng di chuyển ban đầu dựa trên loại
+        switch (movementType)
         {
-            float randomX = Random.Range(0, 2) == 0 ? -1f : 1f;
-            moveDirection = new Vector2(randomX, -1f).normalized;
-        }
-        else if (movementType == MovementType.Roaming)
-        {
-            StopAllCoroutines();
-            StartCoroutine(RoamingCoroutine());
+            case MovementType.Diagonal:
+                float randomX = Random.Range(0, 2) == 0 ? -1f : 1f;
+                moveDirection = new Vector2(randomX, -1f).normalized;
+                break;
+            case MovementType.DiagonalRightToLeft:
+                moveDirection = new Vector2(-Mathf.Tan(40 * Mathf.Deg2Rad), -1f).normalized;
+                break;
+            case MovementType.DiagonalLeftToRight:
+                moveDirection = new Vector2(Mathf.Tan(40 * Mathf.Deg2Rad), -1f).normalized;
+                break;
+            case MovementType.MoveUp:
+                moveDirection = Vector2.up;
+                break;
+            case MovementType.HorizontalLeftToRight:
+                moveDirection = Vector2.right;
+                break;
+            case MovementType.HorizontalRightToLeft:
+                moveDirection = Vector2.left;
+                break;
+            case MovementType.Roaming:
+                StopAllCoroutines();
+                StartCoroutine(RoamingCoroutine());
+                break;
         }
 
         if (isBoss)
@@ -112,29 +129,40 @@ public class Enemy : MonoBehaviour
     void OnDisable()
     {
         StopAllCoroutines();
-
-        if (isBoss && UIManager.Instance != null)
-        {
-            UIManager.Instance.HideBossHealthBar();
-        }
-
-        if (currentEngineEffect != null)
-        {
-            Destroy(currentEngineEffect);
-            currentEngineEffect = null;
-        }
+        if (isBoss && UIManager.Instance != null) { UIManager.Instance.HideBossHealthBar(); }
+        if (currentEngineEffect != null) { Destroy(currentEngineEffect); currentEngineEffect = null; }
     }
 
+    // --- HÀM UPDATE() ĐÃ ĐƯỢC CẬP NHẬT HOÀN CHỈNH ---
     void Update()
     {
         if (isDead) return;
 
         switch (movementType)
         {
-            case MovementType.Vertical: transform.Translate(Vector2.down * speed * Time.deltaTime); break;
-            case MovementType.Diagonal: transform.Translate(moveDirection * speed * Time.deltaTime, Space.World); transform.Rotate(Vector3.forward, rotationSpeed * Time.deltaTime); break;
-            case MovementType.Formation: break;
-            case MovementType.Roaming: if (isMovingToDestination) { transform.position = Vector3.MoveTowards(transform.position, nextDestination, speed * Time.deltaTime); } break;
+            case MovementType.Vertical:
+                transform.Translate(Vector2.down * speed * Time.deltaTime);
+                break;
+            case MovementType.Diagonal:
+            case MovementType.DiagonalRightToLeft:
+            case MovementType.DiagonalLeftToRight:
+            case MovementType.MoveUp:
+            case MovementType.HorizontalLeftToRight:
+            case MovementType.HorizontalRightToLeft:
+                transform.Translate(moveDirection * speed * Time.deltaTime, Space.World);
+                if (movementType == MovementType.Diagonal)
+                {
+                    transform.Rotate(Vector3.forward, rotationSpeed * Time.deltaTime);
+                }
+                break;
+            case MovementType.Formation:
+                break;
+            case MovementType.Roaming:
+                if (isMovingToDestination)
+                {
+                    transform.position = Vector3.MoveTowards(transform.position, nextDestination, speed * Time.deltaTime);
+                }
+                break;
         }
 
         if (canShoot && !isBoss)

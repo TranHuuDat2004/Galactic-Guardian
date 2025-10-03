@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Level_03
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
   levelName: "M\xE0n 1: M\xE1y Bay X\xE2m Chi\u1EBFm"
-  backgroundPrefab: {fileID: 7731094692908644050, guid: 2ae8b3223d8963e45954612e47f19d78, type: 3}
+  backgroundPrefab: {fileID: 4540295240537128305, guid: 5d987868a1f624548bbeb390272253b1, type: 3}
   backgroundMusic: {fileID: 8300000, guid: e7efdf24637b00b4cbdc9b3cbecbbee7, type: 3}
   waves:
   - waveName: "M\xE0n 1: \u0110\u1ED9i h\xECnh c\u01A1 b\u1EA3n"

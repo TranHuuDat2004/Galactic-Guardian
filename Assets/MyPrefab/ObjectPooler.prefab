@@ -60,6 +60,21 @@ MonoBehaviour:
   - tag: Meteor
     prefab: {fileID: 8604667864235231083, guid: 56e8ebd706fb81d41a0bf07e1dc968f0, type: 3}
     size: 50
+  - tag: Meteor1
+    prefab: {fileID: 8604667864235231083, guid: 6df04aa13ceade54794d52e83e261f1d, type: 3}
+    size: 50
+  - tag: Meteor2
+    prefab: {fileID: 8604667864235231083, guid: 3655cfc70f87e624196386258d0446a1, type: 3}
+    size: 50
+  - tag: Meteor3
+    prefab: {fileID: 8604667864235231083, guid: b32c777cd073179499c37e854104c0cb, type: 3}
+    size: 50
+  - tag: BossMeteor
+    prefab: {fileID: 8604667864235231083, guid: 2d68b507e4890de47b98a32fbbe264eb, type: 3}
+    size: 1
+  - tag: MeteorBullet
+    prefab: {fileID: 728102698893383216, guid: 4a05ce9870eb4db4ba44f66a228ebf11, type: 3}
+    size: 50
   - tag: Player
     prefab: {fileID: 7402313836422617715, guid: 43c5fb4b2bc591c4895736631266695f, type: 3}
     size: 1

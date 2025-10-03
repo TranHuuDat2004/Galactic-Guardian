@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 880750931960417853}
   - component: {fileID: 4651694172562875239}
   - component: {fileID: 8603981774925926619}
-  - component: {fileID: 5001097137079276748}
+  - component: {fileID: 6802269437881509557}
   m_Layer: 0
-  m_Name: Meteors
-  m_TagString: Black
+  m_Name: BossMeteor
+  m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -32,7 +32,8 @@ Transform:
   m_LocalPosition: {x: -7.192403, y: 16.582273, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8637261047188498456}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &880750931960417853
@@ -82,7 +83,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -4501234463003357724, guid: 74dafc857eaabc84fbe9b32d2cd45223, type: 3}
+  m_Sprite: {fileID: 8122344961672460285, guid: 639d7d2b865b48b4ba65b4dd8bc91494, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -131,7 +132,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.89, y: 0.82}
+    oldSize: {x: 3.66, y: 3.76}
     newSize: {x: 0.93, y: 0.84}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -151,21 +152,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db8faeafce6c2d945a317476039611e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  movementType: 1
-  health: 1
-  speed: 2.5
-  collisionDamage: 1
+  movementType: 3
+  health: 80
+  speed: 3
+  collisionDamage: 10
   rotationSpeed: 30
-  bossDisplayName: "CHI\u1EBEN H\u1EA0M ZYGON"
+  bossDisplayName: "Thi\xEAn th\u1EA1ch ph\xF3ng x\u1EA1"
   roamingAreaMin: {x: -12, y: -6}
   roamingAreaMax: {x: 12, y: 6}
-  waitAtDestination: 1
+  waitAtDestination: 0.5
   canShoot: 1
-  bulletTag: EnemyBullet
+  bulletTag: MeteorBullet
   fireRate: 2
-  firePoint: {fileID: 0}
-  isBoss: 0
-  attackPhases: []
+  firePoint: {fileID: 8637261047188498456}
+  isBoss: 1
+  attackPhases:
+  - phaseName: 
+    attackType: 6
+    duration: 4
+    fireRate: 0.8
+  - phaseName: 
+    attackType: 5
+    duration: 4
+    fireRate: 1
+  - phaseName: 
+    attackType: 4
+    duration: 4
+    fireRate: 0.9
   explosionTag: EnemyExplosion
   engineEffectPrefab: {fileID: 0}
   powerUpPrefabs:
@@ -174,8 +187,8 @@ MonoBehaviour:
   - {fileID: 587035885492962172, guid: 1e67fa9bc3e9564488d0362ed8a32b71, type: 3}
   - {fileID: 587035885492962172, guid: 1eeeeece94a385c4bbb4cf03bb040f73, type: 3}
   - {fileID: 6551157495255583541, guid: aa7b84cc7f50e3840b6a6ffb88e5a49d, type: 3}
-  dropChance: 15
---- !u!50 &5001097137079276748
+  dropChance: 40
+--- !u!50 &6802269437881509557
 Rigidbody2D:
   serializedVersion: 5
   m_ObjectHideFlags: 0
@@ -202,3 +215,34 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!1 &9051098809869722825
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8637261047188498456}
+  m_Layer: 0
+  m_Name: firepoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8637261047188498456
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9051098809869722825}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.34, y: -2.11, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 438155650841082958}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
