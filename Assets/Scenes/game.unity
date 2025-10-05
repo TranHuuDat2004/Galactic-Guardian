@@ -1432,6 +1432,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Formation_Wave4
       objectReference: {fileID: 0}
+    - target: {fileID: 8980281292477953912, guid: 1fc81d3f536385f428bdf4e52b32c200, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1489,6 +1493,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Formation_Wave1
       objectReference: {fileID: 0}
+    - target: {fileID: 4904512962323392090, guid: ba9a468e8381db646b35853c580da12e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1502,10 +1510,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 190923078105867837, guid: cc92ed6076bf5f548bd3ce83f2659668, type: 3}
-      propertyPath: pools.Array.data[8].size
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 4117634812058438898, guid: cc92ed6076bf5f548bd3ce83f2659668, type: 3}
       propertyPath: m_Name
       value: ObjectPooler
@@ -1567,13 +1571,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Formation_Wave3
       objectReference: {fileID: 0}
+    - target: {fileID: 2069348881396640669, guid: 433902ed30c56984aab23bdc555fb5d6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2981498340790440415, guid: 433902ed30c56984aab23bdc555fb5d6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.4
+      value: -0.52
       objectReference: {fileID: 0}
     - target: {fileID: 2981498340790440415, guid: 433902ed30c56984aab23bdc555fb5d6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 17.25
+      value: 15.23
       objectReference: {fileID: 0}
     - target: {fileID: 2981498340790440415, guid: 433902ed30c56984aab23bdc555fb5d6, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1842,6 +1850,10 @@ PrefabInstance:
     - target: {fileID: 8239330326649353416, guid: baab6ca5323fb2e4ab557c2e6806d901, type: 3}
       propertyPath: m_Name
       value: Formation_Wave2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8239330326649353416, guid: baab6ca5323fb2e4ab557c2e6806d901, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

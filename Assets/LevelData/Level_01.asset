@@ -25,21 +25,21 @@ MonoBehaviour:
     warningDelay: 2
   - waveName: "Wave 2: \u0110\u1ED9i h\xECnh tr\xE1i tim"
     formationPrefab: {fileID: 2069348881396640669, guid: 433902ed30c56984aab23bdc555fb5d6, type: 3}
-    enemyTagToSpawn: Black
+    enemyTagToSpawn: Blue
     warningImagePrefab: {fileID: 0}
     warningPosition: {x: 0, y: 0, z: 0}
     enemyStartPosition: {x: 0, y: 12, z: 0}
     warningDelay: 2
   - waveName: "Wave 3: H\xCCnh c\xE1nh b\u01B0\u1EDBm"
     formationPrefab: {fileID: 8980281292477953912, guid: 1fc81d3f536385f428bdf4e52b32c200, type: 3}
-    enemyTagToSpawn: Black
+    enemyTagToSpawn: Green
     warningImagePrefab: {fileID: 0}
     warningPosition: {x: 0, y: 0, z: 0}
     enemyStartPosition: {x: 0, y: 8, z: 0}
     warningDelay: 2
   - waveName: "Wave 4: M\xE1y bay x\xE2m l\u0103ng"
     formationPrefab: {fileID: 8239330326649353416, guid: baab6ca5323fb2e4ab557c2e6806d901, type: 3}
-    enemyTagToSpawn: Black
+    enemyTagToSpawn: Orange
     warningImagePrefab: {fileID: 0}
     warningPosition: {x: 0, y: 0, z: 0}
     enemyStartPosition: {x: 0, y: 8, z: 0}
