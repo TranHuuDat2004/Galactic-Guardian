@@ -15,11 +15,23 @@ public class UIManager : MonoBehaviour
     // --- THÊM MỚI Ở ĐÂY ---
     [Header("UI Mạng Sống Player")]
     public TextMeshProUGUI livesText; // Kéo Text hiển thị số mạng vào đây
-    // ----------------------
+                                      // ----------------------
+    public GameObject player2LivesUI_Container; // Kéo đối tượng cha chứa icon và text của P2 vào đây
+    public TextMeshProUGUI livesText_P2;      // Kéo Text hiển thị số mạng của P2 vào đây
 
     private void Awake()
     {
         Instance = this;
+
+        // --- THÊM LOGIC NÀY VÀO ---
+        // Ẩn UI của Player 2 nếu chơi chế độ 1 người
+        if (GameModeManager.NumberOfPlayers < 2)
+        {
+            if (player2LivesUI_Container != null)
+            {
+                player2LivesUI_Container.SetActive(false);
+            }
+        }
     }
     
     // --- HÀM MỚI ĐỂ CẬP NHẬT SỐ MẠNG ---
@@ -31,7 +43,13 @@ public class UIManager : MonoBehaviour
         }
     }
     // ------------------------------------
-
+     public void UpdateLives_P2(int currentLives)
+    {
+        if (livesText_P2 != null)
+        {
+            livesText_P2.text = "x " + currentLives;
+        }
+    }
 
     // Hàm để hiện thanh máu
     public void ShowBossHealthBar(string bossName)

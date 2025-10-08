@@ -7,27 +7,34 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-
-    // --- THÊM DÒNG NÀY VÀO ĐÂY ---
-    public static LevelData levelToLoad; // Biến tĩnh để truyền dữ liệu
-    // ---------------------------------
-
-
-    public static GameManager Instance; // Singleton
+    public static LevelData levelToLoad;
+    public static GameManager Instance;
 
     [Header("Thiết Lập Player")]
     public GameObject playerPrefab;
     public Transform playerSpawnPoint;
     public float respawnDelay = 1.0f;
     private PlayerController currentPlayer;
+    
+    // --- VỊ TRÍ ĐỂ THÊM THÔNG TIN CHO PLAYER 2 ---
+    // Ví dụ, bạn có thể thêm các dòng sau khi đã có prefab cho Player 2
+    // public GameObject player2Prefab;
+    // public Transform player2SpawnPoint;
+    // private PlayerController currentPlayer2;
+    // ---------------------------------------------
+     [Header("Thiết Lập Player 2 (Co-op)")]
+    public GameObject player2Prefab; // Prefab cho Player 2, có thể dùng chung với Player 1
+    public Transform player2SpawnPoint; // Vị trí xuất hiện của Player 2
+    private PlayerController currentPlayer2;
+
 
     [Header("Thiết Lập UI")]
     public GameObject gameOverUI;
 
     [Header("Âm Thanh")]
-    public AudioSource backgroundMusicSource; // << BIẾN BỊ THIẾU ĐÃ ĐƯỢC THÊM LẠI
+    public AudioSource backgroundMusicSource;
     public AudioClip gameOverSound;
-    private AudioSource audioSource; // Dùng để phát âm thanh của riêng GameManager
+    private AudioSource audioSource;
 
     [Header("Chuyển Cảnh")]
     public string menuSceneName = "MainMenu";
@@ -36,16 +43,16 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         Instance = this;
-        // Lấy AudioSource trên chính GameObject này
         audioSource = GetComponent<AudioSource>();
     }
 
      void Start()
     {
-        // ...
-        SpawnPlayer(); // Giữ lại hàm này
+        // --- CẬP NHẬT LOGIC TẠO PLAYER Ở ĐÂY ---
+        // Sử dụng thông tin từ GameModeManager
+        SpawnPlayers();
+        // ---------------------------------------
         
-        // GameManager sẽ ra lệnh cho WaveManager
         if (levelToLoad != null && WaveManager.Instance != null)
         {
             WaveManager.Instance.StartLevel(levelToLoad);
@@ -56,90 +63,125 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // Trong GameManager.cs
-    void SpawnPlayer()
+    // --- THAY THẾ HÀM SpawnPlayer() BẰNG HÀM MỚI NÀY ---
+    void SpawnPlayers()
     {
+        // Tạo Player 1
         GameObject playerInstance = Instantiate(playerPrefab, playerSpawnPoint.position, playerSpawnPoint.rotation);
         currentPlayer = playerInstance.GetComponent<PlayerController>();
-
         if (currentPlayer != null)
         {
             currentPlayer.InitializePlayer();
-
-            // --- THÊM DÒNG NÀY ---
-            // Cập nhật UI mạng sống lần đầu tiên khi game bắt đầu
             if (UIManager.Instance != null)
             {
                 UIManager.Instance.UpdateLives(currentPlayer.lives);
             }
-            // ----------------------
         }
+
+        // Tạo Player 2 nếu cần
+         if (GameModeManager.NumberOfPlayers == 2)
+    {
+        if (player2Prefab != null && player2SpawnPoint != null)
+        {
+            GameObject player2Instance = Instantiate(player2Prefab, player2SpawnPoint.position, player2SpawnPoint.rotation);
+            currentPlayer2 = player2Instance.GetComponent<PlayerController>();
+            if (currentPlayer2 != null)
+            {
+                currentPlayer2.InitializePlayer();
+
+                // --- THÊM DÒNG NÀY ĐỂ KHỞI TẠO UI CHO PLAYER 2 ---
+                if (UIManager.Instance != null)
+                {
+                    UIManager.Instance.UpdateLives_P2(currentPlayer2.lives);
+                }
+                // ----------------------------------------------------
+            }
+        }
+        // ...
+    }
     }
 
-    public void HandlePlayerDeath()
-    {
-        if (currentPlayer == null) return;
 
-        // Kiểm tra xem Player còn mạng không (sau khi đã bị trừ)
-        if (currentPlayer.lives > 0)
+     public void HandlePlayerDeath(PlayerController playerWhoDied)
+    {
+        // Kiểm tra xem người chơi đó có còn mạng để hồi sinh không
+        if (playerWhoDied.lives > 0)
         {
-            StartCoroutine(RespawnPlayerCoroutine());
+            // Gọi coroutine hồi sinh và truyền vào người chơi cần hồi sinh
+            StartCoroutine(RespawnPlayerCoroutine(playerWhoDied));
         }
         else
         {
-            GameOver();
+            // Người chơi này đã hết mạng. Kiểm tra xem game đã kết thúc chưa.
+            CheckForGameOver();
         }
     }
 
-    private IEnumerator RespawnPlayerCoroutine()
+     private IEnumerator RespawnPlayerCoroutine(PlayerController playerToRespawn)
     {
         yield return new WaitForSeconds(respawnDelay);
 
-        if (currentPlayer != null)
+        // Xác định đúng vị trí hồi sinh cho từng người chơi
+        Transform spawnPoint;
+        if (playerToRespawn == currentPlayer)
         {
-            // Di chuyển Player về vị trí hồi sinh trước khi kích hoạt lại
-            currentPlayer.transform.position = playerSpawnPoint.position;
-            currentPlayer.transform.rotation = playerSpawnPoint.rotation;
-
-            // Gọi hàm Respawn để kích hoạt và bắt đầu trạng thái bất tử
-            currentPlayer.Respawn();
+            spawnPoint = playerSpawnPoint;
         }
+        else
+        {
+            spawnPoint = player2SpawnPoint;
+        }
+
+        // Hồi sinh người chơi
+        if (playerToRespawn != null)
+        {
+            playerToRespawn.transform.position = spawnPoint.position;
+            playerToRespawn.transform.rotation = spawnPoint.rotation;
+            playerToRespawn.Respawn(); // Gọi hàm Respawn của chính người chơi đó
+        }
+    }
+    
+    void CheckForGameOver()
+    {
+        // Trường hợp 1: Chơi 1 người và người đó hết mạng
+        if (GameModeManager.NumberOfPlayers == 1 && currentPlayer.lives <= 0)
+        {
+            GameOver();
+            return;
+        }
+
+        // Trường hợp 2: Chơi 2 người và CẢ HAI đều hết mạng
+        if (GameModeManager.NumberOfPlayers == 2 && currentPlayer.lives <= 0 && currentPlayer2.lives <= 0)
+        {
+            GameOver();
+            return;
+        }
+        
+        Debug.Log("Một người chơi đã hết mạng, nhưng game vẫn tiếp tục.");
     }
 
     void GameOver()
     {
         Debug.Log("GAME OVER!");
-
-        // 1. Dừng nhạc nền
         if (backgroundMusicSource != null)
         {
             backgroundMusicSource.Stop();
         }
-
-        // 2. Hiện UI Game Over
         if (gameOverUI != null)
         {
             gameOverUI.SetActive(true);
         }
-
-        // 3. Phát âm thanh Game Over
         if (gameOverSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(gameOverSound);
         }
-
-        // 4. Bắt đầu đếm ngược để quay về Menu
         StartCoroutine(LoadMenuAfterDelay());
     }
 
     private IEnumerator LoadMenuAfterDelay()
     {
         yield return new WaitForSeconds(delayBeforeLoadScene);
-
-        // Reset lại Time.timeScale về bình thường trước khi chuyển cảnh
         Time.timeScale = 1f;
-
-        // Tải lại Scene Menu
         SceneManager.LoadScene(menuSceneName);
     }
 }

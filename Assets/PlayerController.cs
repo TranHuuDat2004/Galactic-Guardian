@@ -12,6 +12,11 @@ public class PlayerController : MonoBehaviour
         public string bulletTag;
     }
 
+     [Header("Thiết Lập Điều Khiển")]
+    [Tooltip("Đặt là 1 cho Player 1 (Chuột), 2 cho Player 2 (Bàn phím)")]
+    public int playerID = 1; // Mặc định là Player 1
+    public float keyboardMoveSpeed = 8f; // Tốc độ di chuyển bằng bàn phím
+
     [Header("Thiết Lập Vũ Khí")]
     public List<BulletMapping> bulletMappings;
     public Transform firePoint;
@@ -51,23 +56,18 @@ public class PlayerController : MonoBehaviour
     {
         mainCamera = Camera.main;
         InitBounds();
-        // ResetState() sẽ được gọi trong OnEnable
     }
 
     void OnEnable()
     {
-        // ResetState chỉ reset các chỉ số logic, không phải trạng thái bất tử
         ResetForNewLife();
     }
 
-    // Reset các chỉ số cơ bản khi bắt đầu một mạng sống mới
     void ResetForNewLife()
     {
         isDestroyed = false;
-        // Không reset weaponLevel và currentWeaponType ở đây để giữ nguyên nâng cấp
     }
 
-    // Hàm này được gọi bởi GameManager khi game bắt đầu
     public void InitializePlayer()
     {
         lives = startingLives;
@@ -75,17 +75,34 @@ public class PlayerController : MonoBehaviour
         currentWeaponType = WeaponType.Default;
     }
 
-    void Update()
+     void Update()
     {
         if (isDestroyed) return;
 
-        MoveAndRotate();
-
-        if (Input.GetMouseButton(0) && fireCooldown <= 0f)
+        if (playerID == 1)
         {
-            Shoot();
-            fireCooldown = fireRate;
+            // Player 1 dùng chuột
+            MoveAndRotate();
+            if (Input.GetMouseButton(0) && fireCooldown <= 0f)
+            {
+                Shoot();
+                fireCooldown = fireRate;
+            }
         }
+        else // Player 2 dùng bàn phím
+        {
+            MoveWithKeyboard();
+
+            // --- ĐÂY LÀ DÒNG BẠN CẦN THAY ĐỔI ---
+            // Đã đổi từ KeyCode.RightControl thành KeyCode.Space
+            if (Input.GetKey(KeyCode.Space) && fireCooldown <= 0f) 
+            {
+                Shoot();
+                fireCooldown = fireRate;
+            }
+            // ------------------------------------
+        }
+
 
         if (fireCooldown > 0f)
         {
@@ -93,18 +110,32 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Hàm này được gọi bởi GameManager để hồi sinh người chơi
+    void MoveWithKeyboard()
+    {
+        float moveX = Input.GetAxis("Horizontal"); 
+        float moveY = Input.GetAxis("Vertical");   
+
+        Vector3 moveDirection = new Vector3(moveX, moveY, 0).normalized;
+        Vector3 targetPosition = transform.position + moveDirection * keyboardMoveSpeed * Time.deltaTime;
+        
+        targetPosition.x = Mathf.Clamp(targetPosition.x, minBounds.x, maxBounds.x);
+        targetPosition.y = Mathf.Clamp(targetPosition.y, minBounds.y, maxBounds.y);
+
+        transform.position = targetPosition;
+        
+        if (moveDirection.sqrMagnitude > 0.01f)
+        {
+           transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+    }
+
     public void Respawn()
     {
-        // Kích hoạt lại GameObject
         gameObject.SetActive(true);
-        // Reset các chỉ số cho mạng sống mới
         ResetForNewLife();
-        // Bắt đầu coroutine bất tử và nhấp nháy
         StartCoroutine(InvincibilityCoroutine());
     }
 
-    // Coroutine xử lý trạng thái bất tử và hiệu ứng nhấp nháy
     private IEnumerator InvincibilityCoroutine()
     {
         Debug.Log("Player đang trong trạng thái bất tử!");
@@ -113,52 +144,52 @@ public class PlayerController : MonoBehaviour
         float endTime = Time.time + invincibilityDuration;
         while (Time.time < endTime)
         {
-            // Bật/tắt sprite renderer để tạo hiệu ứng nhấp nháy
             spriteRenderer.enabled = !spriteRenderer.enabled;
-            yield return new WaitForSeconds(0.1f); // Tần suất nhấp nháy
+            yield return new WaitForSeconds(0.1f);
         }
 
-        // Đảm bảo sprite luôn hiện lại cuối cùng và tắt trạng thái bất tử
         spriteRenderer.enabled = true;
         isInvincible = false;
         Debug.Log("Player hết bất tử!");
     }
 
-    // Hàm nhận sát thương đã được viết lại hoàn toàn
-    // Trong PlayerController.cs
-public void TakeDamage(int damageAmount)
-{
-    if (isInvincible || isDestroyed) return;
-
-    lives -= damageAmount;
-
-    // --- THÊM DÒNG NÀY ---
-    // Báo cho UIManager cập nhật lại hiển thị số mạng
-    if (UIManager.Instance != null)
+    public void TakeDamage(int damageAmount)
     {
-        UIManager.Instance.UpdateLives(lives);
-    }
-    // ----------------------
+        if (isInvincible || isDestroyed) return;
 
-    Debug.Log("Player bị trúng đạn! Còn lại: " + lives + " mạng!");
-    
-    if (!string.IsNullOrEmpty(explosionTag))
-    {
-        ObjectPooler.Instance.SpawnFromPool(explosionTag, transform.position, Quaternion.identity);
-    }
+        lives -= damageAmount;
 
-    gameObject.SetActive(false);
+        if (UIManager.Instance != null)
+        {
+            if (playerID == 1)
+            {
+                UIManager.Instance.UpdateLives(lives);
+            }
+                else // Nếu là Player 2
+            {
+            UIManager.Instance.UpdateLives_P2(lives);
+            }
+        }
+
+        Debug.Log("Player " + playerID + " bị trúng đạn! Còn lại: " + lives + " mạng!");
     
-    GameManager.Instance.HandlePlayerDeath();
+        if (!string.IsNullOrEmpty(explosionTag))
+        {
+            ObjectPooler.Instance.SpawnFromPool(explosionTag, transform.position, Quaternion.identity);
+        }
+
+        gameObject.SetActive(false);
+    
+        GameManager.Instance.HandlePlayerDeath(this);
+    // ------------------------------------
 
     if (lives <= 0)
     {
         isDestroyed = true;
+        Debug.Log("Player " + playerID + " đã hết mạng!");
     }
-}
+    }
 
-    // Các hàm còn lại không cần thay đổi
-    // ...
     #region Unchanged Methods
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -166,27 +197,18 @@ public void TakeDamage(int damageAmount)
 
         string tag = other.tag;
 
-        // --- KIỂM TRA VA CHẠM VỚI TẤT CẢ CÁC LOẠI KẺ ĐỊCH ---
         if (tag == "Blue" || tag == "Black" || tag == "Orange" || tag == "Green" || tag == "Meteor" || tag == "Boss")
         {
-            // Thử lấy component Enemy từ đối tượng va chạm
             if (other.TryGetComponent<Enemy>(out Enemy enemy))
             {
-                // Nhận một lượng sát thương bằng với collisionDamage của kẻ địch đó
-                // Nếu là Boss, sẽ là 10. Nếu là địch thường, sẽ là 1.
                 TakeDamage(enemy.collisionDamage);
             }
             else
             {
-                // Nếu không lấy được component Enemy (dự phòng, ví dụ cho Meteor nếu nó dùng script khác), chỉ trừ 1 máu
                 TakeDamage(1);
             }
-
-            // Tắt đối tượng kẻ địch đi
             other.gameObject.SetActive(false);
         }
-        // --------------------------------------------------
-
         else if (tag == "PowerUp")
         {
             if (other.TryGetComponent<PowerUp>(out PowerUp powerUp))
@@ -197,7 +219,6 @@ public void TakeDamage(int damageAmount)
         }
         else if (tag == "EnemyBullet")
         {
-            // Va chạm với đạn địch luôn trừ 1 máu
             TakeDamage(1);
         }
     }
@@ -214,7 +235,6 @@ public void TakeDamage(int damageAmount)
         else
         {
             currentWeaponType = newWeaponType;
-            // weaponLevel = 1; // Giữ nguyên cấp độ khi đổi vũ khí
         }
     }
 
