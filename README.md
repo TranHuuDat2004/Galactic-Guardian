@@ -8,6 +8,8 @@ Dự án này bắt đầu như một bài tập làm quen với Unity, nhưng g
 <!-- Bạn có thể dùng các phần mềm như ScreenToGif để quay lại một đoạn gameplay ngắn -->
 ![Gameplay GIF](link-to-your-gameplay.gif)
 
+![GitHub repo size](https://img.shields.io/github/repo-size/TranHuuDat2004/Galactic-Guardian?style=for-the-badge&logo=github)
+
 ---
 
 ## 🌌 Game Concept & Vision
