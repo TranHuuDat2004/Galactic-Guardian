@@ -1,127 +1,139 @@
 <!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity Web Player | BanGa</title>
-    <link rel="shortcut icon" href="TemplateData/favicon.ico">
-    <link rel="stylesheet" href="TemplateData/style.css">
-  </head>
-  <body>
-    <div id="unity-container" class="unity-desktop">
-      <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
-      <div id="unity-loading-bar">
-        <div id="unity-logo"></div>
-        <div id="unity-progress-bar-empty">
-          <div id="unity-progress-bar-full"></div>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galactic Guardian - Cuộc Chiến Bắt Đầu</title>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="index.css"> <!-- Link đến file CSS bạn vừa tạo -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <style>
+
+    </style>
+</head>
+
+<body>
+
+    <!-- ================== HEADER ĐÃ CẬP NHẬT ================== -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#home" class="nav-logo">GALACTIC GUARDIAN</a>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Trang Chủ</a></li>
+                <li class="nav-item"><a href="feature.html" class="nav-link">Tính Năng</a></li>
+                <li class="nav-item"><a href="gameplay.html" class="nav-link">Gameplay</a></li>
+                <li class="nav-item"><a href="play-game.html" class="nav-link">Chơi ngay</a></li>
+            </ul>
         </div>
-      </div>
-      <div id="unity-warning"> </div>
-      <div id="unity-footer">
-        <div id="unity-logo-title-footer"></div>
-        <div id="unity-fullscreen-button"></div>
-        <div id="unity-build-title">BanGa</div>
-      </div>
-    </div>
-    <script>
-      var canvas = document.querySelector("#unity-canvas");
+    </nav>
 
-      // Shows a temporary message banner/ribbon for a few seconds, or
-      // a permanent error message on top of the canvas if type=='error'.
-      // If type=='warning', a yellow highlight color is used.
-      // Modify or remove this function to customize the visually presented
-      // way that non-critical warnings and error messages are presented to the
-      // user.
-      function unityShowBanner(msg, type) {
-        var warningBanner = document.querySelector("#unity-warning");
-        function updateBannerVisibility() {
-          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
-        }
-        var div = document.createElement('div');
-        div.innerHTML = msg;
-        warningBanner.appendChild(div);
-        if (type == 'error') div.style = 'background: red; padding: 10px;';
-        else {
-          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
-          setTimeout(function() {
-            warningBanner.removeChild(div);
-            updateBannerVisibility();
-          }, 5000);
-        }
-        updateBannerVisibility();
-      }
+    <!-- ================== TRANG CHỦ ================== -->
+    <header id="home">
+        <div class="hero-content">
+            <img src="img/logo.png" alt="Galactic Guardian Logo" class="logo"> <!-- THAY URL LOGO CỦA BẠN -->
+            <h1>GALACTIC GUARDIAN</h1>
+            <p>Lấy cảm hứng từ huyền thoại Chicken Invaders, một cuộc chiến thiên hà mới đang chờ đón bạn. Nâng cấp phi
+                thuyền, đối mặt với hạm đội địch và những con trùm khổng lồ trong hành trình giải cứu vũ trụ!</p>
+            <a href="play-game.html" class="cta-button">Chơi Ngay!</a> <!-- THAY URL GAME CỦA BẠN -->
+        </div>
+    </header>
 
-      var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/CompleteGame.loader.js";
-      var config = {
-        arguments: [],
-        dataUrl: buildUrl + "/CompleteGame.data",
-        frameworkUrl: buildUrl + "/CompleteGame.framework.js",
-        codeUrl: buildUrl + "/CompleteGame.wasm",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "DefaultCompany",
-        productName: "BanGa",
-        productVersion: "1.0",
-        showBanner: unityShowBanner,
-      };
+    <main>
+        <!-- ================== SECTION NHÂN VẬT ================== -->
+        <section id="players" class="hidden">
+            <div class="container"> <!-- << THÊM DÒNG NÀY -->
+                <h2>PHI ĐỘI VỆ BINH</h2>
+                <div class="grid-layout">
+                    <div class="grid-item-text player1-details">
+                        <h3>PLAYER 1 - PHI CÔNG TRƯỞNG</h3>
+                        <ul>
+                            <li>Điều khiển bằng chuột, mang lại sự chính xác và linh hoạt.</li>
+                            <li>Bắt đầu với phi thuyền màu xanh dương đặc trưng.</li>
+                            <li>Là tuyến phòng thủ đầu tiên của thiên hà.</li>
+                        </ul>
+                    </div>
+                    <div class="grid-item-img">
+                        <img src="img/player1.gif" alt="Player 1 Ship"> <!-- THAY HÌNH PLAYER 1 -->
+                    </div>
+                </div>
+                <div class="grid-layout" style="margin-top: 4rem;">
+                    <div class="grid-item-img">
+                        <img src="img/player2.gif" alt="Player 2 Ship"> <!-- THAY HÌNH PLAYER 2 -->
+                    </div>
+                    <div class="grid-item-text player2-details">
+                        <h3>PLAYER 2 - ĐỒNG MINH TIN CẬY</h3>
+                        <ul>
+                            <li>Tham gia trận chiến với chế độ co-op 2 người chơi.</li>
+                            <li>Điều khiển bằng bàn phím (WASD/Mũi tên + Space).</li>
+                            <li>Sát cánh cùng Player 1 với phi thuyền màu xanh lá mạnh mẽ.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-      // By default, Unity keeps WebGL canvas render target size matched with
-      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
-      // Set this to false if you want to decouple this synchronization from
-      // happening inside the engine, and you would instead like to size up
-      // the canvas DOM size and WebGL render target sizes yourself.
-      // config.matchWebGLToCanvasSize = false;
+        <!-- ================== SECTION KẺ ĐỊCH ================== -->
+        <section id="enemies" class="alt-bg hidden">
+            <div class="container"> <!-- << THÊM DÒNG NÀY -->
+                <h2>HẠM ĐỘI XÂM LĂNG</h2>
+                <div class="grid-layout">
+                    <div class="grid-item-img">
+                        <img src="img/enemy.png" alt="Các loại kẻ địch"> <!-- THAY HÌNH GHÉP CÁC KẺ ĐỊCH -->
+                    </div>
+                    <div class="grid-item-text">
+                        <h3>TỪ LÍNH LÁC ĐẾN TRÙM KHỔNG LỒ</h3>
+                        <p>Đối mặt với một hạm đội đa dạng, mỗi loại có kiểu di chuyển và tấn công riêng:</p>
+                        <ul>
+                            <li><b>Tàu Địch Thường:</b> Lực lượng đông đảo với nhiều kiểu bay khác nhau.</li>
+                            <li><b>Thiên Thạch:</b> Những chướng ngại vật nguy hiểm lao đến từ mọi hướng.</li>
+                            <li><b>Boss:</b> Những chiến hạm khổng lồ với nhiều máu và các chuỗi tấn công phức tạp, đòi
+                                hỏi
+                                kỹ năng và chiến thuật để vượt qua.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-      // If you would like all file writes inside Unity Application.persistentDataPath
-      // directory to automatically persist so that the contents are remembered when
-      // the user revisits the site the next time, uncomment the following line:
-      // config.autoSyncPersistentDataPath = true;
-      // This autosyncing is currently not the default behavior to avoid regressing
-      // existing user projects that might rely on the earlier manual
-      // JS_FileSystem_Sync() behavior, but in future Unity version, this will be
-      // expected to change.
+        <!-- ================== SECTION VŨ KHÍ ================== -->
+        <section id="weapons" class="hidden">
+            <div class="container"> <!-- << THÊM DÒNG NÀY -->
+                <h2>KHO VŨ KHÍ TỐI TÂN</h2>
+                <div class="grid-layout">
+                    <div class="grid-item-text">
+                        <h3>NÂNG CẤP & THAY ĐỔI LINH HOẠT</h3>
+                        <p>Sức mạnh của bạn không giới hạn. Thu thập các hộp quà để tùy biến hỏa lực:</p>
+                        <ul>
+                            <li><b>5 Loại Đạn Cơ Bản:</b> Chuyển đổi giữa các loại đạn khác nhau để phù hợp với tình
+                                hình
+                                chiến đấu.</li>
+                            <li><b>10 Cấp Độ Hỏa Lực:</b> Nhặt các vật phẩm cùng loại để nâng cấp sức mạnh và thay đổi
+                                kiểu
+                                bắn, từ một tia đạn đơn giản đến những cơn mưa đạn hủy diệt.</li>
+                            <li><b>Nâng Cấp Đặc Biệt:</b> Tìm kiếm "Tia Sét" để tăng cấp cho bất kỳ loại vũ khí nào bạn
+                                đang
+                                sử dụng.</li>
+                        </ul>
+                    </div>
+                    <div class="grid-item-img video-showcase">
+                        <video src="video/bullet.mp4" autoplay loop muted playsinline></video>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // Mobile device style: fill the whole browser client area with the game canvas:
+    </main>
 
-        var meta = document.createElement('meta');
-        meta.name = 'viewport';
-        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-        document.getElementsByTagName('head')[0].appendChild(meta);
-        document.querySelector("#unity-container").className = "unity-mobile";
-        canvas.className = "unity-mobile";
+    <footer>
+        <p>© 2025 Dat Studio. Lấy cảm hứng từ series Chicken Invaders.</p>
+    </footer>
 
-        // To lower canvas resolution on mobile devices to gain some
-        // performance, uncomment the following line:
-        // config.devicePixelRatio = 1;
+    <script src="script.js"></script>
+</body>
 
-
-      } else {
-        // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
-        canvas.style.width = "960px";
-        canvas.style.height = "600px";
-      }
-
-      document.querySelector("#unity-loading-bar").style.display = "block";
-
-      var script = document.createElement("script");
-      script.src = loaderUrl;
-      script.onload = () => {
-        createUnityInstance(canvas, config, (progress) => {
-          document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
-              }).then((unityInstance) => {
-                document.querySelector("#unity-loading-bar").style.display = "none";
-                document.querySelector("#unity-fullscreen-button").onclick = () => {
-                  unityInstance.SetFullscreen(1);
-                };
-
-              }).catch((message) => {
-                alert(message);
-              });
-            };
-
-      document.body.appendChild(script);
-
-    </script>
-  </body>
 </html>

@@ -1,0 +1,336 @@
+:root {
+    --primary-color: #0d0f28;
+    --secondary-color: #9f5dff;
+    --accent-color: #00e5ff;
+    --text-color: #e0e0e0;
+    --font-heading: 'Orbitron', sans-serif;
+    --font-body: 'Roboto', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.navbar {
+    background: rgba(13, 15, 40, 0.8);
+    backdrop-filter: blur(10px);
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.1rem;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    height: 80px;
+    width: 100%;
+    max-width: 1300px;
+    padding: 0 50px;
+}
+
+.nav-logo {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.8rem;
+    font-family: var(--font-heading);
+    display: flex;
+    align-items: center;
+}
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+    list-style: none;
+}
+
+.nav-item {
+    height: 80px;
+}
+
+.nav-link {
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: 0 1rem;
+    height: 100%;
+    position: relative;
+}
+
+.nav-link:hover {
+    color: var(--accent-color);
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 20px;
+    left: 1rem;
+    right: 1rem;
+    height: 2px;
+    background-color: var(--accent-color);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.nav-link:hover::after {
+    transform: scaleX(1);
+}
+
+header {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+}
+
+.hero-content {
+    z-index: 1;
+    max-width: 800px;
+    padding: 0 1rem;
+}
+
+.hero-content img.logo {
+    width: 250px;
+    margin-bottom: 1rem;
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.hero-content h1 {
+    font-family: var(--font-heading);
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 15px var(--accent-color);
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 15px 40px;
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    color: #fff;
+    background: linear-gradient(45deg, var(--accent-color), var(--secondary-color));
+    border: none;
+    border-radius: 50px;
+    text-decoration: none;
+    text-transform: uppercase;
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
+    transition: all 0.3s ease;
+    animation: pulse 2s infinite;
+}
+
+.cta-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 30px rgba(0, 229, 255, 0.8);
+    animation: none;
+}
+
+/* Thêm class mới này vào */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px; /* Thêm một chút padding lề cho an toàn */
+}
+
+section {
+    padding: 120px 5%;
+
+}
+
+h2 {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 4rem;
+    color: var(--accent-color);
+}
+
+.grid-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    align-items: center;
+}
+
+.grid-item-img img {
+    width: 100%;
+    max-width: 350px;
+    border-radius: 10px;
+    display: block;
+    margin: auto;
+}
+
+.grid-item-text h3 {
+    font-family: var(--font-heading);
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+}
+
+.grid-item-text ul {
+    list-style: none;
+    padding-left: 20px;
+}
+
+.grid-item-text ul li {
+    margin-bottom: 0.5rem;
+    position: relative;
+}
+
+.grid-item-text ul li::before {
+    content: '✓';
+    color: var(--accent-color);
+    position: absolute;
+    left: -20px;
+}
+
+.alt-bg {
+    background: #08091b;
+}
+
+footer {
+    text-align: center;
+    padding: 2rem;
+    background: #050612;
+}
+
+.hidden {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* THÊM STYLE MỚI CHO TRANG CHƠI GAME */
+.game-section {
+    padding-top: 120px;
+    /* Tạo khoảng trống bên dưới header */
+    padding-bottom: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#unity-container {
+    box-shadow: 0 0 40px rgba(0, 229, 255, 0.4);
+    border-radius: 10px;
+    overflow: hidden;
+    /* Ẩn các góc của canvas để bo tròn theo container */
+}
+
+/* --- STYLE CHO NÚT FULLSCREEN CỦA UNITY (Đã Sửa Lỗi Hoàn Chỉnh) --- */
+
+/* Ẩn các phần không cần thiết trong footer của Unity */
+#unity-footer #unity-logo-title-footer, 
+#unity-footer #unity-build-title {
+    display: none;
+}
+
+/* Định vị lại cái hộp chứa nút fullscreen */
+#unity-footer {
+    position: absolute; /* Định vị tuyệt đối so với #unity-container */
+    bottom: 5px;        /* Cách cạnh dưới 5px */
+    right: 5px;         /* Cách cạnh phải 5px */
+    width: 38px;        /* Chiều rộng bằng đúng chiều rộng của nút */
+    height: 38px;       /* Chiều cao bằng đúng chiều cao của nút */
+}
+
+/* Style cho chính nút fullscreen */
+#unity-fullscreen-button {
+    width: 100%; /* Lấp đầy 100% chiều rộng của #unity-footer */
+    height: 100%; /* Lấp đầy 100% chiều cao của #unity-footer */
+    background: url('TemplateData/fullscreen-button.png') no-repeat center;
+    background-size: cover; /* Đảm bảo ảnh nền luôn vừa vặn */
+    cursor: pointer;
+    
+    /* BỎ FLOAT ĐI, KHÔNG CẦN NỮA */
+    /* float: right; */ 
+}
+
+/* --- STYLE CHO CÁC HÌNH ẢNH TRONG GRID LAYOUT --- */
+
+/* Áp dụng cho TẤT CẢ các thẻ img bên trong .grid-item-img */
+.grid-item-img img {
+    width: auto;             /* Chiều rộng sẽ tự động điều chỉnh */
+    height: 300px;           /* Chiều cao được cố định là 150px */
+    max-width: 100%;         /* Đảm bảo ảnh không bị tràn ra ngoài trên màn hình nhỏ */
+    object-fit: contain;     /* Giữ đúng tỉ lệ của ảnh, không bị méo */
+    display: block;
+    margin: auto;
+    border-radius: 10px; /* Vẫn giữ bo góc */
+}
+
+
+
+/* --- STYLE CHO CÁC PLAYER --- */
+
+/* Định nghĩa biến màu cho Player 1 (dùng lại màu accent) */
+:root {
+    --player1-color: var(--accent-color); /* Xanh cyan neon */
+    --player2-color: #4dff4d;             /* Xanh lá cây neon */
+}
+
+/* Class mới cho Player 1 */
+.player1-details ul li::before {
+    color: var(--player1-color);
+}
+.player1-details h3 {
+    color: var(--player1-color);
+    text-shadow: 0 0 10px var(--player1-color);
+}
+
+
+/* Class cho Player 2 (giữ nguyên) */
+.player2-details ul li::before {
+    color: var(--player2-color);
+}
+.player2-details h3 {
+    color: var(--player2-color);
+    text-shadow: 0 0 10px var(--player2-color);
+}
+
