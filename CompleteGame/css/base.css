@@ -1,0 +1,46 @@
+/* ================================================== */
+/* ============= FILE: BASE.CSS ===================== */
+/* Chứa các biến, reset CSS, và style cơ bản nhất   */
+/* ================================================== */
+
+:root {
+    --primary-color: #0d0f28;
+    --secondary-color: #9f5dff;
+    --accent-color: #00e5ff;
+    --text-color: #e0e0e0;
+    --font-heading: 'Orbitron', sans-serif;
+    --font-body: 'Roboto', sans-serif;
+    --player1-color: var(--accent-color);
+    --player2-color: #4dff4d;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+h2 {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 4rem;
+    color: var(--accent-color);
+}

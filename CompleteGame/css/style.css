@@ -1,0 +1,16 @@
+/* ================================================== */
+/* ============= FILE: STYLE.CSS (CHÍNH) ============ */
+/* File này có nhiệm vụ TỔNG HỢP các file CSS con     */
+/* ================================================== */
+
+/* 1. Nhập các style cơ bản và biến */
+@import url('base.css');
+
+/* 2. Nhập các thành phần bố cục chung */
+@import url('layout.css');
+
+/* 3. Nhập các style dành riêng cho từng trang */
+@import url('pages.css');
+
+/* 4. Nhập các style responsive (LUÔN ĐỂ Ở CUỐI CÙNG) */
+@import url('responsive.css');

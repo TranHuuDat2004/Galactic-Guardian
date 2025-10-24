@@ -1,0 +1,243 @@
+/* ================================================== */
+/* ============= FILE: PAGES.CSS ==================== */
+/* Chứa style dành riêng cho từng trang/section      */
+/* ================================================== */
+
+section {
+    padding: 100px 0;
+}
+
+/* ================== PAGE: HOME ================== */
+#home {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+    padding: 0 20px;
+}
+
+.hero-content {
+    z-index: 1;
+    max-width: 800px;
+}
+
+.hero-content img.logo {
+    width: 200px;
+    margin-bottom: 1rem;
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+.hero-content h1 {
+    font-family: var(--font-heading);
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 15px var(--accent-color);
+}
+
+.hero-content p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 15px 35px;
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    color: #fff;
+    background: linear-gradient(45deg, var(--accent-color), var(--secondary-color));
+    border: none;
+    border-radius: 50px;
+    text-decoration: none;
+    text-transform: uppercase;
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
+    transition: all 0.3s ease;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.cta-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 30px rgba(0, 229, 255, 0.8);
+    animation: none;
+}
+
+.player1-details h3 {
+    color: var(--player1-color);
+    text-shadow: 0 0 10px var(--player1-color);
+}
+
+.player1-details ul li::before {
+    color: var(--player1-color);
+}
+
+.player2-details h3 {
+    color: var(--player2-color);
+    text-shadow: 0 0 10px var(--player2-color);
+}
+
+.player2-details ul li::before {
+    color: var(--player2-color);
+}
+
+.alt-bg {
+    background: #08091b;
+}
+
+.hidden {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ================== PAGE: FEATURES ================== */
+.features {
+    background: #08091b;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.feature-item {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.feature-item:hover {
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.feature-item i {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    color: var(--accent-color);
+    text-shadow: 0 0 10px var(--accent-color);
+}
+
+.feature-item h3 {
+    font-family: var(--font-heading);
+    margin-bottom: 1rem;
+    color: #fff;
+    font-size: 1.3rem;
+}
+
+/* ================== PAGE: GAMEPLAY ================== */
+.gameplay {
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+
+.video-container {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding-top: 56.25%;
+    box-shadow: 0 0 40px rgba(0, 229, 255, 0.4);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.final-cta {
+    padding-top: 60px;
+    padding-bottom: 80px;
+    background: #08091b;
+    text-align: center;
+}
+
+/* ================== PAGE: PLAY-GAME ================== */
+.game-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 120px;
+    padding-bottom: 60px;
+    min-height: 100vh;
+}
+
+#unity-container {
+    box-shadow: 0 0 40px rgba(0, 229, 255, 0.4);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#unity-footer {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 38px;
+    height: 38px;
+}
+
+#unity-fullscreen-button {
+    width: 100%;
+    height: 100%;
+    background: url('TemplateData/fullscreen-button.png') no-repeat center;
+    background-size: contain;
+    cursor: pointer;
+}
+
+.fullscreen-tooltip {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+    z-index: 10000;
+}
