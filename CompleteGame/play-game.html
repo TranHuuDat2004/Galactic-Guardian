@@ -135,6 +135,33 @@
         document.querySelector("#unity-loading-bar").style.display = "none";
         document.querySelector("#unity-fullscreen-button").onclick = () => {
           unityInstance.SetFullscreen(1);
+
+          // --- LOGIC MỚI ĐỂ HIỂN THỊ HƯỚNG DẪN ---
+
+          // 1. Kiểm tra xem có thông báo nào đang hiển thị không để tránh tạo nhiều cái
+          if (document.querySelector('.fullscreen-tooltip')) {
+            return; // Nếu có rồi thì không làm gì cả
+          }
+
+          // 2. Tạo một thẻ div mới để chứa thông báo
+          const tooltip = document.createElement('div');
+          tooltip.className = 'fullscreen-tooltip'; // Gán class CSS đã tạo ở trên
+          tooltip.textContent = 'Nhấn phím F11 để thoát chế độ toàn màn hình'; // Nội dung thông báo
+
+          // 3. Thêm thông báo vào trang web
+          document.body.appendChild(tooltip);
+
+          // 4. Tự động xóa thông báo sau 5 giây
+          setTimeout(() => {
+            // Làm cho thông báo mờ đi trước
+            tooltip.style.opacity = '0';
+
+            // Sau khi hiệu ứng mờ kết thúc (500ms), xóa hẳn phần tử khỏi trang
+            setTimeout(() => {
+              tooltip.remove();
+            }, 500);
+
+          }, 5000); // 5000 milliseconds = 5 giây
         };
 
       }).catch((message) => {
@@ -145,7 +172,7 @@
     document.body.appendChild(script);
 
   </script>
-   <!-- SCRIPT CHUNG CỦA WEBSITE (Để tải header/footer) -->
+  <!-- SCRIPT CHUNG CỦA WEBSITE (Để tải header/footer) -->
   <script src="main.js"></script>
 </body>
 

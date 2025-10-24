@@ -439,6 +439,52 @@ h2 {
     overflow: hidden; /* Ẩn các phần thừa của canvas để bo tròn theo */
 }
 
+/* ================== STYLE CHO NÚT FULLSCREEN CỦA UNITY ================== */
+
+/* Định vị lại cái hộp chứa nút fullscreen so với khung game */
+#unity-footer {
+    position: absolute; /* Định vị tuyệt đối so với #unity-container */
+    bottom: 5px;        /* Cách cạnh dưới 5px */
+    right: 5px;         /* Cách cạnh phải 5px */
+    width: 38px;        /* Chiều rộng bằng đúng chiều rộng của nút */
+    height: 38px;       /* Chiều cao bằng đúng chiều cao của nút */
+}
+
+/* Style cho chính nút fullscreen */
+#unity-fullscreen-button {
+    width: 100%; /* Lấp đầy 100% chiều rộng của #unity-footer */
+    height: 100%; /* Lấp đầy 100% chiều cao của #unity-footer */
+    
+    /* DÒNG QUAN TRỌNG: Dùng ảnh nền cho nút */
+    background: url('TemplateData/fullscreen-button.png') no-repeat center;
+    
+    background-size: contain; /* Đảm bảo ảnh nền luôn vừa vặn */
+    cursor: pointer; /* Biến con trỏ thành hình bàn tay khi di chuột vào */
+}
+
+/* ================== STYLE CHO HƯỚNG DẪN THOÁT FULLSCREEN ================== */
+.fullscreen-tooltip {
+    /* Định vị cố định so với cửa sổ trình duyệt */
+    position: fixed;
+    bottom: 20px; /* Hiển thị ở phía dưới màn hình */
+    left: 50%;
+    transform: translateX(-50%); /* Căn giữa theo chiều ngang */
+
+    /* Kiểu dáng */
+    background-color: rgba(0, 0, 0, 0.75); /* Nền đen mờ */
+    color: #fff; /* Chữ trắng */
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    
+    /* Hiệu ứng xuất hiện và biến mất */
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+
+    /* Đảm bảo nó luôn nổi lên trên cùng, kể cả trên game */
+    z-index: 10000;
+}
 
 /* Mobile Devices (max-width: 768px) */
 @media screen and (max-width: 768px) {
