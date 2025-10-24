@@ -1,5 +1,3 @@
-// --- JAVASCRIPT CHO CÁC HIỆU ỨNG TRANG WEB ---
-
 // Chạy code sau khi toàn bộ trang đã được tải
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -10,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (entry.isIntersecting) {
                 entry.target.classList.add('show');
             } else {
-                // Bạn có thể bỏ bình luận dòng dưới nếu muốn hiệu ứng lặp lại mỗi khi cuộn lên/xuống
+                // Bạn có thể bỏ comment dòng dưới nếu muốn hiệu ứng lặp lại mỗi khi cuộn lên/xuống
                 // entry.target.classList.remove('show'); 
             }
         });
@@ -22,31 +20,60 @@ document.addEventListener('DOMContentLoaded', function() {
     hiddenElements.forEach((el) => observer.observe(el));
 
 
-    // 2. Hiệu ứng Parallax cho Header
+    // 2. Hiệu ứng Parallax cho Header (Giữ nguyên)
     // ---------------------------------
     const header = document.getElementById('home');
-    // Chỉ thêm hiệu ứng này nếu có header (để tránh lỗi ở các trang con)
     if (header) {
-        // Chúng ta cần tạo các layer parallax bằng JavaScript để code HTML gọn gàng hơn
         const stars = document.createElement('div');
         stars.className = 'parallax-bg';
-        stars.id = 'bg-stars';
-        stars.style.backgroundImage = "url('https://i.imgur.com/k2o2y3X.png')"; // URL ảnh sao
+        stars.style.backgroundImage = "url('https://i.imgur.com/k2o2y3X.png')";
+        stars.style.position = 'absolute';
+        stars.style.top = 0;
+        stars.style.left = 0;
+        stars.style.width = '100%';
+        stars.style.height = '100%';
+        stars.style.zIndex = '-2';
         
         const nebula = document.createElement('div');
         nebula.className = 'parallax-bg';
-        nebula.id = 'bg-nebula';
-        nebula.style.backgroundImage = "url('https://i.imgur.com/uGNA28H.png')"; // URL ảnh tinh vân
+        nebula.style.backgroundImage = "url('https://i.imgur.com/uGNA28H.png')";
+        nebula.style.position = 'absolute';
+        nebula.style.top = 0;
+        nebula.style.left = 0;
+        nebula.style.width = '100%';
+        nebula.style.height = '100%';
+        nebula.style.zIndex = '-1';
         nebula.style.opacity = '0.6';
 
-        header.prepend(nebula); // Thêm nebula vào trước
-        header.prepend(stars);  // Thêm sao vào trước cùng (để nó nằm sau nebula)
+        header.prepend(nebula);
+        header.prepend(stars);
 
         window.addEventListener('scroll', function() {
             let scrollValue = window.scrollY;
-            // Di chuyển các lớp nền với tốc độ khác nhau
             stars.style.transform = 'translateY(' + scrollValue * 0.5 + 'px)';
             nebula.style.transform = 'translateY(' + scrollValue * 0.2 + 'px)';
+        });
+    }
+
+    // 3. CODE MỚI: Xử lý cho menu di động
+    // ------------------------------------
+    const navToggle = document.getElementById('nav-toggle');
+    const navMenu = document.querySelector('.nav-menu');
+
+    if (navToggle && navMenu) {
+        navToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            navToggle.classList.toggle('is-active');
+        });
+
+        // Đóng menu khi click vào một link (để chuyển trang)
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if (navMenu.classList.contains('active')) {
+                    navMenu.classList.remove('active');
+                    navToggle.classList.remove('is-active');
+                }
+            });
         });
     }
 });

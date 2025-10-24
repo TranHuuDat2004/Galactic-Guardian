@@ -5,6 +5,8 @@
     --text-color: #e0e0e0;
     --font-heading: 'Orbitron', sans-serif;
     --font-body: 'Roboto', sans-serif;
+    --player1-color: var(--accent-color);
+    --player2-color: #4dff4d;
 }
 
 * {
@@ -24,6 +26,13 @@ body {
     line-height: 1.6;
 }
 
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* ================== NAVBAR ================== */
 .navbar {
     background: rgba(13, 15, 40, 0.8);
     backdrop-filter: blur(10px);
@@ -41,10 +50,9 @@ body {
 .nav-container {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     height: 80px;
     width: 100%;
-    max-width: 1300px;
-    padding: 0 50px;
 }
 
 .nav-logo {
@@ -74,6 +82,7 @@ body {
     padding: 0 1rem;
     height: 100%;
     position: relative;
+    transition: color 0.3s ease;
 }
 
 .nav-link:hover {
@@ -96,6 +105,22 @@ body {
     transform: scaleX(1);
 }
 
+.nav-toggle {
+    display: none;
+    cursor: pointer;
+}
+
+.nav-toggle .bar {
+    width: 25px;
+    height: 3px;
+    margin: 5px auto;
+    transition: all 0.3s ease-in-out;
+    background: #fff;
+    display: block;
+}
+
+
+/* ================== HEADER ================== */
 header {
     position: relative;
     height: 100vh;
@@ -104,51 +129,42 @@ header {
     align-items: center;
     text-align: center;
     overflow: hidden;
+    padding: 0 20px;
 }
 
 .hero-content {
     z-index: 1;
     max-width: 800px;
-    padding: 0 1rem;
 }
 
 .hero-content img.logo {
-    width: 250px;
+    width: 200px;
     margin-bottom: 1rem;
     animation: float 6s ease-in-out infinite;
 }
 
 @keyframes float {
-    0% {
-        transform: translateY(0px);
-    }
-
-    50% {
-        transform: translateY(-20px);
-    }
-
-    100% {
-        transform: translateY(0px);
-    }
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
 }
 
 .hero-content h1 {
     font-family: var(--font-heading);
-    font-size: 4rem;
+    font-size: 3.5rem;
     margin-bottom: 1rem;
     text-shadow: 0 0 15px var(--accent-color);
 }
 
 .hero-content p {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     margin-bottom: 2rem;
 }
 
 .cta-button {
     display: inline-block;
-    padding: 15px 40px;
+    padding: 15px 35px;
     font-family: var(--font-heading);
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     color: #fff;
     background: linear-gradient(45deg, var(--accent-color), var(--secondary-color));
     border: none;
@@ -160,22 +176,21 @@ header {
     animation: pulse 2s infinite;
 }
 
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
 .cta-button:hover {
     transform: scale(1.1);
     box-shadow: 0 0 30px rgba(0, 229, 255, 0.8);
     animation: none;
 }
 
-/* Thêm class mới này vào */
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 15px; /* Thêm một chút padding lề cho an toàn */
-}
-
+/* ================== SECTIONS ================== */
 section {
-    padding: 120px 5%;
-
+    padding: 100px 0;
 }
 
 h2 {
@@ -188,17 +203,19 @@ h2 {
 
 .grid-layout {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
     align-items: center;
 }
 
-.grid-item-img img {
+.grid-item-img img, .grid-item-img video {
     width: 100%;
-    max-width: 350px;
-    border-radius: 10px;
+    max-width: 400px;
+    height: auto;
+    object-fit: contain;
     display: block;
     margin: auto;
+    border-radius: 10px;
 }
 
 .grid-item-text h3 {
@@ -209,34 +226,52 @@ h2 {
 
 .grid-item-text ul {
     list-style: none;
-    padding-left: 20px;
+    padding-left: 25px;
 }
 
 .grid-item-text ul li {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.7rem;
     position: relative;
 }
 
 .grid-item-text ul li::before {
     content: '✓';
-    color: var(--accent-color);
     position: absolute;
-    left: -20px;
+    left: -25px;
+    font-weight: bold;
+}
+
+.player1-details h3 {
+    color: var(--player1-color);
+    text-shadow: 0 0 10px var(--player1-color);
+}
+.player1-details ul li::before {
+    color: var(--player1-color);
+}
+
+.player2-details h3 {
+    color: var(--player2-color);
+    text-shadow: 0 0 10px var(--player2-color);
+}
+.player2-details ul li::before {
+    color: var(--player2-color);
 }
 
 .alt-bg {
     background: #08091b;
 }
 
+/* ================== FOOTER ================== */
 footer {
     text-align: center;
     padding: 2rem;
     background: #050612;
 }
 
+/* ================== ANIMATIONS ================== */
 .hidden {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px);
     transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
@@ -245,92 +280,143 @@ footer {
     transform: translateY(0);
 }
 
-/* THÊM STYLE MỚI CHO TRANG CHƠI GAME */
-.game-section {
-    padding-top: 120px;
-    /* Tạo khoảng trống bên dưới header */
-    padding-bottom: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+/* ================================================== */
+/* ============= RESPONSIVE DESIGN ================== */
+/* ================================================== */
+
+/* Tablets & Small Desktops (max-width: 992px) */
+@media screen and (max-width: 992px) {
+    .nav-container {
+        padding: 0 30px;
+    }
+
+    h2 {
+        font-size: 2.2rem;
+    }
+
+    .hero-content h1 {
+        font-size: 3rem;
+    }
+
+    .grid-layout {
+        gap: 2rem;
+    }
 }
 
-#unity-container {
-    box-shadow: 0 0 40px rgba(0, 229, 255, 0.4);
-    border-radius: 10px;
-    overflow: hidden;
-    /* Ẩn các góc của canvas để bo tròn theo container */
-}
+/* Mobile Devices (max-width: 768px) */
+@media screen and (max-width: 768px) {
+    /* --- Responsive Navbar --- */
+    .nav-menu {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 100%;
+        height: calc(100vh - 80px);
+        position: absolute;
+        top: 80px;
+        left: -100%;
+        opacity: 0;
+        transition: all 0.5s ease;
+        background: var(--primary-color);
+    }
 
-/* --- STYLE CHO NÚT FULLSCREEN CỦA UNITY (Đã Sửa Lỗi Hoàn Chỉnh) --- */
+    .nav-menu.active {
+        left: 0;
+        opacity: 1;
+        z-index: 1;
+    }
 
-/* Ẩn các phần không cần thiết trong footer của Unity */
-#unity-footer #unity-logo-title-footer, 
-#unity-footer #unity-build-title {
-    display: none;
-}
-
-/* Định vị lại cái hộp chứa nút fullscreen */
-#unity-footer {
-    position: absolute; /* Định vị tuyệt đối so với #unity-container */
-    bottom: 5px;        /* Cách cạnh dưới 5px */
-    right: 5px;         /* Cách cạnh phải 5px */
-    width: 38px;        /* Chiều rộng bằng đúng chiều rộng của nút */
-    height: 38px;       /* Chiều cao bằng đúng chiều cao của nút */
-}
-
-/* Style cho chính nút fullscreen */
-#unity-fullscreen-button {
-    width: 100%; /* Lấp đầy 100% chiều rộng của #unity-footer */
-    height: 100%; /* Lấp đầy 100% chiều cao của #unity-footer */
-    background: url('TemplateData/fullscreen-button.png') no-repeat center;
-    background-size: cover; /* Đảm bảo ảnh nền luôn vừa vặn */
-    cursor: pointer;
+    .nav-item {
+        width: 100%;
+        height: 70px;
+    }
     
-    /* BỎ FLOAT ĐI, KHÔNG CẦN NỮA */
-    /* float: right; */ 
+    .nav-link {
+        justify-content: center;
+        font-size: 1.5rem;
+        padding: 2rem 0;
+    }
+    
+    .nav-link:hover::after {
+        transform: scaleX(0.3); /* Thu nhỏ gạch chân trên mobile */
+    }
+
+    .nav-container {
+        position: relative;
+        width: 100%;
+    }
+
+    .nav-toggle {
+        display: block;
+        position: absolute;
+        top: 50%;
+        right: 30px;
+        transform: translateY(-50%);
+    }
+
+    #nav-toggle.is-active .bar:nth-child(2) {
+        opacity: 0;
+    }
+    #nav-toggle.is-active .bar:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+    #nav-toggle.is-active .bar:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+
+    /* --- General Section & Text Adjustments --- */
+    section {
+        padding: 80px 0;
+    }
+
+    h2 {
+        font-size: 2rem;
+        margin-bottom: 3rem;
+    }
+
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-content p {
+        font-size: 1rem;
+    }
+
+    .cta-button {
+        padding: 12px 30px;
+        font-size: 1.1rem;
+    }
+
+/* --- Grid Layout Stack (Đã sửa lỗi) --- */
+    .grid-layout {
+        grid-template-columns: 1fr; /* Chuyển thành 1 cột */
+        text-align: center;
+        gap: 1.5rem; /* Giảm khoảng cách giữa hình và chữ một chút */
+    }
+    
+    /* QUY TẮC MỚI: Luôn đưa hình ảnh lên trước trên di động */
+    .grid-item-img {
+        order: 1; 
+    }
+
+    /* QUY TẮC MỚI: Luôn đưa mô tả xuống sau trên di động */
+    .grid-item-text {
+        order: 2;
+    }
+
+    /* Giữ nguyên các style phụ */
+    .grid-item-text ul {
+       padding-left: 0;
+       display: inline-block;
+       text-align: left;
+    }
+    
+    .grid-item-text ul li::before {
+        left: -20px;
+    }
+
+    section .container ul{
+        padding-left: 20px;
+        padding-right: 20px;
+    }
 }
-
-/* --- STYLE CHO CÁC HÌNH ẢNH TRONG GRID LAYOUT --- */
-
-/* Áp dụng cho TẤT CẢ các thẻ img bên trong .grid-item-img */
-.grid-item-img img {
-    width: auto;             /* Chiều rộng sẽ tự động điều chỉnh */
-    height: 300px;           /* Chiều cao được cố định là 150px */
-    max-width: 100%;         /* Đảm bảo ảnh không bị tràn ra ngoài trên màn hình nhỏ */
-    object-fit: contain;     /* Giữ đúng tỉ lệ của ảnh, không bị méo */
-    display: block;
-    margin: auto;
-    border-radius: 10px; /* Vẫn giữ bo góc */
-}
-
-
-
-/* --- STYLE CHO CÁC PLAYER --- */
-
-/* Định nghĩa biến màu cho Player 1 (dùng lại màu accent) */
-:root {
-    --player1-color: var(--accent-color); /* Xanh cyan neon */
-    --player2-color: #4dff4d;             /* Xanh lá cây neon */
-}
-
-/* Class mới cho Player 1 */
-.player1-details ul li::before {
-    color: var(--player1-color);
-}
-.player1-details h3 {
-    color: var(--player1-color);
-    text-shadow: 0 0 10px var(--player1-color);
-}
-
-
-/* Class cho Player 2 (giữ nguyên) */
-.player2-details ul li::before {
-    color: var(--player2-color);
-}
-.player2-details h3 {
-    color: var(--player2-color);
-    text-shadow: 0 0 10px var(--player2-color);
-}
-

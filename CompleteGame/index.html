@@ -7,22 +7,26 @@
     <title>Galactic Guardian - Cuộc Chiến Bắt Đầu</title>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="stylesheet" href="index.css"> <!-- Link đến file CSS bạn vừa tạo -->
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@400;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
-    <style>
-
-    </style>
+    <link rel="stylesheet" href="index.css">
 </head>
 
 <body>
 
     <!-- ================== HEADER ĐÃ CẬP NHẬT ================== -->
     <nav class="navbar">
-        <div class="nav-container">
+        <div class="nav-container container">
             <a href="#home" class="nav-logo">GALACTIC GUARDIAN</a>
+            
+            <!-- NÚT HAMBURGER CHO DI ĐỘNG -->
+            <div class="nav-toggle" id="nav-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+
             <ul class="nav-menu">
                 <li class="nav-item"><a href="index.html" class="nav-link">Trang Chủ</a></li>
                 <li class="nav-item"><a href="feature.html" class="nav-link">Tính Năng</a></li>
@@ -35,18 +39,18 @@
     <!-- ================== TRANG CHỦ ================== -->
     <header id="home">
         <div class="hero-content">
-            <img src="img/logo.png" alt="Galactic Guardian Logo" class="logo"> <!-- THAY URL LOGO CỦA BẠN -->
+            <img src="img/logo.png" alt="Galactic Guardian Logo" class="logo">
             <h1>GALACTIC GUARDIAN</h1>
             <p>Lấy cảm hứng từ huyền thoại Chicken Invaders, một cuộc chiến thiên hà mới đang chờ đón bạn. Nâng cấp phi
                 thuyền, đối mặt với hạm đội địch và những con trùm khổng lồ trong hành trình giải cứu vũ trụ!</p>
-            <a href="play-game.html" class="cta-button">Chơi Ngay!</a> <!-- THAY URL GAME CỦA BẠN -->
+            <a href="play-game.html" class="cta-button">Chơi Ngay!</a>
         </div>
     </header>
 
     <main>
         <!-- ================== SECTION NHÂN VẬT ================== -->
         <section id="players" class="hidden">
-            <div class="container"> <!-- << THÊM DÒNG NÀY -->
+            <div class="container">
                 <h2>PHI ĐỘI VỆ BINH</h2>
                 <div class="grid-layout">
                     <div class="grid-item-text player1-details">
@@ -58,12 +62,12 @@
                         </ul>
                     </div>
                     <div class="grid-item-img">
-                        <img src="img/player1.gif" alt="Player 1 Ship"> <!-- THAY HÌNH PLAYER 1 -->
+                        <img src="img/player1.gif" alt="Player 1 Ship">
                     </div>
                 </div>
                 <div class="grid-layout" style="margin-top: 4rem;">
-                    <div class="grid-item-img">
-                        <img src="img/player2.gif" alt="Player 2 Ship"> <!-- THAY HÌNH PLAYER 2 -->
+                     <div class="grid-item-img">
+                        <img src="img/player2.gif" alt="Player 2 Ship">
                     </div>
                     <div class="grid-item-text player2-details">
                         <h3>PLAYER 2 - ĐỒNG MINH TIN CẬY</h3>
@@ -79,12 +83,9 @@
 
         <!-- ================== SECTION KẺ ĐỊCH ================== -->
         <section id="enemies" class="alt-bg hidden">
-            <div class="container"> <!-- << THÊM DÒNG NÀY -->
+            <div class="container">
                 <h2>HẠM ĐỘI XÂM LĂNG</h2>
                 <div class="grid-layout">
-                    <div class="grid-item-img">
-                        <img src="img/enemy.png" alt="Các loại kẻ địch"> <!-- THAY HÌNH GHÉP CÁC KẺ ĐỊCH -->
-                    </div>
                     <div class="grid-item-text">
                         <h3>TỪ LÍNH LÁC ĐẾN TRÙM KHỔNG LỒ</h3>
                         <p>Đối mặt với một hạm đội đa dạng, mỗi loại có kiểu di chuyển và tấn công riêng:</p>
@@ -96,13 +97,16 @@
                                 kỹ năng và chiến thuật để vượt qua.</li>
                         </ul>
                     </div>
+                     <div class="grid-item-img">
+                        <img src="img/enemy.png" alt="Các loại kẻ địch">
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- ================== SECTION VŨ KHÍ ================== -->
         <section id="weapons" class="hidden">
-            <div class="container"> <!-- << THÊM DÒNG NÀY -->
+            <div class="container">
                 <h2>KHO VŨ KHÍ TỐI TÂN</h2>
                 <div class="grid-layout">
                     <div class="grid-item-text">
@@ -120,7 +124,7 @@
                                 sử dụng.</li>
                         </ul>
                     </div>
-                    <div class="grid-item-img video-showcase">
+                    <div class="grid-item-img">
                         <video src="video/bullet.mp4" autoplay loop muted playsinline></video>
                     </div>
                 </div>
@@ -133,6 +137,7 @@
         <p>© 2025 Dat Studio. Lấy cảm hứng từ series Chicken Invaders.</p>
     </footer>
 
+    <!-- ĐẢM BẢO DÒNG NÀY ĐƯỢC ĐẶT Ở CUỐI BODY -->
     <script src="script.js"></script>
 </body>
 
