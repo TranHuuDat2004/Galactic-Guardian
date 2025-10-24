@@ -514,10 +514,16 @@ h2 {
         height: 70px;
     }
     
-    .nav-link {
+.nav-link {
+        /* Dùng flexbox để căn icon và chữ */
+        display: flex;
+        align-items: center; /* Căn giữa theo chiều dọc */
         justify-content: center;
+        gap: 15px; /* Tạo khoảng cách 15px giữa icon và chữ */
+
         font-size: 1.5rem;
         padding: 2rem 0;
+        width: 100%; /* Đảm bảo link chiếm toàn bộ chiều rộng */
     }
     
     .nav-link:hover::after {
