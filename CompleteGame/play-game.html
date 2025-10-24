@@ -5,30 +5,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chơi Ngay - Galactic Guardian</title>
-  <link rel="shortcut icon" href="TemplateData/favicon.ico"> <!-- Giả sử TemplateData cùng cấp -->
+  <link rel="shortcut icon" href="favicon.ico">
 
   <!-- Link đến Font và CSS chung -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@400;700&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="index.css"> <!-- Link đến file CSS bạn vừa tạo -->
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <!-- Header Đồng Bộ -->
-  <nav class="navbar">
-    <div class="nav-container">
-      <a href="index.html" class="nav-logo">GALACTIC GUARDIAN</a>
-      <ul class="nav-menu">
-        <li class="nav-item"><a href="index.html" class="nav-link">Trang Chủ</a></li>
-        <li class="nav-item"><a href="feature.html" class="nav-link">Tính Năng</a></li>
-        <li class="nav-item"><a href="gameplay.html" class="nav-link">Gameplay</a></li>
-        <li class="nav-item"><a href="play-game.html" class="nav-link">Chơi ngay</a></li>
-      </ul>
-    </div>
-  </nav>
+  <!-- Header tự động tải -->
+  <header class="header-placeholder"></header>
 
   <main>
     <section class="game-section">
@@ -50,10 +40,8 @@
     </section>
   </main>
 
-  <!-- Footer Đồng Bộ -->
-  <footer>
-    <p>© 2025 Dat Studio. Lấy cảm hứng từ series Chicken Invaders.</p>
-  </footer>
+  <!-- Footer tự động tải -->
+  <footer class="footer-placeholder"></footer>
 
   <!-- ================== SCRIPT CỦA UNITY ================== -->
   <!-- Sao chép và dán từ file index.html do Unity tạo ra -->
@@ -157,7 +145,8 @@
     document.body.appendChild(script);
 
   </script>
-  <!-- =============================================== -->
+   <!-- SCRIPT CHUNG CỦA WEBSITE (Để tải header/footer) -->
+  <script src="main.js"></script>
 </body>
 
 </html>
