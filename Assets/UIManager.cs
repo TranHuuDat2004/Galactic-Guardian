@@ -4,37 +4,47 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    public static UIManager Instance; // Singleton để dễ dàng truy cập
+    public static UIManager Instance;
 
     [Header("Thanh Máu Boss")]
     public GameObject healthBarUI;
     public Image healthBarFill;
     public TextMeshProUGUI bossNameText;
 
+    [Header("UI Mạng Sống Player 1")]
+    public TextMeshProUGUI livesText;
 
-    // --- THÊM MỚI Ở ĐÂY ---
-    [Header("UI Mạng Sống Player")]
-    public TextMeshProUGUI livesText; // Kéo Text hiển thị số mạng vào đây
-                                      // ----------------------
-    public GameObject player2LivesUI_Container; // Kéo đối tượng cha chứa icon và text của P2 vào đây
-    public TextMeshProUGUI livesText_P2;      // Kéo Text hiển thị số mạng của P2 vào đây
+    [Header("UI Mạng Sống Player 2")]
+    public GameObject player2LivesUI_Container;
+    public TextMeshProUGUI livesText_P2;
+
+    [Header("UI Kỹ Năng Co-op")]
+    public GameObject coopSkillUI_Container; // << DÙNG GAMEOBJECT CHA
+    public Image coopSkillFill;
 
     private void Awake()
     {
         Instance = this;
 
-        // --- THÊM LOGIC NÀY VÀO ---
-        // Ẩn UI của Player 2 nếu chơi chế độ 1 người
-        if (GameModeManager.NumberOfPlayers < 2)
+        // --- CẬP NHẬT LOGIC Ở ĐÂY ---
+        // Kiểm tra xem có phải chế độ 1 người chơi không
+        bool isSinglePlayer = (GameModeManager.NumberOfPlayers < 2);
+        
+        // Ẩn UI của Player 2 nếu là 1 người chơi
+        if (player2LivesUI_Container != null)
         {
-            if (player2LivesUI_Container != null)
-            {
-                player2LivesUI_Container.SetActive(false);
-            }
+            player2LivesUI_Container.SetActive(!isSinglePlayer); // Sẽ là false nếu 1 người, true nếu 2 người
         }
+
+        // Ẩn UI kỹ năng co-op nếu là 1 người chơi
+        if (coopSkillUI_Container != null)
+        {
+            coopSkillUI_Container.SetActive(!isSinglePlayer); // Tương tự
+        }
+        // -----------------------------
     }
-    
-    // --- HÀM MỚI ĐỂ CẬP NHẬT SỐ MẠNG ---
+
+    // Hàm cập nhật mạng sống P1
     public void UpdateLives(int currentLives)
     {
         if (livesText != null)
@@ -42,16 +52,35 @@ public class UIManager : MonoBehaviour
             livesText.text = "x " + currentLives;
         }
     }
-    // ------------------------------------
-     public void UpdateLives_P2(int currentLives)
+
+    // Hàm cập nhật mạng sống P2
+    public void UpdateLives_P2(int currentLives)
     {
         if (livesText_P2 != null)
         {
             livesText_P2.text = "x " + currentLives;
         }
     }
+    
+    // Hàm cập nhật UI hồi chiêu kỹ năng co-op
+    public void UpdateCoopSkillCooldown(float timer, float cooldown)
+    {
+        if (coopSkillFill != null)
+        {
+            if (cooldown > 0 && timer > 0)
+            {
+                // Hiển thị tiến trình hồi chiêu
+                coopSkillFill.fillAmount = timer / cooldown;
+            }
+            else
+            {
+                // Khi sẵn sàng, thanh fill đầy
+                coopSkillFill.fillAmount = 1; 
+            }
+        }
+    }
 
-    // Hàm để hiện thanh máu
+    // Các hàm của Boss không thay đổi
     public void ShowBossHealthBar(string bossName)
     {
         if (healthBarUI != null)
@@ -61,7 +90,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    // Hàm để ẩn thanh máu
     public void HideBossHealthBar()
     {
         if (healthBarUI != null)
@@ -69,8 +97,7 @@ public class UIManager : MonoBehaviour
             healthBarUI.SetActive(false);
         }
     }
-
-    // Hàm để cập nhật giá trị thanh máu
+    
     public void UpdateBossHealth(float currentHealth, float maxHealth)
     {
         if (healthBarFill != null)

@@ -183,13 +183,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db8faeafce6c2d945a317476039611e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  speed: 2
+  movementType: 0
   health: 1
-  canMoveIndependently: 1
+  speed: 2
+  collisionDamage: 1
+  rotationSpeed: 50
+  bossDisplayName: "CHI\u1EBEN H\u1EA0M ZYGON"
+  roamingAreaMin: {x: -12, y: -6}
+  roamingAreaMax: {x: 12, y: 6}
+  waitAtDestination: 1
   canShoot: 1
   bulletTag: EnemyBullet
   fireRate: 8
   firePoint: {fileID: 2998098379749520488}
+  isBoss: 0
+  attackPhases: []
   explosionTag: EnemyExplosion
   engineEffectPrefab: {fileID: 100000, guid: 93bdcaae53f95461785a8eeb8c01bc61, type: 3}
   powerUpPrefabs:
@@ -198,6 +206,9 @@ MonoBehaviour:
   - {fileID: 587035885492962172, guid: 1e67fa9bc3e9564488d0362ed8a32b71, type: 3}
   - {fileID: 587035885492962172, guid: 1eeeeece94a385c4bbb4cf03bb040f73, type: 3}
   - {fileID: 6551157495255583541, guid: aa7b84cc7f50e3840b6a6ffb88e5a49d, type: 3}
+  - {fileID: 7984805447041885496, guid: 711740451419ce74fa1a142d0a36fa4b, type: 3}
+  - {fileID: 7984805447041885496, guid: 711740451419ce74fa1a142d0a36fa4b, type: 3}
+  - {fileID: 7984805447041885496, guid: 711740451419ce74fa1a142d0a36fa4b, type: 3}
   dropChance: 15
 --- !u!50 &-3933451819927160027
 Rigidbody2D:

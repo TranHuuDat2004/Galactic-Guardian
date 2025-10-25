@@ -7,5 +7,6 @@ public enum WeaponType
     FireballOrange,    // Đạn la-ze (bullet2)
     BulletGreen,   // Đạn tỏa (BulletGreen)
 
-    UpgradeOnly // Loại đặc biệt chỉ để nâng cấp vũ khí hiện tại
+    UpgradeOnly, // Loại đặc biệt chỉ để nâng cấp vũ khí hiện tại
+    Shield, // << THÊM DÒNG NÀY
 }
