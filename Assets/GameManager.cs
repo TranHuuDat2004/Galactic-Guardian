@@ -36,6 +36,16 @@ public class GameManager : MonoBehaviour
     public AudioClip gameOverSound;
     private AudioSource audioSource;
 
+
+     [Header("Thiết Lập Khiên Co-op")]
+    [Tooltip("Khoảng cách tối đa để 2 người chơi kích hoạt khiên.")]
+    public float proximityDistance = 2.0f;
+    [Tooltip("Thời gian khiên tồn tại.")]
+    public float proximityShieldDuration = 5.0f;
+    [Tooltip("Thời gian hồi chiêu của kỹ năng.")]
+    public float proximityShieldCooldown = 30.0f;
+
+    private float proximityCooldownTimer = 0f;
     [Header("Chuyển Cảnh")]
     public string menuSceneName = "MainMenu";
     public float delayBeforeLoadScene = 8.0f;
@@ -52,7 +62,7 @@ public class GameManager : MonoBehaviour
         // Sử dụng thông tin từ GameModeManager
         SpawnPlayers();
         // ---------------------------------------
-        
+
         if (levelToLoad != null && WaveManager.Instance != null)
         {
             WaveManager.Instance.StartLevel(levelToLoad);
@@ -60,6 +70,12 @@ public class GameManager : MonoBehaviour
         else
         {
             Debug.LogError("LỖI: Không có LevelData để tải!");
+        }
+         if (GameModeManager.NumberOfPlayers == 2)
+        {
+            proximityCooldownTimer = proximityShieldCooldown; 
+            // Hoặc bạn có thể đặt một thời gian ngắn hơn, ví dụ 5.0f
+            proximityCooldownTimer = 5.0f;
         }
     }
 
@@ -102,7 +118,7 @@ public class GameManager : MonoBehaviour
     }
 
 
-     public void HandlePlayerDeath(PlayerController playerWhoDied)
+    public void HandlePlayerDeath(PlayerController playerWhoDied)
     {
         // Kiểm tra xem người chơi đó có còn mạng để hồi sinh không
         if (playerWhoDied.lives > 0)
@@ -114,6 +130,46 @@ public class GameManager : MonoBehaviour
         {
             // Người chơi này đã hết mạng. Kiểm tra xem game đã kết thúc chưa.
             CheckForGameOver();
+        }
+    }
+
+    void Update()
+    {
+        // Chỉ chạy logic này ở chế độ 2 người chơi
+        if (GameModeManager.NumberOfPlayers == 2)
+        {
+            HandleProximityShield();
+        }
+    }
+    
+    void HandleProximityShield()
+    {
+        // Đếm ngược thời gian hồi chiêu
+        if (proximityCooldownTimer > 0)
+        {
+            proximityCooldownTimer -= Time.deltaTime;
+            return; // Đang trong thời gian hồi, không làm gì cả
+        }
+
+        // Kiểm tra xem cả 2 người chơi có tồn tại và đang hoạt động không
+        if (currentPlayer != null && currentPlayer2 != null &&
+            currentPlayer.gameObject.activeInHierarchy && currentPlayer2.gameObject.activeInHierarchy)
+        {
+            // Tính khoảng cách giữa 2 người chơi
+            float distance = Vector3.Distance(currentPlayer.transform.position, currentPlayer2.transform.position);
+
+            // Nếu khoảng cách đủ gần
+            if (distance <= proximityDistance)
+            {
+                Debug.Log("Kích hoạt khiên co-op!");
+
+                // Kích hoạt khiên cho cả hai
+                currentPlayer.ActivateShield(proximityShieldDuration);
+                currentPlayer2.ActivateShield(proximityShieldDuration);
+
+                // Bắt đầu đếm ngược thời gian hồi chiêu
+                proximityCooldownTimer = proximityShieldCooldown;
+            }
         }
     }
 
@@ -183,5 +239,38 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(delayBeforeLoadScene);
         Time.timeScale = 1f;
         SceneManager.LoadScene(menuSceneName);
+    }
+
+      private void OnDrawGizmos()
+    {
+        // Chỉ vẽ khi game đang chạy và ở chế độ 2 người
+        if (!Application.isPlaying || GameModeManager.NumberOfPlayers < 2)
+        {
+            return;
+        }
+
+        // Đảm bảo cả 2 player đều tồn tại
+        if (currentPlayer != null && currentPlayer2 != null)
+        {
+            // Vẽ một đường thẳng nối 2 player
+            Gizmos.color = Color.white;
+            Gizmos.DrawLine(currentPlayer.transform.position, currentPlayer2.transform.position);
+
+            // Vẽ một vòng tròn xung quanh mỗi player với bán kính là proximityDistance
+            // Vòng tròn này thể hiện "vùng kích hoạt"
+            if (proximityCooldownTimer <= 0)
+            {
+                // Màu xanh lá cây khi kỹ năng sẵn sàng
+                Gizmos.color = Color.green;
+            }
+            else
+            {
+                // Màu đỏ khi kỹ năng đang hồi
+                Gizmos.color = Color.red;
+            }
+            
+            Gizmos.DrawWireSphere(currentPlayer.transform.position, proximityDistance);
+            Gizmos.DrawWireSphere(currentPlayer2.transform.position, proximityDistance);
+        }
     }
 }

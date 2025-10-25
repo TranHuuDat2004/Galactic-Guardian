@@ -31,6 +31,12 @@ public class PlayerController : MonoBehaviour
     public bool isInvincible = false; // Trạng thái bất tử
     public float invincibilityDuration = 2.0f; // Thời gian bất tử sau khi hồi sinh
 
+// --- THÊM MỚI Ở ĐÂY ---
+    [Header("Thiết Lập Khiên")]
+    public GameObject shieldVisual; // Kéo GameObject hình ảnh của khiên vào đây
+    private bool isShieldActive = false;
+    // ----------------------
+
     [Header("Hiệu Ứng")]
     public string explosionTag = "PlayerExplosion";
 
@@ -50,6 +56,7 @@ public class PlayerController : MonoBehaviour
         if (firePoint == null) firePoint = transform.Find("FirePoint");
         audioSource = GetComponent<AudioSource>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+         if (shieldVisual != null) shieldVisual.SetActive(false);
     }
 
     void Start()
@@ -155,40 +162,62 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(int damageAmount)
     {
-        if (isInvincible || isDestroyed) return;
+         // Nếu khiên đang bật, không nhận sát thương
+        if (isShieldActive || isInvincible || isDestroyed) return;
+        // --------------------
 
+        // Phần còn lại của hàm giữ nguyên
         lives -= damageAmount;
 
         if (UIManager.Instance != null)
         {
-            if (playerID == 1)
-            {
-                UIManager.Instance.UpdateLives(lives);
-            }
-                else // Nếu là Player 2
-            {
-            UIManager.Instance.UpdateLives_P2(lives);
-            }
+            if (playerID == 1) UIManager.Instance.UpdateLives(lives);
+            else UIManager.Instance.UpdateLives_P2(lives);
         }
 
         Debug.Log("Player " + playerID + " bị trúng đạn! Còn lại: " + lives + " mạng!");
-    
+
         if (!string.IsNullOrEmpty(explosionTag))
         {
             ObjectPooler.Instance.SpawnFromPool(explosionTag, transform.position, Quaternion.identity);
         }
 
         gameObject.SetActive(false);
-    
         GameManager.Instance.HandlePlayerDeath(this);
+
+        if (lives <= 0)
+        {
+            isDestroyed = true;
+            Debug.Log("Player " + playerID + " đã hết mạng!");
+        }
+    }
+    
+    // --- HÀM MỚI ĐỂ KÍCH HOẠT KHIÊN ---
+    public void ActivateShield(float duration)
+    {
+        // Nếu khiên chưa được kích hoạt, hãy bắt đầu coroutine
+        if (!isShieldActive)
+        {
+            StartCoroutine(ShieldCoroutine(duration));
+        }
+    }
+
+    private IEnumerator ShieldCoroutine(float duration)
+    {
+        Debug.Log("Player " + playerID + " đã bật khiên!");
+        isShieldActive = true;
+        if (shieldVisual != null) shieldVisual.SetActive(true);
+
+        // Chờ hết thời gian của khiên
+        yield return new WaitForSeconds(duration);
+
+        // Tắt khiên
+        isShieldActive = false;
+        if (shieldVisual != null) shieldVisual.SetActive(false);
+        Debug.Log("Player " + playerID + " đã hết khiên!");
+    }
     // ------------------------------------
 
-    if (lives <= 0)
-    {
-        isDestroyed = true;
-        Debug.Log("Player " + playerID + " đã hết mạng!");
-    }
-    }
 
     #region Unchanged Methods
     private void OnTriggerEnter2D(Collider2D other)
@@ -209,34 +238,48 @@ public class PlayerController : MonoBehaviour
             }
             other.gameObject.SetActive(false);
         }
-        else if (tag == "PowerUp")
+       else if (tag == "PowerUp")
+    {
+        if (other.TryGetComponent<PowerUp>(out PowerUp powerUp))
         {
-            if (other.TryGetComponent<PowerUp>(out PowerUp powerUp))
+            // Kiểm tra xem đây là loại quà gì
+            switch (powerUp.powerUpType)
             {
-                UpgradeOrChangeWeapon(powerUp.weaponTypeToGive);
+                case PowerUp.PowerUpType.Weapon:
+                    UpgradeOrChangeWeapon(powerUp.weaponTypeToGive);
+                    break;
+                case PowerUp.PowerUpType.Shield:
+                    ActivateShield(5f); // Kích hoạt khiên trong 5 giây
+                    break;
             }
-            Destroy(other.gameObject);
         }
+        Destroy(other.gameObject);
+    }
         else if (tag == "EnemyBullet")
         {
             TakeDamage(1);
         }
     }
 
-    private void UpgradeOrChangeWeapon(WeaponType newWeaponType)
+// Trong PlayerController.cs
+private void UpgradeOrChangeWeapon(WeaponType newWeaponType)
+{
+    // --- THÊM ĐIỀU KIỆN MỚI Ở ĐẦU ---
+    if (newWeaponType == WeaponType.Shield)
     {
-        if (newWeaponType == WeaponType.UpgradeOnly || newWeaponType == currentWeaponType)
-        {
-            if (weaponLevel < maxWeaponLevel)
-            {
-                weaponLevel++;
-            }
-        }
-        else
-        {
-            currentWeaponType = newWeaponType;
-        }
+        // Kích hoạt khiên với thời gian cố định, ví dụ 5 giây
+        ActivateShield(5.0f);
     }
+    // --------------------------------
+    else if (newWeaponType == WeaponType.UpgradeOnly || newWeaponType == currentWeaponType)
+    {
+        if (weaponLevel < maxWeaponLevel) weaponLevel++;
+    }
+    else
+    {
+        currentWeaponType = newWeaponType;
+    }
+}
 
     private string GetBulletTagForCurrentWeapon()
     {
