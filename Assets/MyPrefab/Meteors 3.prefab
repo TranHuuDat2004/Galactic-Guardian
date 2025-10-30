@@ -151,9 +151,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db8faeafce6c2d945a317476039611e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  movementType: 4
+  movementType: 0
   health: 1
-  speed: 4.5
+  speed: 3.6
   collisionDamage: 1
   rotationSpeed: 30
   bossDisplayName: "CHI\u1EBEN H\u1EA0M ZYGON"

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: e6b99f7be5ba94d41a7615bdbeb8d56e
+guid: e4644c4aeab0cbf43b3524180c3372d5
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -412809400687154973
-    second: image6_0
+      213: -6114546526105681878
+    second: IonBlasterLV11_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,17 +96,30 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: image6_0
+      name: IonBlasterLV11_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 76
-        height: 200
+        width: 180
+        height: 198
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3e8a9188908654af0800000000000000
-      internalID: -412809400687154973
+      spriteID: a204fdca454c42ba0800000000000000
+      internalID: -6114546526105681878
       vertices: []
       indices: 
       edges: []
@@ -135,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      image6_0: -412809400687154973
+      IonBlasterLV11_0: -6114546526105681878
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

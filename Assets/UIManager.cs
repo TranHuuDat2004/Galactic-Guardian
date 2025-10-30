@@ -22,6 +22,10 @@ public class UIManager : MonoBehaviour
     public GameObject coopSkillUI_Container; // << BIẾN BỊ THIẾU
     public Image coopSkillFill;
 
+ // --- THÊM MỚI Ở ĐÂY ---
+    [Header("UI Tạm Dừng")]
+    public GameObject pauseMenuUI; // Kéo PauseMenu_Panel vào đây
+
     private void Awake()
     {
         Instance = this;
@@ -45,6 +49,19 @@ public class UIManager : MonoBehaviour
         }
     }
     
+    // --- CÁC HÀM MỚI ĐỂ ĐIỀU KHIỂN PAUSE MENU ---
+    public void ShowPauseMenu()
+    {
+        if (pauseMenuUI != null) pauseMenuUI.SetActive(true);
+    }
+
+    public void HidePauseMenu()
+    {
+        if (pauseMenuUI != null) pauseMenuUI.SetActive(false);
+    }
+    // ---------------------------------------------
+
+
     // --- HÀM CẬP NHẬT COOLDOWN ĐÃ ĐỔI TÊN BIẾN ---
     public void UpdateCoopSkillCooldown(float fillAmount)
     {

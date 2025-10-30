@@ -194,7 +194,7 @@ MonoBehaviour:
   waitAtDestination: 1
   canShoot: 1
   bulletTag: EnemyBullet1
-  fireRate: 28
+  fireRate: 25
   firePoint: {fileID: 6017860498689635308}
   isBoss: 0
   attackPhases: []

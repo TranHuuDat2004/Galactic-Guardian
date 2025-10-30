@@ -1543,6 +1543,8 @@ MonoBehaviour:
   mainButtonsPanel: {fileID: 837549767}
   modeSelectionPanel: {fileID: 383024464}
   comingSoonPanel: {fileID: 1864448253}
+  cursorSprite: {fileID: 2800000, guid: 330fce528a2acb4418d617e18b1c084e, type: 3}
+  cursorHotspot: {x: 0, y: 0}
 --- !u!4 &1028413393
 Transform:
   m_ObjectHideFlags: 0

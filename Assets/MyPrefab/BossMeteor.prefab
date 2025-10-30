@@ -157,7 +157,7 @@ MonoBehaviour:
   speed: 3
   collisionDamage: 10
   rotationSpeed: 30
-  bossDisplayName: "Thi\xEAn th\u1EA1ch ph\xF3ng x\u1EA1"
+  bossDisplayName: Oblivion Core
   roamingAreaMin: {x: -12, y: -6}
   roamingAreaMax: {x: 12, y: 6}
   waitAtDestination: 0.5

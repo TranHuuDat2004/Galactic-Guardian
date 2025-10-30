@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 8613ab981b0a0f9428a359cae53bcff3
+guid: 50a06eb442d307a4fa98dae4639410f4
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3506796010499809244
-    second: image5_0
+      213: 4254750787675067359
+    second: LightningFryerLV11_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,17 +96,30 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: image5_0
+      name: LightningFryerLV11_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 76
-        height: 378
+        width: 180
+        height: 394
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 420e666bb9b555fc0800000000000000
-      internalID: -3506796010499809244
+      spriteID: fd39f2b7c49eb0b30800000000000000
+      internalID: 4254750787675067359
       vertices: []
       indices: 
       edges: []
@@ -135,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      image5_0: -3506796010499809244
+      LightningFryerLV11_0: 4254750787675067359
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

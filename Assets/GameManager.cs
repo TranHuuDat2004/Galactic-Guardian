@@ -10,6 +10,9 @@ public class GameManager : MonoBehaviour
     public static LevelData levelToLoad;
     public static GameManager Instance;
 
+    // --- BIẾN MỚI ĐỂ THEO DÕI TRẠNG THÁI DỪNG GAME ---
+    private bool isPaused = false;
+
     [Header("Thiết Lập Player")]
     public GameObject playerPrefab;
     public Transform playerSpawnPoint;
@@ -58,6 +61,24 @@ public class GameManager : MonoBehaviour
 
      void Start()
     {
+                // Khi bắt đầu game, đảm bảo thời gian chạy bình thường và ẩn các UI
+        Time.timeScale = 1f; 
+        Cursor.visible = false;
+        
+        if (gameOverUI != null) gameOverUI.SetActive(false);
+        // Ẩn cả Pause Menu khi bắt đầu
+        if (UIManager.Instance != null) UIManager.Instance.HidePauseMenu();
+
+        // --- DÒNG QUAN TRỌNG NHẤT ---
+    // Luôn luôn ẩn con trỏ chuột khi vào màn chơi
+    Cursor.visible = false;
+    // ---------------------------
+
+    if (gameOverUI != null)
+    {
+        gameOverUI.SetActive(false);
+    }
+
         // --- CẬP NHẬT LOGIC TẠO PLAYER Ở ĐÂY ---
         // Sử dụng thông tin từ GameModeManager
         SpawnPlayers();
@@ -135,12 +156,63 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        // Kiểm tra xem người chơi có nhấn nút tạm dừng không
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
+        {
+            // Nếu game đang chạy, thì tạm dừng
+            if (!isPaused)
+            {
+                PauseGame();
+            }
+            // Nếu game đang tạm dừng, thì tiếp tục
+            else
+            {
+                ResumeGame();
+            }
+        }
+
         // Chỉ chạy logic này ở chế độ 2 người chơi
         if (GameModeManager.NumberOfPlayers == 2)
         {
             HandleProximityShield();
         }
     }
+    
+    // --- CÁC HÀM MỚI ĐỂ QUẢN LÝ VIỆC TẠM DỪNG ---
+    public void PauseGame()
+    {
+        isPaused = true;
+        Time.timeScale = 0f; // Dòng này sẽ "đóng băng" toàn bộ game
+        
+        // Hiện Pause Menu và con trỏ chuột
+        if (UIManager.Instance != null) UIManager.Instance.ShowPauseMenu();
+        Cursor.visible = true;
+    }
+
+    public void ResumeGame()
+    {
+        isPaused = false;
+        Time.timeScale = 1f; // Cho game chạy lại bình thường
+        
+        // Ẩn Pause Menu và con trỏ chuột
+        if (UIManager.Instance != null) UIManager.Instance.HidePauseMenu();
+        Cursor.visible = false;
+    }
+
+    public void RestartLevel()
+    {
+        // Reset lại Time.timeScale trước khi tải lại Scene
+        Time.timeScale = 1f;
+        // Tải lại Scene game hiện tại
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void GoToMainMenu()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(menuSceneName);
+    }
+    // ---------------------------------------------
     
     void HandleProximityShield()
     {
@@ -236,6 +308,13 @@ public class GameManager : MonoBehaviour
     void GameOver()
     {
         Debug.Log("GAME OVER!");
+
+         // --- THÊM DÒNG NÀY VÀO ---
+    // Hiện lại con trỏ chuột để người chơi có thể tương tác với UI Game Over
+    Cursor.visible = true;
+    // -------------------------
+
+
         if (backgroundMusicSource != null)
         {
             backgroundMusicSource.Stop();

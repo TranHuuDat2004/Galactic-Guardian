@@ -153,7 +153,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   movementType: 5
   health: 1
-  speed: 3.3
+  speed: 2.6
   collisionDamage: 1
   rotationSpeed: 30
   bossDisplayName: "CHI\u1EBEN H\u1EA0M ZYGON"

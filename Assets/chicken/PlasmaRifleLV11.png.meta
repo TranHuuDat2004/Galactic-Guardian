@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 9146b1bc1d206c84bbcf7394986865f2
+guid: f7bc6f331be8a0b44b3ade7fd35597f2
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6891541253924508337
-    second: image8_0
+      213: 6733099575631671900
+    second: PlasmaRifleLV11_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,17 +96,30 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: image8_0
+      name: PlasmaRifleLV11_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 180
-        height: 332
+        width: 150
+        height: 407
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f4d21e41eb35c50a0800000000000000
-      internalID: -6891541253924508337
+      spriteID: c52fbdaf366c07d50800000000000000
+      internalID: 6733099575631671900
       vertices: []
       indices: 
       edges: []
@@ -135,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      image8_0: -6891541253924508337
+      PlasmaRifleLV11_0: 6733099575631671900
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

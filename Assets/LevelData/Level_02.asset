@@ -16,38 +16,43 @@ MonoBehaviour:
   backgroundPrefab: {fileID: 3199191389628404008, guid: 2ae8b3223d8963e45954612e47f19d78, type: 3}
   backgroundMusic: {fileID: 8300000, guid: 366b9fe8be3672147b638440b02f45c9, type: 3}
   waves:
-  - waveName: "Wave 6: Thi\xEAn th\u1EA1ch r\u01A1i"
+  - waveName: 'Wave 6: Asteroid Field'
     formationPrefab: {fileID: 8239330326649353416, guid: baab6ca5323fb2e4ab557c2e6806d901, type: 3}
     enemyTagToSpawn: Meteor1
     warningImagePrefab: {fileID: 0}
     warningPosition: {x: 0, y: 0, z: 0}
     enemyStartPosition: {x: 0, y: 8, z: 0}
     warningDelay: 2
-  - waveName: "Wave 7: Thi\xEAn th\u1EA1ch r\u01A1i nhanh h\u01A1n"
-    formationPrefab: {fileID: 8239330326649353416, guid: baab6ca5323fb2e4ab557c2e6806d901, type: 3}
-    enemyTagToSpawn: Meteor
+    destroyZoneName: DZ_Topopen
+  - waveName: 'Wave 7: Chicken Invasion'
+    formationPrefab: {fileID: 4904512962323392090, guid: ba9a468e8381db646b35853c580da12e, type: 3}
+    enemyTagToSpawn: Chicken
     warningImagePrefab: {fileID: 0}
     warningPosition: {x: 0, y: 0, z: 0}
     enemyStartPosition: {x: 0, y: 8, z: 0}
     warningDelay: 2
-  - waveName: "Wave 8: Nhanh h\u01A1n n\u1EEFa"
-    formationPrefab: {fileID: 8239330326649353416, guid: baab6ca5323fb2e4ab557c2e6806d901, type: 3}
-    enemyTagToSpawn: Meteor2
+    destroyZoneName: DZ_Topopen
+  - waveName: 'Wave 8: Vector Assault'
+    formationPrefab: {fileID: 4408398878411715803, guid: fd651163fc45e4f41bbe2c17672eb4c0, type: 3}
+    enemyTagToSpawn: Orange
     warningImagePrefab: {fileID: 0}
     warningPosition: {x: 0, y: 0, z: 0}
-    enemyStartPosition: {x: 0, y: 8, z: 0}
+    enemyStartPosition: {x: -45, y: 0, z: 0}
     warningDelay: 2
-  - waveName: "Wave 9: M\u01B0a thi\xEAn th\u1EA1ch"
+    destroyZoneName: DZ_LeftOpen
+  - waveName: 'Wave 9: Meteor Storm'
     formationPrefab: {fileID: 8239330326649353416, guid: baab6ca5323fb2e4ab557c2e6806d901, type: 3}
     enemyTagToSpawn: Meteor3
     warningImagePrefab: {fileID: 0}
     warningPosition: {x: 0, y: 0, z: 0}
     enemyStartPosition: {x: 0, y: 8, z: 0}
     warningDelay: 2
-  - waveName: "Wave 10: Thi\xEAn th\u1EA1ch ph\xF3ng x\u1EA1"
+    destroyZoneName: DZ_Topopen
+  - waveName: 'Wave 10: Oblivion Core'
     formationPrefab: {fileID: 4715738115431962415, guid: 21196bc41e12d9c47991b30e2a116f5f, type: 3}
     enemyTagToSpawn: BossMeteor
     warningImagePrefab: {fileID: 0}
     warningPosition: {x: 0, y: 0, z: 0}
     enemyStartPosition: {x: 0, y: 8, z: 0}
     warningDelay: 2
+    destroyZoneName: 

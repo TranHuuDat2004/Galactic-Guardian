@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 4044f46d2ab16754788d71c815065ea9
+guid: 57d9867422e3a3d4691731751863c456
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3337427645810508816
-    second: image4_0
+      213: 7169395976786324077
+    second: HypergunLV11_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,17 +96,30 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: image4_0
+      name: HypergunLV11_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 133
-        height: 320
+        width: 76
+        height: 200
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0148a1ce2cce05e20800000000000000
-      internalID: 3337427645810508816
+      spriteID: d6aa672e7afce7360800000000000000
+      internalID: 7169395976786324077
       vertices: []
       indices: 
       edges: []
@@ -135,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      image4_0: 3337427645810508816
+      HypergunLV11_0: 7169395976786324077
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

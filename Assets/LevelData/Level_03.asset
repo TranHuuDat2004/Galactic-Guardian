@@ -16,31 +16,43 @@ MonoBehaviour:
   backgroundPrefab: {fileID: 4540295240537128305, guid: 5d987868a1f624548bbeb390272253b1, type: 3}
   backgroundMusic: {fileID: 8300000, guid: e7efdf24637b00b4cbdc9b3cbecbbee7, type: 3}
   waves:
-  - waveName: "M\xE0n 1: \u0110\u1ED9i h\xECnh c\u01A1 b\u1EA3n"
-    formationPrefab: {fileID: 4904512962323392090, guid: ba9a468e8381db646b35853c580da12e, type: 3}
-    enemyTagToSpawn: Black
+  - waveName: 'Wave 11: UFO Chickens'
+    formationPrefab: {fileID: 4408398878411715803, guid: fd651163fc45e4f41bbe2c17672eb4c0, type: 3}
+    enemyTagToSpawn: UFOChicken
     warningImagePrefab: {fileID: 0}
     warningPosition: {x: 0, y: 0, z: 0}
-    enemyStartPosition: {x: 0, y: 8, z: 0}
+    enemyStartPosition: {x: -45, y: 0, z: 0}
     warningDelay: 2
-  - waveName: "M\xE0n 2: Thi\xEAn th\u1EA1ch r\u01A1i"
-    formationPrefab: {fileID: 8239330326649353416, guid: baab6ca5323fb2e4ab557c2e6806d901, type: 3}
-    enemyTagToSpawn: Black
-    warningImagePrefab: {fileID: 0}
-    warningPosition: {x: 0, y: 0, z: 0}
-    enemyStartPosition: {x: 0, y: 8, z: 0}
-    warningDelay: 2
-  - waveName: "M\xE0n 3: \u0110\u1ED9i h\xECnh tr\xE1i tim"
+    destroyZoneName: DZ_LeftOpen
+  - waveName: 'Wave 12: Cupid''s Arrow'
     formationPrefab: {fileID: 2069348881396640669, guid: 433902ed30c56984aab23bdc555fb5d6, type: 3}
-    enemyTagToSpawn: Black
+    enemyTagToSpawn: Chicken
+    warningImagePrefab: {fileID: 0}
+    warningPosition: {x: 0, y: 0, z: 0}
+    enemyStartPosition: {x: 0, y: 8, z: 0}
+    warningDelay: 2
+    destroyZoneName: DZ_Topopen
+  - waveName: 'Wave 13: Snowball Fight'
+    formationPrefab: {fileID: 8980281292477953912, guid: 1fc81d3f536385f428bdf4e52b32c200, type: 3}
+    enemyTagToSpawn: Chiller
     warningImagePrefab: {fileID: 0}
     warningPosition: {x: 0, y: 0, z: 0}
     enemyStartPosition: {x: 0, y: 12, z: 0}
     warningDelay: 2
-  - waveName: "M\xE0n Boss"
+    destroyZoneName: DZ_Topopen
+  - waveName: 'Wave 14: The Hatchlings'
+    formationPrefab: {fileID: 8473746977471471465, guid: dd2d3de14594cc344a27e641f1bb13a2, type: 3}
+    enemyTagToSpawn: OrdinaryChick
+    warningImagePrefab: {fileID: 0}
+    warningPosition: {x: 0, y: 0, z: 0}
+    enemyStartPosition: {x: -0.5, y: 8, z: 0}
+    warningDelay: 2
+    destroyZoneName: DZ_Topopen
+  - waveName: 'Wave 15: Chick Gatling Gun'
     formationPrefab: {fileID: 4715738115431962415, guid: 21196bc41e12d9c47991b30e2a116f5f, type: 3}
-    enemyTagToSpawn: Black
+    enemyTagToSpawn: ChickGatlingGun
     warningImagePrefab: {fileID: 0}
     warningPosition: {x: 0, y: 0, z: 0}
     enemyStartPosition: {x: 0, y: 8, z: 0}
     warningDelay: 2
+    destroyZoneName: 
