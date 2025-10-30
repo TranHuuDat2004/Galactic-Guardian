@@ -241,3 +241,58 @@ section {
     transition: opacity 0.5s ease-in-out;
     z-index: 10000;
 }
+
+/* ================== SECTION: LỊCH SỬ PHIÊN BẢN ================== */
+.version-history-section {
+    background-color: #08091b; /* Thêm màu nền tối cho đồng bộ */
+    padding: 100px 0;
+}
+
+.version-grid {
+    display: flex;
+    flex-direction: column; /* Xếp các phiên bản theo chiều dọc */
+    align-items: center;    /* Căn giữa các box theo chiều ngang */
+    gap: 2rem;              /* Tạo khoảng cách giữa các phiên bản */
+}
+
+.version-item {
+    width: 100%;
+    max-width: 800px; /* Giới hạn chiều rộng để dễ đọc hơn */
+    padding: 1.5rem 2rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    text-align: left; /* Căn lề trái cho nội dung bên trong */
+}
+
+.version-item h3 {
+    font-family: var(--font-heading);
+    color: var(--accent-color);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.version-item p {
+    margin-left: 0.5rem;
+}
+
+.version-item ul {
+    list-style-type: none; /* Bỏ dấu chấm tròn mặc định */
+    padding-left: 0.5rem;
+}
+
+.version-item ul li {
+    position: relative;
+    padding-left: 25px; /* Tạo không gian cho dấu gạch đầu dòng tùy chỉnh */
+    margin-bottom: 0.5rem;
+}
+
+/* Tạo dấu gạch đầu dòng tùy chỉnh cho đẹp hơn */
+.version-item ul li::before {
+    content: '•'; /* Ký tự bullet */
+    position: absolute;
+    left: 0;
+    color: var(--accent-color);
+    font-size: 1.2rem;
+    line-height: 1;
+}
