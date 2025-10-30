@@ -247,20 +247,26 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (isDead || other == null) return;
+    // Trong Enemy.cs - Đoạn code này đã đúng và sẽ là nơi duy nhất xử lý va chạm Player-Enemy
+private void OnTriggerEnter2D(Collider2D other)
+{
+    if (isDead || other == null) return;
 
-        if (other.CompareTag("Bullet"))
-        {
-            if (other.TryGetComponent<Bullet>(out Bullet bullet)) { TakeDamage(bullet.damage); }
-        }
-        else if (other.CompareTag("Player"))
-        {
-            if(other.TryGetComponent<PlayerController>(out PlayerController player)) { player.TakeDamage(collisionDamage); }
-            Die();
-        }
+    if (other.CompareTag("Bullet"))
+    {
+        if (other.TryGetComponent<Bullet>(out Bullet bullet)) { TakeDamage(bullet.damage); }
     }
+    else if (other.CompareTag("Player"))
+    {
+        // Gây sát thương cho Player
+        if(other.TryGetComponent<PlayerController>(out PlayerController player)) 
+        { 
+            player.TakeDamage(collisionDamage); 
+        }
+        // Sau đó tự hủy
+        Die(); 
+    }
+}
 
     public void TakeDamage(int damageAmount)
     {
@@ -276,6 +282,16 @@ public class Enemy : MonoBehaviour
         isDead = true;
 
         TryDropLoot();
+
+        // --- THÊM MỚI Ở ĐÂY ---
+    // Gọi SFXManager để phát âm thanh nổ
+    if (SFXManager.Instance != null)
+    {
+        SFXManager.Instance.PlaySound(SFXManager.Instance.enemyExplosionSound);
+    }
+    // ----------------------
+
+
         if (!string.IsNullOrEmpty(explosionTag)) { ObjectPooler.Instance.SpawnFromPool(explosionTag, transform.position, Quaternion.identity); }
         if (WaveManager.Instance != null) { WaveManager.Instance.OnEnemyDestroyed(); }
         

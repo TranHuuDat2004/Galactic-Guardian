@@ -24,14 +24,14 @@ MonoBehaviour:
     enemyStartPosition: {x: 0, y: 8, z: 0}
     warningDelay: 2
     destroyZoneName: DZ_Topopen
-  - waveName: 'Wave 2: Heart Attack'
-    formationPrefab: {fileID: 2069348881396640669, guid: 433902ed30c56984aab23bdc555fb5d6, type: 3}
+  - waveName: 'Wave 2: Numeric Assault'
+    formationPrefab: {fileID: 4898789732452015054, guid: 24ffefbc3fd84f9449bb12fbf425bbdc, type: 3}
     enemyTagToSpawn: Blue
     warningImagePrefab: {fileID: 0}
     warningPosition: {x: 0, y: 0, z: 0}
-    enemyStartPosition: {x: 0, y: 12, z: 0}
+    enemyStartPosition: {x: 30, y: 0, z: 0}
     warningDelay: 2
-    destroyZoneName: DZ_Topopen
+    destroyZoneName: DZ_RightOpen
   - waveName: 'Wave 3: Winged Menace'
     formationPrefab: {fileID: 8980281292477953912, guid: 1fc81d3f536385f428bdf4e52b32c200, type: 3}
     enemyTagToSpawn: Green
@@ -40,14 +40,14 @@ MonoBehaviour:
     enemyStartPosition: {x: 0, y: 8, z: 0}
     warningDelay: 2
     destroyZoneName: DZ_Topopen
-  - waveName: 'Wave 4: Invader Fleet'
-    formationPrefab: {fileID: 8239330326649353416, guid: baab6ca5323fb2e4ab557c2e6806d901, type: 3}
+  - waveName: 'Wave 4: Binary Code'
+    formationPrefab: {fileID: 132804357149945049, guid: ed2042207ae3fe3409c493b4c27d89a8, type: 3}
     enemyTagToSpawn: Orange
     warningImagePrefab: {fileID: 0}
     warningPosition: {x: 0, y: 0, z: 0}
-    enemyStartPosition: {x: 0, y: 8, z: 0}
+    enemyStartPosition: {x: -45, y: 0, z: 0}
     warningDelay: 2
-    destroyZoneName: DZ_Topopen
+    destroyZoneName: DZ_LeftOpen
   - waveName: 'Wave 5: The ZYGON Dreadnought'
     formationPrefab: {fileID: 4715738115431962415, guid: 21196bc41e12d9c47991b30e2a116f5f, type: 3}
     enemyTagToSpawn: Boss2

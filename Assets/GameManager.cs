@@ -148,9 +148,26 @@ public class GameManager : MonoBehaviour
         if (proximityCooldownTimer > 0)
         {
             proximityCooldownTimer -= Time.deltaTime;
+
+            // --- CẬP NHẬT UI COOLDOWN Ở ĐÂY ---
+            // Tính toán tỉ lệ fill amount (thời gian còn lại / tổng thời gian)
+            float fillAmount = proximityCooldownTimer / proximityShieldCooldown;
+            if (UIManager.Instance != null)
+            {
+                UIManager.Instance.UpdateCoopSkillCooldown(fillAmount);
+            }
+            // ------------------------------------
+
+
             return; // Đang trong thời gian hồi, không làm gì cả
         }
 
+// Nếu đã hồi chiêu xong, đảm bảo fill amount là 0
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateCoopSkillCooldown(0);
+        }
+        
         // Kiểm tra xem cả 2 người chơi có tồn tại và đang hoạt động không
         if (currentPlayer != null && currentPlayer2 != null &&
             currentPlayer.gameObject.activeInHierarchy && currentPlayer2.gameObject.activeInHierarchy)

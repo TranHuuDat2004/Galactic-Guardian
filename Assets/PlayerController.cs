@@ -177,6 +177,14 @@ public class PlayerController : MonoBehaviour
 
         Debug.Log("Player " + playerID + " bị trúng đạn! Còn lại: " + lives + " mạng!");
 
+// --- THAY ĐỔI Ở ĐÂY ---
+    // Gọi SFXManager để phát âm thanh nổ
+    if (SFXManager.Instance != null)
+    {
+        SFXManager.Instance.PlaySound(SFXManager.Instance.playerExplosionSound);
+    }
+    // ----------------------
+
         if (!string.IsNullOrEmpty(explosionTag))
         {
             ObjectPooler.Instance.SpawnFromPool(explosionTag, transform.position, Quaternion.identity);
@@ -221,45 +229,38 @@ public class PlayerController : MonoBehaviour
 
     #region Unchanged Methods
     private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (isDestroyed || other == null) return;
+{
+    if (isDestroyed || other == null) return;
 
-        string tag = other.tag;
+    string tag = other.tag;
 
-        if (tag == "Blue" || tag == "Black" || tag == "Orange" || tag == "Green" || tag == "Meteor" || tag == "Boss")
-        {
-            if (other.TryGetComponent<Enemy>(out Enemy enemy))
-            {
-                TakeDamage(enemy.collisionDamage);
-            }
-            else
-            {
-                TakeDamage(1);
-            }
-            other.gameObject.SetActive(false);
-        }
-       else if (tag == "PowerUp")
+    // --- LOGIC VA CHẠM VỚI KẺ ĐỊCH ĐÃ BỊ LOẠI BỎ ---
+    // Việc này giờ do Enemy.cs xử lý
+
+    // Chỉ xử lý va chạm với PowerUp và Đạn của địch
+    if (tag == "PowerUp")
     {
         if (other.TryGetComponent<PowerUp>(out PowerUp powerUp))
         {
-            // Kiểm tra xem đây là loại quà gì
             switch (powerUp.powerUpType)
             {
                 case PowerUp.PowerUpType.Weapon:
                     UpgradeOrChangeWeapon(powerUp.weaponTypeToGive);
                     break;
                 case PowerUp.PowerUpType.Shield:
-                    ActivateShield(5f); // Kích hoạt khiên trong 5 giây
+                    ActivateShield(5f);
                     break;
             }
         }
         Destroy(other.gameObject);
     }
-        else if (tag == "EnemyBullet")
-        {
-            TakeDamage(1);
-        }
+    else if (tag == "EnemyBullet")
+    {
+        TakeDamage(1);
+        // Viên đạn địch nên tự hủy, nhưng để an toàn, ta có thể tắt nó ở đây
+        other.gameObject.SetActive(false); 
     }
+}
 
 // Trong PlayerController.cs
 private void UpgradeOrChangeWeapon(WeaponType newWeaponType)

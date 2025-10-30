@@ -319,8 +319,8 @@ MonoBehaviour:
   firePoint: {fileID: 2635701001166741101}
   fireRate: 0.2
   weaponLevel: 1
-  startingLives: 3
-  lives: 3
+  startingLives: 5
+  lives: 5
   isInvincible: 0
   invincibilityDuration: 2
   shieldVisual: {fileID: 5401103465018024562}
@@ -339,7 +339,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.8
+  m_Volume: 0.4
   m_Pitch: 1
   Loop: 0
   Mute: 0
