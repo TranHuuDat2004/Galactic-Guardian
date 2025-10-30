@@ -66,5 +66,5 @@
     "explorer.fileNesting.patterns": {
         "*.sln": "*.csproj"
     },
-    "dotnet.defaultSolution": "galactic-guardian-main.sln"
+    "dotnet.defaultSolution": "galactic-guardian.sln"
 }

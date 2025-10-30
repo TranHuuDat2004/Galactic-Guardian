@@ -15,6 +15,10 @@ public class Wave
     public Vector3 warningPosition;
     public Vector3 enemyStartPosition;
     public float warningDelay = 2.0f;
+
+ [Header("Thiết Lập Destroy Zone")]
+    [Tooltip("Gõ vào TÊN của GameObject cấu hình DestroyZone trong Hierarchy.")]
+    public string destroyZoneName; // << CHỈ CẦN DÙNG STRING
 }
 
 // Dòng này cho phép bạn tạo file asset từ script

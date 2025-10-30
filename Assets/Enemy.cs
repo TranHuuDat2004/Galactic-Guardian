@@ -68,7 +68,6 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    // --- HÀM ONENABLE() ĐÃ ĐƯỢC CẬP NHẬT HOÀN CHỈNH ---
     void OnEnable()
     {
         health = initialHealth;
@@ -78,8 +77,8 @@ public class Enemy : MonoBehaviour
         if (col != null) col.enabled = true;
 
         fireCooldown = Random.Range(0.5f, fireRate);
-
-        // Thiết lập hướng di chuyển ban đầu dựa trên loại
+        
+        // Thiết lập hướng di chuyển
         switch (movementType)
         {
             case MovementType.Diagonal:
@@ -126,18 +125,32 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    // --- HÀM MỚI ĐỂ DỌN DẸP SẠCH SẼ ---
     void OnDisable()
     {
+        // Dừng tất cả các coroutine khi đối tượng bị tắt
         StopAllCoroutines();
-        if (isBoss && UIManager.Instance != null) { UIManager.Instance.HideBossHealthBar(); }
-        if (currentEngineEffect != null) { Destroy(currentEngineEffect); currentEngineEffect = null; }
-    }
+        
+        // Ẩn thanh máu của Boss nếu có
+        if (isBoss && UIManager.Instance != null) 
+        { 
+            UIManager.Instance.HideBossHealthBar(); 
+        }
 
-    // --- HÀM UPDATE() ĐÃ ĐƯỢC CẬP NHẬT HOÀN CHỈNH ---
+        // Hủy đối tượng hiệu ứng động cơ nếu nó tồn tại
+        if (currentEngineEffect != null) 
+        { 
+            Destroy(currentEngineEffect);
+            currentEngineEffect = null; // Đặt lại là null để tránh lỗi
+        }
+    }
+    // -------------------------------------
+
     void Update()
     {
         if (isDead) return;
 
+        // Xử lý di chuyển
         switch (movementType)
         {
             case MovementType.Vertical:
@@ -165,6 +178,7 @@ public class Enemy : MonoBehaviour
                 break;
         }
 
+        // Xử lý bắn
         if (canShoot && !isBoss)
         {
             fireCooldown -= Time.deltaTime;
@@ -233,29 +247,17 @@ public class Enemy : MonoBehaviour
         }
     }
 
-     // --- CẬP NHẬT HÀM OnTriggerEnter2D ---
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (isDead || other == null) return;
 
-        // Nếu va chạm với đạn của Player
         if (other.CompareTag("Bullet"))
         {
-            if (other.TryGetComponent<Bullet>(out Bullet bullet))
-            {
-                TakeDamage(bullet.damage);
-            }
+            if (other.TryGetComponent<Bullet>(out Bullet bullet)) { TakeDamage(bullet.damage); }
         }
-        // Nếu va chạm với Player
         else if (other.CompareTag("Player"))
         {
-            // Thử lấy component PlayerController
-            if(other.TryGetComponent<PlayerController>(out PlayerController player))
-            {
-                // Ra lệnh cho Player nhận sát thương bằng giá trị collisionDamage
-                player.TakeDamage(collisionDamage);
-            }
-            // Sau khi gây sát thương, Boss/Enemy tự hủy
+            if(other.TryGetComponent<PlayerController>(out PlayerController player)) { player.TakeDamage(collisionDamage); }
             Die();
         }
     }
@@ -276,7 +278,8 @@ public class Enemy : MonoBehaviour
         TryDropLoot();
         if (!string.IsNullOrEmpty(explosionTag)) { ObjectPooler.Instance.SpawnFromPool(explosionTag, transform.position, Quaternion.identity); }
         if (WaveManager.Instance != null) { WaveManager.Instance.OnEnemyDestroyed(); }
-
+        
+        // Hàm OnDisable sẽ tự động được gọi sau dòng này, giúp dọn dẹp hiệu ứng động cơ
         gameObject.SetActive(false);
     }
 
@@ -298,6 +301,8 @@ public class Enemy : MonoBehaviour
         {
             if (WaveManager.Instance != null) WaveManager.Instance.OnEnemyDestroyed();
         }
+        
+        // Hàm OnDisable sẽ tự động được gọi sau dòng này
         gameObject.SetActive(false);
     }
 }

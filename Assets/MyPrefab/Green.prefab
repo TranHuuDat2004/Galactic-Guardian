@@ -185,7 +185,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   movementType: 0
   health: 1
-  speed: 1
+  speed: 1.65
   collisionDamage: 1
   rotationSpeed: 50
   bossDisplayName: "CHI\u1EBEN H\u1EA0M ZYGON"
@@ -194,7 +194,7 @@ MonoBehaviour:
   waitAtDestination: 1
   canShoot: 1
   bulletTag: EnemyBullet2
-  fireRate: 8
+  fireRate: 25
   firePoint: {fileID: 8321722330517378246}
   isBoss: 0
   attackPhases: []
@@ -206,7 +206,7 @@ MonoBehaviour:
   - {fileID: 587035885492962172, guid: 1e67fa9bc3e9564488d0362ed8a32b71, type: 3}
   - {fileID: 587035885492962172, guid: 1eeeeece94a385c4bbb4cf03bb040f73, type: 3}
   - {fileID: 6551157495255583541, guid: aa7b84cc7f50e3840b6a6ffb88e5a49d, type: 3}
-  - {fileID: 7984805447041885496, guid: 711740451419ce74fa1a142d0a36fa4b, type: 3}
+  - {fileID: 587035885492962172, guid: ce9cd09cb6644d94d8ba3008996d73c8, type: 3}
   dropChance: 15
 --- !u!50 &-615522138774004555
 Rigidbody2D:

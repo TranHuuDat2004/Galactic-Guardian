@@ -5,15 +5,14 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 
-// KHÔNG CÒN ĐỊNH NGHĨA LỚP "WAVE" Ở ĐÂY NỮA
-// Nó đã được định nghĩa trong file LevelData.cs
-
 public class WaveManager : MonoBehaviour
 {
-    private GameObject currentBackgroundInstance; // Biến mới để lưu background hiện tại
-    // KHÔNG CÒN CÁC BIẾN CŨ allWaves và wavesPerLevel
-    private List<Wave> currentLevelWaves; // Biến để lưu trữ các wave của màn chơi hiện tại
+    public static WaveManager Instance;
 
+    [Header("Tham Chiếu Trong Scene")]
+    [Tooltip("Kéo GameObject cha chứa tất cả các cấu hình DestroyZone vào đây.")]
+    public Transform destroyZoneParent; 
+    
     [Header("Cài Đặt Chuyển Cảnh")]
     public string worldMapSceneName = "WorldMap";
     public string finalVictorySceneName = "VictoryScene";
@@ -35,10 +34,12 @@ public class WaveManager : MonoBehaviour
     private AudioSource audioSource;
 
     // Biến nội bộ
+    private List<Wave> currentLevelWaves;
     private int currentWaveIndex;
     private int enemiesAlive = 0;
     private GameObject currentFormationInstance;
-    public static WaveManager Instance;
+    private GameObject currentBackgroundInstance;
+    private GameObject currentActiveDestroyZone;
 
     void Awake()
     {
@@ -49,37 +50,30 @@ public class WaveManager : MonoBehaviour
 
     void Start()
     {
-        // Hàm Start sẽ trống, chờ lệnh từ GameManager
+        // Trống, chờ lệnh từ GameManager
     }
-
-    // Hàm này được gọi bởi GameManager để bắt đầu một màn chơi mới
-        public void StartLevel(LevelData levelData)
+    
+    public void StartLevel(LevelData levelData)
     {
-        // 1. Dọn dẹp background của màn chơi cũ (nếu có)
         if (currentBackgroundInstance != null)
         {
             Destroy(currentBackgroundInstance);
         }
 
-        // 2. Tạo ra background mới từ Prefab
         if (levelData.backgroundPrefab != null)
         {
             currentBackgroundInstance = Instantiate(levelData.backgroundPrefab, Vector3.zero, Quaternion.identity);
         }
 
-        // 3. Thiết lập nhạc
-        if (backgroundMusicSource != null)
+        if (backgroundMusicSource != null && levelData.backgroundMusic != null)
         {
             backgroundMusicSource.clip = levelData.backgroundMusic;
             backgroundMusicSource.Play();
         }
 
-        // 4. Bắt đầu các wave
         currentLevelWaves = levelData.waves;
         currentWaveIndex = -1;
 
-        // Tốc độ cuộn giờ sẽ được thiết lập trên chính prefab background,
-        // nhưng chúng ta vẫn có thể override nó ở đây nếu muốn.
         if (BackgroundScroller.Instance != null)
         {
             BackgroundScroller.Instance.SetScrollSpeed(initialScrollSpeed);
@@ -90,24 +84,50 @@ public class WaveManager : MonoBehaviour
 
     public void StartNextWave()
     {
+        // Tắt DestroyZone của wave cũ đi
+        if (currentActiveDestroyZone != null)
+        {
+            currentActiveDestroyZone.SetActive(false);
+            currentActiveDestroyZone = null; // Reset để đảm bảo
+        }
+
         currentWaveIndex++;
         if (currentWaveIndex < currentLevelWaves.Count)
         {
-            StartCoroutine(SpawnWaveCoroutine(currentLevelWaves[currentWaveIndex]));
+            StartCoroutine(SpawnWaveCoroutine());
         }
         else
         {
-            // Đã hoàn thành tất cả các wave của màn chơi này
             StartCoroutine(LevelCompleteCoroutine());
         }
     }
 
-    private IEnumerator SpawnWaveCoroutine(Wave wave)
+    private IEnumerator SpawnWaveCoroutine()
     {
+        Wave wave = currentLevelWaves[currentWaveIndex];
+        
+        // Bước 1: Tìm và kích hoạt DestroyZone dựa trên TÊN
+        if (destroyZoneParent != null && !string.IsNullOrEmpty(wave.destroyZoneName))
+        {
+            Transform zoneTransform = destroyZoneParent.Find(wave.destroyZoneName);
+            if (zoneTransform != null)
+            {
+                currentActiveDestroyZone = zoneTransform.gameObject;
+                currentActiveDestroyZone.SetActive(true);
+            }
+            else
+            {
+                Debug.LogError("Không tìm thấy DestroyZone có tên: '" + wave.destroyZoneName + "' bên trong " + destroyZoneParent.name);
+            }
+        }
+        
+        // Bước 2: Hiện tên wave
         yield return StartCoroutine(ShowWaveTextCoroutine(wave.waveName));
 
+        // Bước 3: Dọn dẹp đội hình cũ
         if (currentFormationInstance != null) Destroy(currentFormationInstance);
 
+        // Bước 4: Hiện cảnh báo nếu có
         GameObject warningInstance = null;
         if (wave.warningImagePrefab != null && mainCanvas != null)
         {
@@ -120,28 +140,38 @@ public class WaveManager : MonoBehaviour
 
         if (warningInstance != null) Destroy(warningInstance);
 
+        // Bước 5: Tạo đội hình địch mới
         currentFormationInstance = Instantiate(wave.formationPrefab, wave.enemyStartPosition, Quaternion.identity);
 
         enemiesAlive = 0;
         foreach (Transform spawnPoint in currentFormationInstance.transform)
         {
-            ObjectPooler.Instance.SpawnFromPool(wave.enemyTagToSpawn, spawnPoint.position, spawnPoint.rotation);
-            enemiesAlive++;
+            GameObject enemyObj = ObjectPooler.Instance.SpawnFromPool(wave.enemyTagToSpawn, spawnPoint.position, spawnPoint.rotation);
+            if(enemyObj != null)
+            {
+                enemiesAlive++;
+            }
         }
     }
 
     private IEnumerator LevelCompleteCoroutine()
     {
+        // Tắt DestroyZone của wave cuối cùng
+        if (currentActiveDestroyZone != null)
+        {
+            currentActiveDestroyZone.SetActive(false);
+        }
+        
+        if (currentFormationInstance != null)
+        {
+            Destroy(currentFormationInstance);
+        }
+        
         yield return StartCoroutine(ShowWaveTextCoroutine("LEVEL COMPLETE!"));
 
         int currentLevel = GameProgress.LoadLevel();
-        // Giả sử tổng số màn là số lượng LevelData bạn có (cần truyền vào từ đâu đó)
-        // Cách đơn giản là kiểm tra xem có LevelData cho màn tiếp theo không
         int nextLevel = currentLevel + 1;
-
-        // Cần một cách để biết tổng số màn, ví dụ qua WorldMapController
-        // Tạm thời chúng ta sẽ giả sử có 3 màn
-        int totalLevels = 3;
+        int totalLevels = 3; // Tạm thời giả định
 
         if (currentLevel >= totalLevels)
         {
@@ -157,18 +187,16 @@ public class WaveManager : MonoBehaviour
             SceneManager.LoadScene(worldMapSceneName);
         }
     }
+
     private IEnumerator ShowWaveTextCoroutine(string textToShow)
     {
         if (waveText == null || waveTextCanvasGroup == null) yield break;
 
-        // Xử lý logic đặc biệt cho "LEVEL COMPLETE!"
         if (textToShow == "LEVEL COMPLETE!")
         {
             if (backgroundMusicSource != null) backgroundMusicSource.Stop();
             if (levelCompleteSound != null && audioSource != null) audioSource.PlayOneShot(levelCompleteSound);
-
             yield return new WaitForSeconds(2.0f);
-
             if (BackgroundScroller.Instance != null)
             {
                 BackgroundScroller.Instance.SetScrollSpeed(victoryScrollSpeed);

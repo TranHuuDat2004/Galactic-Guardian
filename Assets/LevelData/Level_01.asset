@@ -16,38 +16,43 @@ MonoBehaviour:
   backgroundPrefab: {fileID: 750556141068164855, guid: 63526f52bf309094b9d4b965a2dabc26, type: 3}
   backgroundMusic: {fileID: 8300000, guid: 63830303bdd8cb346838cfe6022b5e54, type: 3}
   waves:
-  - waveName: "Wave 1: \u0110\u1ED9i h\xECnh c\u01A1 b\u1EA3n"
+  - waveName: 'Wave 1: Initial Assault'
     formationPrefab: {fileID: 4904512962323392090, guid: ba9a468e8381db646b35853c580da12e, type: 3}
     enemyTagToSpawn: Black
     warningImagePrefab: {fileID: 0}
     warningPosition: {x: 0, y: 0, z: 0}
     enemyStartPosition: {x: 0, y: 8, z: 0}
     warningDelay: 2
-  - waveName: "Wave 2: \u0110\u1ED9i h\xECnh tr\xE1i tim"
+    destroyZoneName: DZ_Topopen
+  - waveName: 'Wave 2: Heart Attack'
     formationPrefab: {fileID: 2069348881396640669, guid: 433902ed30c56984aab23bdc555fb5d6, type: 3}
     enemyTagToSpawn: Blue
     warningImagePrefab: {fileID: 0}
     warningPosition: {x: 0, y: 0, z: 0}
     enemyStartPosition: {x: 0, y: 12, z: 0}
     warningDelay: 2
-  - waveName: "Wave 3: H\xCCnh c\xE1nh b\u01B0\u1EDBm"
+    destroyZoneName: DZ_Topopen
+  - waveName: 'Wave 3: Winged Menace'
     formationPrefab: {fileID: 8980281292477953912, guid: 1fc81d3f536385f428bdf4e52b32c200, type: 3}
     enemyTagToSpawn: Green
     warningImagePrefab: {fileID: 0}
     warningPosition: {x: 0, y: 0, z: 0}
     enemyStartPosition: {x: 0, y: 8, z: 0}
     warningDelay: 2
-  - waveName: "Wave 4: M\xE1y bay x\xE2m l\u0103ng"
+    destroyZoneName: DZ_Topopen
+  - waveName: 'Wave 4: Invader Fleet'
     formationPrefab: {fileID: 8239330326649353416, guid: baab6ca5323fb2e4ab557c2e6806d901, type: 3}
     enemyTagToSpawn: Orange
     warningImagePrefab: {fileID: 0}
     warningPosition: {x: 0, y: 0, z: 0}
     enemyStartPosition: {x: 0, y: 8, z: 0}
     warningDelay: 2
-  - waveName: "Wave 5: CHI\u1EBEN H\u1EA0M ZYGON"
+    destroyZoneName: DZ_Topopen
+  - waveName: 'Wave 5: The ZYGON Dreadnought'
     formationPrefab: {fileID: 4715738115431962415, guid: 21196bc41e12d9c47991b30e2a116f5f, type: 3}
     enemyTagToSpawn: Boss2
     warningImagePrefab: {fileID: 0}
     warningPosition: {x: 0, y: 0, z: 0}
     enemyStartPosition: {x: 0, y: 8, z: 0}
     warningDelay: 2
+    destroyZoneName: 
