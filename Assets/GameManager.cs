@@ -162,7 +162,7 @@ public class GameManager : MonoBehaviour
             // Nếu game đang chạy, thì tạm dừng
             if (!isPaused)
             {
-                PauseGame();
+                TogglePause();
             }
             // Nếu game đang tạm dừng, thì tiếp tục
             else
@@ -178,23 +178,35 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    // --- CÁC HÀM MỚI ĐỂ QUẢN LÝ VIỆC TẠM DỪNG ---
+    // --- HÀM MỚI ĐỂ NÚT BẤM VÀ PHÍM CÙNG SỬ DỤNG ---
+    public void TogglePause()
+    {
+        // isPaused là biến bool chúng ta đã tạo trước đó
+        isPaused = !isPaused; // Đảo ngược trạng thái
+
+        if (isPaused)
+        {
+            PauseGame();
+        }
+        else
+        {
+            ResumeGame();
+        }
+    }
+    // ---------------------------------------------
+    
     public void PauseGame()
     {
-        isPaused = true;
-        Time.timeScale = 0f; // Dòng này sẽ "đóng băng" toàn bộ game
-        
-        // Hiện Pause Menu và con trỏ chuột
+        isPaused = true; // Đảm bảo trạng thái luôn đúng
+        Time.timeScale = 0f;
         if (UIManager.Instance != null) UIManager.Instance.ShowPauseMenu();
         Cursor.visible = true;
     }
 
     public void ResumeGame()
     {
-        isPaused = false;
-        Time.timeScale = 1f; // Cho game chạy lại bình thường
-        
-        // Ẩn Pause Menu và con trỏ chuột
+        isPaused = false; // Đảm bảo trạng thái luôn đúng
+        Time.timeScale = 1f;
         if (UIManager.Instance != null) UIManager.Instance.HidePauseMenu();
         Cursor.visible = false;
     }
