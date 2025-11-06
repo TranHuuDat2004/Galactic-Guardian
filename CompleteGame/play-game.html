@@ -46,9 +46,25 @@
         <h2>Lịch sử phiên bản</h2>
 
         <div class="version-grid">
-                    <!-- Phiên bản 1. (MỚI) -->
+          <!-- Phiên bản 1.2.0 (MỚI NHẤT) -->
           <div class="version-item">
-            <h3>Phiên bản 1.1.2 (Mới nhất - Ngày 03/11/2025)</h3>
+            <h3>Phiên bản 1.2.0: Sức Mạnh Nguyên Tố (Mới nhất - Ngày 06/11/2025)</h3>
+            <p>Giải phóng sức mạnh nguyên tố với 3 loại đạn hoàn toàn mới, mang đến chiều sâu chiến thuật cho cuộc chiến
+              chống lại binh đoàn gà!</p>
+            <ul>
+              <li><strong>Vũ khí mới - Đạn Băng:</strong> Làm chậm tốc độ di chuyển và tấn công của kẻ địch, cho bạn
+                thêm thời gian để xoay xở.</li>
+              <li><strong>Vũ khí mới - Đạn Lửa:</strong> Tạo ra các vụ nổ rực lửa khi va chạm, gây sát thương lan cho
+                những kẻ địch đứng gần.</li>
+              <li><strong>Vũ khí mới - Đạn Axit/Độc:</strong> Nâng cấp từ đạn thường với khả năng bắn tỏa ra nhiều hướng
+                hơn, dọn dẹp các đội hình đông đảo một cách hiệu quả.</li>
+              <li>Cải thiện hiệu ứng hình ảnh và âm thanh cho các loại vũ khí mới.</li>
+            </ul>
+          </div>
+
+          <!-- Phiên bản 1. (MỚI) -->
+          <div class="version-item">
+            <h3>Phiên bản 1.1.2 (Ngày 03/11/2025)</h3>
             <ul>
               <li>Thêm nút button pause (tạm dừng) trên cả điện thoại và máy tính.</li>
             </ul>
@@ -124,12 +140,12 @@
       }
 
       var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/v1.2.1 WebGL.loader.js";
+      var loaderUrl = buildUrl + "/v1.2.0 WebGL.loader.js";
       var config = {
         arguments: [],
-        dataUrl: buildUrl + "/v1.2.1 WebGL.data",
-        frameworkUrl: buildUrl + "/v1.2.1 WebGL.framework.js",
-        codeUrl: buildUrl + "/v1.2.1 WebGL.wasm",
+        dataUrl: buildUrl + "/v1.2.0 WebGL.data",
+        frameworkUrl: buildUrl + "/v1.2.0 WebGL.framework.js",
+        codeUrl: buildUrl + "/v1.2.0 WebGL.wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "DefaultCompany",
         productName: "BanGa",
@@ -196,6 +212,7 @@
 
     </script>
 </body>
-    <!-- Gọi file JS ở cuối cùng -->
-    <script src="js/main.js"></script>
+<!-- Gọi file JS ở cuối cùng -->
+<script src="js/main.js"></script>
+
 </html>
