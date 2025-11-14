@@ -13,6 +13,23 @@ MonoBehaviour:
   m_Name: Level_01
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
   levelName: "M\xE0n 1: M\xE1y Bay X\xE2m Chi\u1EBFm"
+  storyText: "Truy\u1EC1n tin t\u1EEB Ch\u1EC9 huy!!:\n\n\"Trung t\xE2m ch\u1EC9
+    huy V\u1EC7 Binh g\u1ECDi Phi \u0111\u1ED9i Tinh V\u1EC7! Nghe r\xF5 tr\u1EA3
+    l\u1EDDi! T\xECnh tr\u1EA1ng kh\u1EA9n c\u1EA5p!\"\n\n\"...\"\n\n\"Ch\xFAng ta
+    v\u1EEBa m\u1EA5t ho\xE0n to\xE0n li\xEAn l\u1EA1c v\u1EDBi Ti\u1EC1n \u0111\u1ED3n
+    X-12. T\xEDn hi\u1EC7u cu\u1ED1i c\xF9ng nh\u1EADn \u0111\u01B0\u1EE3c... [Ti\u1EBFng
+    nhi\u1EC5u s\xF3ng g\u1EAFt l\xEAn]... l\xE0 m\u1ED9t c\u1EA3nh b\xE1o x\xE2m
+    nh\u1EADp c\u1EA5p \u0111\u1ED9 Huy\u1EBFt Tinh (Crimson Alert). To\xE0n b\u1ED9
+    ti\u1EC1n \u0111\u1ED3n \u0111\xE3 im l\u1EB7ng.\"\n\n\"Ph\xE2n t\xEDch cho th\u1EA5y
+    phi \u0111\u1ED9i c\u1EE7a c\xE1c anh l\xE0 \u0111\u01A1n v\u1ECB chi\u1EBFn
+    \u0111\u1EA5u duy nh\u1EA5t trong ph\u1EA1m vi 50 parsec. Kh\xF4ng c\xF3 y\u1EC3m
+    tr\u1EE3. C\xE1c anh l\xE0 tuy\u1EBFn ph\xF2ng th\u1EE7 duy nh\u1EA5t.\"\n\n\"Nhi\u1EC7m
+    v\u1EE5: Bay th\u1EB3ng \u0111\u1EBFn t\u1ECDa \u0111\u1ED9 X-12. \u0110\xE1nh
+    gi\xE1 t\xECnh h\xECnh, \u0111i\u1EC1u tra s\u1EF1 im l\u1EB7ng, v\xE0 v\xF4
+    hi\u1EC7u h\xF3a b\u1EA5t k\u1EF3 m\u1ED1i \u0111e d\u1ECDa n\xE0o. T\xEDnh m\u1EA1ng
+    c\u1EE7a h\u01A1n t\xE1m ng\xE0n c\xF4ng d\xE2n tr\xEAn tr\u1EA1m \u0111\xF3
+    ph\u1EE5 thu\u1ED9c v\xE0o c\xE1c anh.\"\n\n\"Tinh V\u1EC7... Xu\u1EA5t k\xEDch
+    ngay l\u1EADp t\u1EE9c!\""
   backgroundPrefab: {fileID: 750556141068164855, guid: 63526f52bf309094b9d4b965a2dabc26, type: 3}
   backgroundMusic: {fileID: 8300000, guid: 63830303bdd8cb346838cfe6022b5e54, type: 3}
   waves:

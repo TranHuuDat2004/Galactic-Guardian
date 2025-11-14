@@ -184,8 +184,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   movementType: 8
-  health: 2
-  speed: 1.7
+  health: 4
+  speed: 1.2
   collisionDamage: 1
   rotationSpeed: 50
   bossDisplayName: "CHI\u1EBEN H\u1EA0M ZYGON"
@@ -200,6 +200,7 @@ MonoBehaviour:
   attackPhases: []
   explosionTag: EnemyExplosion
   engineEffectPrefab: {fileID: 100000, guid: 93bdcaae53f95461785a8eeb8c01bc61, type: 3}
+  burnEffectPrefab: {fileID: 7251879486380165639, guid: c2f6a8962aac3814aa56cb9647c93470, type: 3}
   powerUpPrefabs:
   - {fileID: 587035885492962172, guid: dd34ca2b08c498d45ad2653ca71edd28, type: 3}
   - {fileID: 587035885492962172, guid: 7ac30f462f6c1184fb3c722700d52721, type: 3}

@@ -6,13 +6,13 @@ Dự án này bắt đầu như một bài tập làm quen với Unity, nhưng g
 
 <!-- THAY THẾ BẰNG GIF GAMEPLAY CỦA BẠN KHI CÓ THỂ -->
 <!-- Bạn có thể dùng các phần mềm như ScreenToGif để quay lại một đoạn gameplay ngắn -->
-![Gameplay GIF](link-to-your-gameplay.gif)
+![Gameplay GIF](link-to-your-gameplay.gif) 
 
 ---
 
 ## 🌌 Game Concept & Vision
 
-**Galactic Guardian** không chỉ là một game bắn súng thông thường. Tầm nhìn của dự án là tạo ra một trải nghiệm arcade có thể chơi lại nhiều lần, với các thử thách liên tục thay đổi và đặc biệt tỏa sáng khi chơi cùng bạn bè.
+**Galactic Guardian** không chỉ là một game bắn súng thông thường. Tầm nhìn của dự án là tạo ra một trải nghiệm arcade có thể chơi lại nhiều lần, với các thử thách liên tục thay đổi và đặc biệt tỏa sáng khi chơi cùng với bạn bè.
 
 ### Các Tính Năng Cốt Lõi
 

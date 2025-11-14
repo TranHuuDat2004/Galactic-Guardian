@@ -5202,6 +5202,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bullet
   speed: 20
+  damage: 1
+  effectType: 1
+  effectDuration: 3
+  effectPotency: 0.5
+  explosionRadius: 2
+  explosionDamage: 1
+  explosionEffectTag: EnemyExplosion
 --- !u!1 &1355984127163962
 GameObject:
   m_ObjectHideFlags: 0

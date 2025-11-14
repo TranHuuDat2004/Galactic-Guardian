@@ -27,6 +27,11 @@ public class LevelData : ScriptableObject
 {
     [Header("Thông Tin Màn Chơi")]
     public string levelName;
+
+    [Header("Cốt Truyện")]
+    [Tooltip("Nội dung cốt truyện sẽ hiển thị trước khi bắt đầu màn chơi này.")]
+    [TextArea(10, 20)] // Giúp ô nhập liệu trong Inspector lớn hơn, dễ gõ hơn
+    public string storyText;
     
     [Header("Thiết Lập Chung")]
     public GameObject backgroundPrefab; // << THAY ĐỔI Ở ĐÂY

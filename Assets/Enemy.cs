@@ -45,7 +45,9 @@ public class Enemy : MonoBehaviour
     [Header("Hiệu Ứng")]
     public string explosionTag = "EnemyExplosion";
     public GameObject engineEffectPrefab;
+    public GameObject burnEffectPrefab; // << Kéo prefab BurnVFX vào đây
     private GameObject currentEngineEffect;
+    private GameObject activeBurnEffectInstance; // << Để lưu trữ hiệu ứng lửa
 
     [Header("Thiết Lập Rớt Đồ")]
     public GameObject[] powerUpPrefabs;
@@ -58,6 +60,15 @@ public class Enemy : MonoBehaviour
     private Vector3 nextDestination;
     private bool isMovingToDestination = false;
 
+    private Coroutine activeFreezeCoroutine;
+    private Coroutine activeBurnCoroutine;
+    // Biến để lưu trữ các chỉ số gốc
+    private float originalSpeed;
+    private SpriteRenderer spriteRenderer; // Để thay đổi màu sắc
+
+
+    // ----------------------
+   
     void Awake()
     {
         initialHealth = health;
@@ -66,6 +77,8 @@ public class Enemy : MonoBehaviour
             Transform foundPoint = transform.Find("FirePoint");
             if (foundPoint != null) firePoint = foundPoint;
         }
+        originalSpeed = speed; // Lưu lại tốc độ gốc khi đối tượng được tạo
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void OnEnable()
@@ -77,7 +90,9 @@ public class Enemy : MonoBehaviour
         if (col != null) col.enabled = true;
 
         fireCooldown = Random.Range(0.5f, fireRate);
-        
+        health = initialHealth;
+        isDead = false;
+
         // Thiết lập hướng di chuyển
         switch (movementType)
         {
@@ -105,6 +120,12 @@ public class Enemy : MonoBehaviour
                 StartCoroutine(RoamingCoroutine());
                 break;
         }
+        
+        speed = originalSpeed;
+        if (spriteRenderer != null) spriteRenderer.color = Color.white;
+        // Dừng các coroutine hiệu ứng còn sót lại từ lần sử dụng trước
+        if (activeFreezeCoroutine != null) StopCoroutine(activeFreezeCoroutine);
+        if (activeBurnCoroutine != null) StopCoroutine(activeBurnCoroutine);
 
         if (isBoss)
         {
@@ -122,6 +143,10 @@ public class Enemy : MonoBehaviour
         if (engineEffectPrefab != null)
         {
             currentEngineEffect = Instantiate(engineEffectPrefab, transform.position, transform.rotation, transform);
+        }
+         if (activeBurnEffectInstance != null)
+        {
+            Destroy(activeBurnEffectInstance);
         }
     }
 
@@ -142,6 +167,10 @@ public class Enemy : MonoBehaviour
         { 
             Destroy(currentEngineEffect);
             currentEngineEffect = null; // Đặt lại là null để tránh lỗi
+        }
+        if (activeBurnEffectInstance != null)
+        {
+            Destroy(activeBurnEffectInstance);
         }
     }
     // -------------------------------------
@@ -275,6 +304,83 @@ private void OnTriggerEnter2D(Collider2D other)
         if (isBoss && UIManager.Instance != null) { UIManager.Instance.UpdateBossHealth(health, initialHealth); }
         if (health <= 0) { Die(); }
     }
+
+    public void ApplyStatusEffect(Bullet bullet)
+    {
+        if (isDead) return;
+
+        switch (bullet.effectType)
+        {
+            case SpecialEffectType.Freeze:
+                // Nếu đang có hiệu ứng đóng băng, dừng nó lại để bắt đầu cái mới
+                if (activeFreezeCoroutine != null) StopCoroutine(activeFreezeCoroutine);
+                activeFreezeCoroutine = StartCoroutine(FreezeCoroutine(bullet.effectPotency, bullet.effectDuration));
+                break;
+            case SpecialEffectType.Burn:
+                // Tương tự với hiệu ứng đốt cháy
+                if (activeBurnCoroutine != null) StopCoroutine(activeBurnCoroutine);
+                activeBurnCoroutine = StartCoroutine(BurnCoroutine(bullet.effectPotency, bullet.effectDuration));
+                break;
+        }
+    }
+    
+     private IEnumerator FreezeCoroutine(float slowMultiplier, float duration)
+    {
+        speed = originalSpeed * (1f - slowMultiplier); // Làm chậm tốc độ
+        if (spriteRenderer != null) spriteRenderer.color = Color.cyan; // Đổi màu thành xanh băng
+
+        yield return new WaitForSeconds(duration);
+
+        // Hồi phục lại trạng thái ban đầu
+        speed = originalSpeed;
+        if (spriteRenderer != null) spriteRenderer.color = Color.white;
+        activeFreezeCoroutine = null; // Đánh dấu là đã kết thúc
+    }
+
+    // --- COROUTINE CHO HIỆU ỨNG ĐỐT CHÁY ---
+    private IEnumerator BurnCoroutine(float damagePerSecond, float duration)
+{
+    // ... code thay đổi màu sắc và tạo hiệu ứng lửa không đổi ...
+    if (spriteRenderer != null) spriteRenderer.color = new Color(1f, 0.5f, 0f);
+    if (burnEffectPrefab != null)
+    {
+        activeBurnEffectInstance = Instantiate(burnEffectPrefab, transform.position, Quaternion.identity, transform);
+    }
+    
+    // ... vòng lặp gây sát thương không đổi ...
+    float timer = 0f;
+    while (timer < duration)
+    {
+        TakeDamage(Mathf.CeilToInt(damagePerSecond));
+        yield return new WaitForSeconds(1f);
+        timer += 1f;
+    }
+    
+    // --- ĐÂY LÀ PHẦN THAY ĐỔI QUAN TRỌNG ---
+    // Thay vì hủy ngay lập tức, chúng ta sẽ ra lệnh cho nó tự tắt
+    if (activeBurnEffectInstance != null)
+    {
+        // Lấy component ParticleSystem từ hiệu ứng
+        ParticleSystem ps = activeBurnEffectInstance.GetComponent<ParticleSystem>();
+        if (ps != null)
+        {
+            // Ra lệnh cho hệ thống ngừng phát ra các hạt mới
+            ps.Stop();
+        }
+        else
+        {
+            // Nếu không tìm thấy ParticleSystem (dự phòng), thì mới hủy theo cách cũ
+            Destroy(activeBurnEffectInstance);
+        }
+    }
+    // ------------------------------------------
+    
+    // ... code hồi phục màu sắc và reset coroutine không đổi ...
+    if (spriteRenderer != null) spriteRenderer.color = Color.white;
+    activeBurnCoroutine = null;
+}
+    
+    
 
     private void Die()
     {

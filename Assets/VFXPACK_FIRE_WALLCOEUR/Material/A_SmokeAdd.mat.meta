@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 560ded7d466dc58429e2c0b8e8b22d45
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 305098
+  packageName: VFX URP - Fire Package
+  packageVersion: 1.0
+  assetPath: Assets/VFXPACK_FIRE_WALLCOEUR/Material/A_SmokeAdd.mat
+  uploadId: 716663

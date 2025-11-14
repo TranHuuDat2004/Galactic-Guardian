@@ -51,7 +51,7 @@ MonoBehaviour:
   rotate: 0
   rotateAmount: 45
   bounce: 0
-  bounceForce: 10
+  bounceForce: 3
   speed: 35
   accuracy: 95
   fireRate: 4
@@ -146,6 +146,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bullet
   speed: 20
+  damage: 1
+  effectType: 3
+  effectDuration: 3
+  effectPotency: 0.5
+  explosionRadius: 2
+  explosionDamage: 1
+  explosionEffectTag: EnemyExplosio
 --- !u!1 &1520093347119720
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 1941e36e7c442864ebe6ab487a35595b
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 305098
+  packageName: VFX URP - Fire Package
+  packageVersion: 1.0
+  assetPath: Assets/VFXPACK_FIRE_WALLCOEUR/Material/GridMat.mat
+  uploadId: 716663

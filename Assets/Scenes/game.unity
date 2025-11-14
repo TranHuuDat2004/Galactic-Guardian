@@ -1780,7 +1780,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8473746977471471465, guid: dd2d3de14594cc344a27e641f1bb13a2, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -2540,7 +2540,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 190923078105867837, guid: cc92ed6076bf5f548bd3ce83f2659668, type: 3}
       propertyPath: pools.Array.size
-      value: 31
+      value: 32
       objectReference: {fileID: 0}
     - target: {fileID: 190923078105867837, guid: cc92ed6076bf5f548bd3ce83f2659668, type: 3}
       propertyPath: pools.Array.data[8].tag
@@ -2635,6 +2635,10 @@ PrefabInstance:
       value: Boss2
       objectReference: {fileID: 0}
     - target: {fileID: 190923078105867837, guid: cc92ed6076bf5f548bd3ce83f2659668, type: 3}
+      propertyPath: pools.Array.data[31].tag
+      value: EnemyExplosio
+      objectReference: {fileID: 0}
+    - target: {fileID: 190923078105867837, guid: cc92ed6076bf5f548bd3ce83f2659668, type: 3}
       propertyPath: pools.Array.data[5].size
       value: 1
       objectReference: {fileID: 0}
@@ -2677,6 +2681,10 @@ PrefabInstance:
     - target: {fileID: 190923078105867837, guid: cc92ed6076bf5f548bd3ce83f2659668, type: 3}
       propertyPath: pools.Array.data[30].size
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 190923078105867837, guid: cc92ed6076bf5f548bd3ce83f2659668, type: 3}
+      propertyPath: pools.Array.data[31].size
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 190923078105867837, guid: cc92ed6076bf5f548bd3ce83f2659668, type: 3}
       propertyPath: pools.Array.data[8].prefab
@@ -2770,6 +2778,10 @@ PrefabInstance:
       propertyPath: pools.Array.data[30].prefab
       value: 
       objectReference: {fileID: 8604667864235231083, guid: 33a321df25894a4419612518790d004c, type: 3}
+    - target: {fileID: 190923078105867837, guid: cc92ed6076bf5f548bd3ce83f2659668, type: 3}
+      propertyPath: pools.Array.data[31].prefab
+      value: 
+      objectReference: {fileID: 6111780402021197910, guid: 6c3f332676c9b7146a16b045cf9a680a, type: 3}
     - target: {fileID: 4117634812058438898, guid: cc92ed6076bf5f548bd3ce83f2659668, type: 3}
       propertyPath: m_Name
       value: ObjectPooler

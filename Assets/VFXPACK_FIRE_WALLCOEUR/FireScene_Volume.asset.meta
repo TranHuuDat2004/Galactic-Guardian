@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 60b43e99b2a83ae4a8293d68005eb492
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 305098
+  packageName: VFX URP - Fire Package
+  packageVersion: 1.0
+  assetPath: Assets/VFXPACK_FIRE_WALLCOEUR/FireScene_Volume.asset
+  uploadId: 716663

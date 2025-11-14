@@ -184,7 +184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   movementType: 3
-  health: 100
+  health: 120
   speed: 1.3
   collisionDamage: 1
   rotationSpeed: 50
@@ -212,6 +212,7 @@ MonoBehaviour:
     fireRate: 0.5
   explosionTag: EnemyExplosion
   engineEffectPrefab: {fileID: 100000, guid: 93bdcaae53f95461785a8eeb8c01bc61, type: 3}
+  burnEffectPrefab: {fileID: 6580013486785886714, guid: 4e9560de11cba4c44ba8452cdabf1de3, type: 3}
   powerUpPrefabs:
   - {fileID: 587035885492962172, guid: dd34ca2b08c498d45ad2653ca71edd28, type: 3}
   - {fileID: 587035885492962172, guid: 7ac30f462f6c1184fb3c722700d52721, type: 3}
