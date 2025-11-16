@@ -60,7 +60,7 @@ sysinfo.txt
 *.app
 *.exe
 *.ipa
-*.unitypackage
+
 
 # Crashlytics generated folder
 /[Cc]rashlytics/
