@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bullet
   speed: 20
-  damage: 1
+  damage: 2
   effectType: 0
   effectDuration: 3
   effectPotency: 0.5

@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 public class MainMenuController : MonoBehaviour
 {
     public string worldMapSceneName = "WorldMap";
-
+public string creditsSceneName = "CreditsScene"; // << THÊM BIẾN MỚI
     [Header("UI Panels")]
     public GameObject mainButtonsPanel;
     public GameObject modeSelectionPanel;
@@ -26,6 +26,14 @@ public class MainMenuController : MonoBehaviour
         mainButtonsPanel.SetActive(false);
         modeSelectionPanel.SetActive(true);
     }
+
+        // --- HÀM MỚI CHO NÚT CREDITS ---
+    public void OnCreditsClicked()
+    {
+        Debug.Log("Chuyển sang màn hình Credits...");
+        SceneManager.LoadScene(creditsSceneName);
+    }
+    // ------------------------------------
     
     public void OnContinueClicked()
     {

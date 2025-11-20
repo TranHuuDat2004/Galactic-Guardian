@@ -5,7 +5,6 @@ using TMPro;
 
 public class StoryController : MonoBehaviour
 {
-    // Biến tĩnh để nhận dữ liệu từ các Scene khác
     public static string textToDisplay;
 
     [Header("Tham Chiếu UI")]
@@ -13,45 +12,81 @@ public class StoryController : MonoBehaviour
 
     [Header("Cài Đặt")]
     public float scrollSpeed = 50f;
-    public float delayAfterScroll = 2f; // Chờ 2s sau khi cuộn xong
-    public string gameSceneName = "game"; // Tên Scene game chính
+    public float delayAfterScroll = 2f;
+    public string gameSceneName = "game";
+
+    // --- THÊM MỚI Ở ĐÂY ---
+    private bool canSkip = false; // Cờ để tránh người chơi vô tình skip ngay lập tức
+    private bool isSkipping = false; // Cờ để đảm bảo hàm skip chỉ được gọi 1 lần
+    private Coroutine scrollingCoroutine; // Để lưu trữ coroutine đang chạy
+    // ----------------------
 
     void Start()
     {
-        // Kiểm tra xem có text để hiển thị không
         if (string.IsNullOrEmpty(textToDisplay))
         {
-            // Nếu không có, bỏ qua và vào game luôn
             LoadGameScene();
             return;
         }
 
-        // Hiển thị text và bắt đầu cuộn
         storyTextComponent.text = textToDisplay;
-        StartCoroutine(ScrollStoryCoroutine());
+        // Lưu lại coroutine để có thể dừng nó lại
+        scrollingCoroutine = StartCoroutine(ScrollStoryCoroutine());
     }
+
+    // --- THÊM HÀM UPDATE() ---
+    void Update()
+    {
+        // Nếu người chơi nhấn bất kỳ phím nào hoặc click chuột
+        if (canSkip && Input.anyKeyDown)
+        {
+            SkipStory();
+        }
+    }
+    // -------------------------
 
     private IEnumerator ScrollStoryCoroutine()
     {
-        // Bắt đầu từ vị trí dưới cùng của màn hình
-        storyTextComponent.rectTransform.anchoredPosition = new Vector2(0, -Screen.height);
+        // --- THÊM MỚI: Bật cờ cho phép skip sau một khoảng trễ ngắn ---
+        yield return new WaitForSeconds(0.5f); // Chờ nửa giây để tránh skip nhầm
+        canSkip = true;
+        // -----------------------------------------------------------
 
-        // Tính toán vị trí đích (khi text đã cuộn hết lên trên)
+        
+
+        storyTextComponent.rectTransform.anchoredPosition = new Vector2(0, -Screen.height);
         float targetY = Screen.height;
 
-        // Bắt đầu cuộn
         while (storyTextComponent.rectTransform.anchoredPosition.y < targetY)
         {
             storyTextComponent.rectTransform.Translate(Vector3.up * scrollSpeed * Time.deltaTime);
             yield return null;
         }
 
-        // Đợi một chút
         yield return new WaitForSeconds(delayAfterScroll);
-
-        // Chuyển sang màn chơi
         LoadGameScene();
     }
+
+    // --- HÀM MỚI DÀNH CHO NÚT BẤM VÀ INPUT ---
+    public void SkipStory()
+    {
+        // Nếu chưa skip, thì thực hiện skip
+        if (!isSkipping)
+        {
+            isSkipping = true;
+            Debug.Log("Đã bỏ qua cốt truyện!");
+
+            // Dừng coroutine đang cuộn chữ lại
+            if (scrollingCoroutine != null)
+            {
+                StopCoroutine(scrollingCoroutine);
+            }
+            
+            // Tải màn chơi ngay lập tức
+            LoadGameScene();
+        }
+    }
+    // -------------------------------------------
 
     void LoadGameScene()
     {

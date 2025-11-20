@@ -184,7 +184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   movementType: 0
-  health: 1
+  health: 2
   speed: 1.3
   collisionDamage: 1
   rotationSpeed: 50

@@ -18,7 +18,7 @@ Dự án này bắt đầu như một bài tập làm quen với Unity, nhưng g
 
 *   **Lối chơi Arcade kinh điển:** Dễ làm quen nhưng khó thành thạo.
 *   **Hệ thống kẻ thù thông minh:** Mỗi kẻ địch có hành vi và chiến thuật riêng, đòi hỏi người chơi phải thích ứng.
-*   **Nâng cấp đa dạng:** Các loại đạn độc đáo thay đổi hoàn toàn cách bạn tiếp cận trận chiến.
+*   **Nâng cấp đa dạng:** Các loại đạn độc đáo thay đổi hoàn toàn cách tiếp cận trận chiến.
 *   **Các trận đấu trùm hoành tráng:** Những kẻ địch khổng lồ với nhiều giai đoạn tấn công phức tạp.
 *   **Chế độ Co-op Online:** Hợp tác cùng một người bạn để bảo vệ ngân hà.
 

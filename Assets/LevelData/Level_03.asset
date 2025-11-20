@@ -13,6 +13,42 @@ MonoBehaviour:
   m_Name: Level_03
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
   levelName: "M\xE0n 1: M\xE1y Bay X\xE2m Chi\u1EBFm"
+  storyText: "Ch\u01B0\u01A1ng 3: Tinh Th\u1EC3 B\u1ECB L\xE3ng Qu\xEAn\n\n(To\xE0n
+    b\u1ED9 phi \u0111\u1ED9i Tinh V\u1EC7 \u0111\u1EC1u b\u1ECB cho\xE1ng ng\u1EE3p.
+    M\u1ED9t kho\u1EA3nh kh\u1EAFc im l\u1EB7ng ho\xE0n to\xE0n, ch\u1EC9 c\xF3 ti\u1EBFng
+    m\xE1y t\xEDnh li\xEAn t\u1EE5c ph\xE1t ra c\u1EA3nh b\xE1o l\u1ED7i.)\n\nS\u0129
+    quan Chi\u1EBFn thu\u1EADt: \"C\u1EA3nh b\xE1o, Phi c\xF4ng! T\xEDn hi\u1EC7u
+    n\u0103ng l\u01B0\u1EE3ng \u0111ang \u1EDF ngay tr\u01B0\u1EDBc m\u1EB7t! Ch\u1EC9
+    s\u1ED1 v\u01B0\u1EE3t qu\xE1 1200% thang \u0111o! \u0110\xF3 kh\xF4ng ph\u1EA3i
+    l\xE0 m\u1ED9t ti\u1EC3u h\xE0nh tinh th\xF4ng th\u01B0\u1EDDng... \u0110\xF3
+    l\xE0 Tinh Th\u1EC3 Ngu\u1ED3n!\"\n\nTinh V\u1EC7 : \"Kh\xF4ng th\u1EC3 n\xE0o...
+    N\xF3... n\xF3 ch\u1EC9 l\xE0 huy\u1EC1n tho\u1EA1i. Chuy\u1EC7n k\u1EC3 c\u1EE7a
+    nh\u1EEFng k\u1EBB lang thang v\u0169 tr\u1EE5...\"\n\nTinh V\u1EC7  (Ng\u01B0\u1EDDi
+    ch\u01A1i): \"N\xF3 c\xF3 th\u1EADt. V\xE0 n\u0103ng l\u01B0\u1EE3ng c\u1EE7a
+    n\xF3... th\u1EADt kh\u1EE7ng khi\u1EBFp. Trung t\xE2m Ch\u1EC9 huy, ch\xFAng
+    t\xF4i \u0111\xE3 t\xECm th\u1EA5y m\u1EE5c ti\xEAu. T\xF4i l\u1EB7p l\u1EA1i:
+    Tinh Th\u1EC3 Ngu\u1ED3n \u0111\xE3 \u0111\u01B0\u1EE3c \u0111\u1ECBnh v\u1ECB!\"\n\nCh\u1EC9
+    huy: (Gi\u1ECDng Ch\u1EC9 huy tr\u1EDF n\xEAn c\u0103ng th\u1EB3ng v\xE0 nghi\xEAm
+    tr\u1ECDng h\u01A1n bao gi\u1EDD h\u1EBFt) \"Tuy\u1EC7t v\u1EDDi, Tinh V\u1EC7.
+    H\xE3y nghe k\u1EF9 \u0111\xE2y. C\xE1c t\xE0i li\u1EC7u t\u1ED1i m\u1EADt c\u1EE7a
+    Li\xEAn \u0110o\xE0n cho bi\u1EBFt: Tinh Th\u1EC3 Ngu\u1ED3n l\xE0 m\u1ED9t c\u1ED5
+    v\u1EADt c\u1EE7a n\u1EC1n v\u0103n minh c\u1ED5 \u0111\u1EA1i \u0111\xE3 b\u1ECB
+    l\xE3ng qu\xEAn. N\u0103ng l\u01B0\u1EE3ng c\u1EE7a n\xF3 c\xF3 th\u1EC3 cung
+    c\u1EA5p s\u1EE9c m\u1EA1nh cho c\u1EA3 m\u1ED9t h\u1EC7 sao... ho\u1EB7c, n\u1EBFu
+    b\u1ECB k\xEDch ho\u1EA1t sai c\xE1ch, n\xF3 c\xF3 th\u1EC3 ph\xE1 h\u1EE7y n\xF3!\"\n\nTinh
+    V\u1EC7 : \"Ch\u1EAFc ch\u1EAFn b\u1ECDn Huy\u1EBFt Nguy\u1EC7t \u0111\xE3 theo
+    d\xF5i th\u1EE9 n\xE0y t\u1EEB l\xE2u. Ch\xFAng \u0111\xE3 t\xECm ki\u1EBFm n\xF3,
+    kh\xF4ng ph\u1EA3i t\xECnh c\u1EDD th\u1EA5y.\"\n\nS\u0129 quan Chi\u1EBFn thu\u1EADt:
+    \"X\xE1c nh\u1EADn! Radar t\u1EA7m xa... b\u1ED1n \u0111\u01A1n v\u1ECB H\u1EA1m
+    \u0111\u1ED9i Huy\u1EBFt Nguy\u1EC7t \u0111ang nh\u1EA3y si\xEAu kh\xF4ng gian
+    v\xE0o khu v\u1EF1c n\xE0y! Ch\xFAng \u0111ang c\u1EED m\u1ED9t l\u1EF1c l\u01B0\u1EE3ng
+    l\u1EDBn h\u01A1n \u0111\u1EC3 b\u1EA3o v\u1EC7 th\xE0nh qu\u1EA3 c\u1EE7a ch\xFAng!\"\n\nCh\u1EC9
+    huy: \"C\xE1c anh \u0111\xE3 ho\xE0n th\xE0nh nhi\u1EC7m v\u1EE5 \u0111i\u1EC1u
+    tra. B\xE2y gi\u1EDD l\xE0 nhi\u1EC7m v\u1EE5 b\u1EA3o v\u1EC7! B\u1ECDn Huy\u1EBFt
+    Nguy\u1EC7t kh\xF4ng \u0111\u01B0\u1EE3c ph\xE9p c\xF3 \u0111\u01B0\u1EE3c tinh
+    th\u1EC3 \u0111\xF3! H\xE3y s\u1EED d\u1EE5ng b\xE3i ti\u1EC3u h\xE0nh tinh l\xE0m
+    l\u1EDBp ph\xF2ng th\u1EE7 t\u1EF1 nhi\xEAn! B\u1EA3o v\u1EC7 Tinh Th\u1EC3 Ngu\u1ED3n
+    b\u1EB1ng m\u1ECDi gi\xE1!\""
   backgroundPrefab: {fileID: 4540295240537128305, guid: 5d987868a1f624548bbeb390272253b1, type: 3}
   backgroundMusic: {fileID: 8300000, guid: e7efdf24637b00b4cbdc9b3cbecbbee7, type: 3}
   waves:
@@ -45,7 +81,7 @@ MonoBehaviour:
     enemyTagToSpawn: OrdinaryChick
     warningImagePrefab: {fileID: 0}
     warningPosition: {x: 0, y: 0, z: 0}
-    enemyStartPosition: {x: -0.5, y: 8, z: 0}
+    enemyStartPosition: {x: 2.58, y: 10, z: 0}
     warningDelay: 2
     destroyZoneName: DZ_Topopen
   - waveName: 'Wave 15: Chick Gatling Gun'
