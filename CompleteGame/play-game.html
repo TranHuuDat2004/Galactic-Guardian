@@ -38,6 +38,11 @@
           <div id="unity-fullscreen-button"></div>
         </div>
       </div>
+      <!-- ================== THÊM ĐOẠN NÀY VÀO ĐÂY ================== -->
+      <p class="loading-notice" style="text-align: center; margin-top: 1rem; opacity: 0.8;">
+        Lần đầu vào game có thể mất một chút thời gian để tải, bạn vui lòng kiên nhẫn chờ đợi nhé!
+      </p>
+      <!-- ========================================================== -->
     </section>
 
     <!-- ================== LỊCH SỬ PHIÊN BẢN (LAYOUT DỌC MỚI) ================== -->
@@ -46,9 +51,21 @@
         <h2>Lịch sử phiên bản</h2>
 
         <div class="version-grid">
+          <!-- ============== PHIÊN BẢN 1.3.1 MỚI THÊM VÀO ĐÂY ============== -->
+          <div class="version-item">
+            <h3>Phiên bản 1.3.1 (Mới nhất - Ngày 17/11/2025)</h3>
+            <ul>
+              <li>
+                <strong>Cải thiện Trải nghiệm:</strong> Thêm nút "Bỏ qua" (Skip) trong màn hình cốt truyện mở đầu, cho
+                phép người chơi vào thẳng hành động.
+              </li>
+              <li>Thêm dòng thông báo về thời gian tải game cho người chơi mới.</li>
+              <li>Sửa một số lỗi chính tả nhỏ.</li>
+            </ul>
+          </div>
           <!-- Phiên bản 1.3.0 (MỚI NHẤT) -->
           <div class="version-item">
-            <h3>Phiên bản 1.3.0: Lời Truyền Từ Tinh Hà (Mới nhất - Ngày 14/11/2025)</h3>
+            <h3>Phiên bản 1.3.0: Lời Truyền Từ Tinh Hà (Ngày 14/11/2025)</h3>
             <p>Cuộc chiến giờ đây đã có khởi đầu! Phiên bản 1.3.0 chính thức giới thiệu bối cảnh của Galactic Guardian,
               đưa người chơi vào trung tâm của cuộc xung đột thiên hà.</p>
             <ul>
@@ -153,12 +170,12 @@
     }
 
     var buildUrl = "Build";
-    var loaderUrl = buildUrl + "/v1.3.0 WebGL.loader.js";
+    var loaderUrl = buildUrl + "/v1.3.1 WebGL.loader.js";
     var config = {
       arguments: [],
-      dataUrl: buildUrl + "/v1.3.0 WebGL.data",
-      frameworkUrl: buildUrl + "/v1.3.0 WebGL.framework.js",
-      codeUrl: buildUrl + "/v1.3.0 WebGL.wasm",
+      dataUrl: buildUrl + "/v1.3.1 WebGL.data",
+      frameworkUrl: buildUrl + "/v1.3.1 WebGL.framework.js",
+      codeUrl: buildUrl + "/v1.3.1 WebGL.wasm",
       streamingAssetsUrl: "StreamingAssets",
       companyName: "DefaultCompany",
       productName: "BanGa",
