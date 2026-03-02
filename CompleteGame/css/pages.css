@@ -89,6 +89,28 @@ section {
     animation: none;
 }
 
+.cta-button-secondary {
+    display: inline-block;
+    padding: 15px 35px;
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid var(--accent-color);
+    border-radius: 50px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    margin-left: 20px;
+    backdrop-filter: blur(5px);
+}
+
+.cta-button-secondary:hover {
+    background: rgba(0, 229, 255, 0.2);
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
+    transform: scale(1.05);
+}
+
 .player1-details h3 {
     color: var(--player1-color);
     text-shadow: 0 0 10px var(--player1-color);

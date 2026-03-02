@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tải Xuống - Galactic Guardian</title>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <style>
+        .download-section {
+            padding-top: 120px;
+            padding-bottom: 60px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .download-cards {
+            display: flex;
+            gap: 2rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .download-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2.5rem;
+            text-align: center;
+            width: 300px;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .download-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+        }
+
+        .download-card i {
+            font-size: 4rem;
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 10px var(--accent-color);
+        }
+
+        .download-card h3 {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .download-card p {
+            margin-bottom: 2rem;
+            color: #ccc;
+        }
+
+        .download-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            color: #1a1a2e;
+            background: var(--accent-color);
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background: #fff;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+        }
+
+        .download-btn.disabled {
+            background: #555;
+            color: #888;
+            cursor: not-allowed;
+            pointer-events: none;
+            box-shadow: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header tự động tải -->
+    <header class="header-placeholder"></header>
+
+    <main>
+        <section class="download-section">
+            <h2 style="font-size: 2.5rem; text-shadow: 0 0 15px var(--accent-color);">TẢI GAME VỀ MÁY</h2>
+            <p style="margin-top: 1rem; font-size: 1.2rem; color: #ccc; text-align: center; max-width: 600px;">
+                Trải nghiệm Galactic Guardian mượt mà nhất với phiên bản cài đặt trực tiếp trên thiết bị của bạn.
+            </p>
+
+            <div class="download-cards">
+                <!-- Windows Card -->
+                <div class="download-card">
+                    <i class="fa-brands fa-windows"></i>
+                    <h3>Windows</h3>
+                    <p>Phiên bản đầy đủ cho PC (.exe)</p>
+                    <a href="#" class="download-btn">Tải Xuống</a>
+                </div>
+
+                <!-- Android Card -->
+                <div class="download-card">
+                    <i class="fa-brands fa-android"></i>
+                    <h3>Android</h3>
+                    <p>Phiên bản di động (.apk)</p>
+                    <a href="#" class="download-btn disabled">Sắp Ra Mắt</a>
+                </div>
+            </div>
+
+            <div style="margin-top: 4rem;">
+                <a href="index.html" class="cta-button-secondary" style="margin-left: 0;">&laquo; Quay Lại Trang Chủ</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer tự động tải -->
+    <footer class="footer-placeholder"></footer>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>
